@@ -1,0 +1,8 @@
+{
+  "name": "Barilgachin.mn - Барилгын материалын их дэлгүүр",
+  "description": "Монголын хамгийн том барилгын материалын цахим худалдаа. Агуулахын бодит үлдэгдэл, B2B үнийн санал, материалын ухаалаг тооцоолуур.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
