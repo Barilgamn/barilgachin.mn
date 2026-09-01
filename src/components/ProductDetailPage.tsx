@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   ArrowLeft,
   ShieldCheck,
-  Building,
   ShoppingCart,
   Plus,
   Minus,
@@ -412,38 +411,6 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                       </div>
                     );
                   })}
-                </div>
-              </div>
-
-              {/* Warehouse Stock Breakdown (Odoo ERP Real-time 4 Branches) */}
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-[13px] font-semibold text-slate-900 flex items-center gap-1.5">
-                    <Building className="w-3.5 h-3.5 text-blue-600" />
-                    <span>Салбар агуулахуудын бодит үлдэгдэл (Odoo ERP)</span>
-                  </h3>
-                  <span className="text-[10px] text-slate-400 font-mono">Шинэчлэгдсэн: яг одоо</span>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                  {product.stockLocations.map((loc, idx) => (
-                    <div
-                      key={idx}
-                      className="p-3 rounded-xl bg-slate-50/60 border border-slate-200 flex items-center justify-between"
-                    >
-                      <div>
-                        <div className="font-bold text-slate-800">{loc.branchName}</div>
-                        <div className="text-[11px] text-slate-400 truncate max-w-[170px]">
-                          {loc.address}
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <span className="font-mono font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 text-xs">
-                          {loc.qty.toLocaleString()} {product.uom}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
                 </div>
               </div>
 
