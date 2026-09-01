@@ -162,46 +162,45 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </button>
       </div>
 
-      {/* Product Content Body */}
-      <div className="p-2.5 sm:p-3 flex-1 flex flex-col justify-between space-y-2">
-        <div className="space-y-1">
-          {/* Subtitle / Brand text */}
-          <div className="flex items-center justify-between text-[10px] text-slate-400">
-            <span className="font-mono truncate">{product.sku}</span>
-            <span className="truncate">{product.subcategory || product.brand}</span>
-          </div>
-
-          {/* Product Name (Bold, 2 lines truncated) */}
-          <h3 className="text-xs sm:text-[13px] font-bold text-slate-900 group-hover:text-amber-600 transition-colors line-clamp-2 leading-snug">
-            {product.name}
-          </h3>
-
-          {/* Stock indicator badge */}
-          <div className="flex items-center gap-1 text-[10px] font-medium text-emerald-700 pt-0.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-            <span>{product.totalStock > 0 ? `Агуулахад бэлэн` : 'Захиалгаар'}</span>
-          </div>
-        </div>
-
-        {/* Pricing & Add to Cart Area */}
-        <div className="space-y-2 pt-1 border-t border-slate-100">
-          <div className="flex items-baseline justify-between gap-1">
-            <div className="flex items-baseline gap-1">
-              <span className="text-sm sm:text-base font-black text-slate-950 font-display">
-                {formatMNT(product.price)}
-              </span>
-              <span className="text-[10px] text-slate-400 font-medium">
-                /{product.uom}
-              </span>
-            </div>
-
+      {/* Product Content Body — үнэ эхэндээ (unegui.mn маягаар: үнэ нь
+          нэрнээс том, барилгачин хүн эхлээд үнээр нь харьцуулдаг). */}
+      <div className="p-2.5 sm:p-3 flex-1 flex flex-col justify-between gap-2">
+        <div>
+          {/* Price — хамгийн том элемент */}
+          <div className="flex items-baseline gap-1.5 flex-wrap">
+            <span className="text-base sm:text-xl font-bold text-slate-950 font-display tabular-nums leading-none">
+              {formatMNT(product.price)}
+            </span>
+            <span className="text-[10px] sm:text-[11px] text-slate-400 font-medium">
+              /{product.uom}
+            </span>
             {product.originalPrice && product.originalPrice > product.price && (
-              <span className="text-[10px] text-rose-500 line-through font-semibold">
+              <span className="text-[10px] text-slate-400 line-through tabular-nums">
                 {formatMNT(product.originalPrice)}
               </span>
             )}
           </div>
 
+          {/* Product Name — үнийн доор, нимгэн */}
+          <h3 className="mt-1.5 text-xs sm:text-[13px] font-medium text-slate-700 group-hover:text-amber-600 transition-colors line-clamp-2 leading-snug">
+            {product.name}
+          </h3>
+
+          {/* Metadata: код · дэд ангилал */}
+          <div className="mt-1 flex items-center justify-between gap-2 text-[10px] text-slate-400">
+            <span className="font-mono truncate">{product.sku}</span>
+            <span className="truncate">{product.subcategory || product.brand}</span>
+          </div>
+
+          {/* Stock indicator badge */}
+          <div className="mt-1 flex items-center gap-1 text-[10px] font-medium text-emerald-700">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            <span>{product.totalStock > 0 ? `Агуулахад бэлэн` : 'Захиалгаар'}</span>
+          </div>
+        </div>
+
+        {/* Add to Cart Area */}
+        <div className="pt-2 border-t border-slate-100">
           {/* Add to Cart & Stepper */}
           <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
             {/* Quantity Stepper */}

@@ -150,6 +150,22 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
   const activeCategoryObj = CATEGORIES.find((c) => c.id === selectedCategory);
   const displayCategoryTitle = activeCategoryObj ? activeCategoryObj.name.split(',')[0] : 'Барилгын материал';
 
+  /**
+   * Гарчгийн доорх дэд ангиллын chip-үүд (unegui.mn маягаар, тоотой).
+   * Тоог зөвхөн ангиллын шүүлтээр гаргана — дэд ангиллаа сонгосон ч бусад
+   * chip-ийн тоо хэвээр үлдэж, харьцуулах боломжтой байх ёстой.
+   */
+  const subcategoryChips = useMemo(() => {
+    if (!activeCategoryObj) return [];
+    const inCategory = products.filter((p) => p.category === selectedCategory);
+    return activeCategoryObj.subcategories
+      .map((name) => ({
+        name,
+        count: inCategory.filter((p) => p.subcategory === name).length,
+      }))
+      .filter((chip) => chip.count > 0);
+  }, [products, selectedCategory, activeCategoryObj]);
+
   // Filtered & Sorted Products
   const filteredProducts = useMemo(() => {
     return products
@@ -911,6 +927,47 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
               </div>
             </div>
           </div>
+
+          {/* Дэд ангиллын chip-үүд — гар утсанд хажуугийн шүүлтүүр хаалттай
+              байдаг тул энэ нь тэнд гол сонгох хэрэгсэл болно. */}
+          {subcategoryChips.length > 0 && (
+            <div className="flex gap-1.5 overflow-x-auto pb-0.5 -mx-2.5 px-2.5 sm:mx-0 sm:px-0 sm:flex-wrap sm:overflow-visible">
+              <button
+                type="button"
+                onClick={() => setSelectedSubcategory('all')}
+                aria-pressed={selectedSubcategory === 'all'}
+                className={`shrink-0 rounded-lg px-2.5 py-1.5 text-[11px] sm:text-xs font-medium transition-colors cursor-pointer ${
+                  selectedSubcategory === 'all'
+                    ? 'bg-slate-900 text-white'
+                    : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
+                }`}
+              >
+                Бүгд
+              </button>
+
+              {subcategoryChips.map((chip) => {
+                const active = selectedSubcategory === chip.name;
+                return (
+                  <button
+                    key={chip.name}
+                    type="button"
+                    onClick={() => setSelectedSubcategory(active ? 'all' : chip.name)}
+                    aria-pressed={active}
+                    className={`shrink-0 rounded-lg px-2.5 py-1.5 text-[11px] sm:text-xs font-medium transition-colors cursor-pointer ${
+                      active
+                        ? 'bg-slate-900 text-white'
+                        : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
+                    }`}
+                  >
+                    {chip.name}
+                    <span className={`ml-1.5 tabular-nums ${active ? 'text-white/60' : 'text-slate-400'}`}>
+                      {chip.count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
           {/* ================= BRANDS BAR: "Брэндүүд" (Desktop Only to keep Mobile ultra-clean) ================= */}
           <div className="hidden lg:block space-y-2.5">
