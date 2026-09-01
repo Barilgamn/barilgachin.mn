@@ -290,7 +290,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                     <FileText className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="text-base font-black text-slate-900 tracking-tight font-display">
+                    <h3 className="text-base font-semibold text-slate-900 font-display">
                       Техникийн үзүүлэлтүүд
                     </h3>
                     <p className="text-xs text-slate-500 font-medium">
@@ -346,7 +346,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             <div className="bg-white rounded-3xl p-5 sm:p-7 border border-slate-200 shadow-sm space-y-4">
               <div className="space-y-1.5 border-b border-slate-100 pb-4">
                 <div className="flex items-center gap-2 text-xs font-bold flex-wrap">
-                  <span className="px-2.5 py-1 rounded-md bg-amber-100 text-amber-900 font-black tracking-wide uppercase">
+                  <span className="px-2.5 py-1 rounded-md bg-amber-100 text-amber-900 font-semibold tracking-wide uppercase">
                     {product.brand}
                   </span>
                   <span className="text-slate-400">•</span>
@@ -354,17 +354,17 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   <span className="text-slate-400">•</span>
                   <span className="text-slate-500 font-mono">Баркод: {product.barcode}</span>
                 </div>
-                <h1 className="text-xl sm:text-3xl font-black text-slate-900 tracking-tight font-display">
+                <h1 className="text-2xl sm:text-[30px] font-bold text-slate-900 font-display leading-[1.15]">
                   {product.name}
                 </h1>
-                <div className="text-xs sm:text-sm text-slate-500 font-medium">
+                <div className="text-sm sm:text-base text-slate-500">
                   {product.mongolianName}
                 </div>
               </div>
 
               {/* Description */}
               <div className="space-y-2">
-                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
+                <p className="max-w-[62ch] text-sm text-slate-600 leading-[1.7]">
                   {product.fullDescription || product.description}
                 </p>
               </div>
@@ -372,7 +372,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               {/* Bulk Tiered Pricing Grid */}
               <div className="bg-slate-50/80 rounded-2xl p-4 border border-slate-200 space-y-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
+                  <h3 className="text-[13px] font-semibold text-slate-900 flex items-center gap-1.5">
                     <Tag className="w-3.5 h-3.5 text-amber-600" />
                     <span>Бөөний шатлалт үнэ (Тоо хэмжээний хөнгөлөлт)</span>
                   </h3>
@@ -418,7 +418,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               {/* Warehouse Stock Breakdown (Odoo ERP Real-time 4 Branches) */}
               <div className="space-y-2.5">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
+                  <h3 className="text-[13px] font-semibold text-slate-900 flex items-center gap-1.5">
                     <Building className="w-3.5 h-3.5 text-blue-600" />
                     <span>Салбар агуулахуудын бодит үлдэгдэл (Odoo ERP)</span>
                   </h3>
@@ -452,7 +452,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 <div className="flex flex-wrap items-end justify-between gap-3 border-b border-slate-800 pb-4">
                   <div>
                     <span className="text-xs text-slate-400 font-medium">Нэгжийн үнэ (НӨАТ орсон):</span>
-                    <div className="text-2xl sm:text-3xl font-black text-amber-400 font-display">
+                    <div className="text-2xl sm:text-3xl font-bold text-amber-400 font-display tabular-nums">
                       {formatMNT(currentUnitPrice)}
                     </div>
                     <span className="text-[11px] text-slate-400">
@@ -464,7 +464,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                     <span className="text-xs text-slate-400 font-medium">
                       Нийт үнэ ({quantity} {product.uom}):
                     </span>
-                    <div className="text-2xl sm:text-3xl font-black text-white font-display">
+                    <div className="text-2xl sm:text-3xl font-bold text-white font-display tabular-nums">
                       {formatMNT(totalPrice)}
                     </div>
                     <span className="text-xs text-amber-300 font-mono font-bold">
@@ -563,11 +563,11 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
         <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-100 pb-4">
             <div>
-              <div className="flex items-center gap-2 text-amber-600 text-xs font-extrabold uppercase tracking-wider mb-1">
+              <div className="flex items-center gap-2 text-amber-600 text-xs font-semibold tracking-wide mb-1">
                 <Sparkles className="w-4 h-4" />
                 <span>Зөвлөмж & Дагалдах материалууд</span>
               </div>
-              <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight font-display">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 font-display">
                 Холбоотой & Цуг захиалагддаг бүтээгдэхүүнүүд
               </h2>
             </div>
@@ -609,7 +609,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
                   <div className="space-y-1">
                     <div className="text-[11px] text-slate-400 font-mono">SKU: {item.sku}</div>
-                    <h3 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-amber-600 transition-colors line-clamp-2 leading-snug">
+                    <h3 className="text-xs sm:text-[13px] font-medium text-slate-700 group-hover:text-amber-600 transition-colors line-clamp-2 leading-snug">
                       {item.name}
                     </h3>
                   </div>
