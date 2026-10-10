@@ -242,7 +242,7 @@ export default function App() {
         />
       ) : (
         <>
-          <main id="catalog-section" className="flex-1 max-w-7xl w-full mx-auto px-2.5 sm:px-4 py-2 sm:py-6 space-y-4 sm:space-y-8 pb-20 sm:pb-8">
+          <main id="catalog-section" className="flex-1 max-w-6xl w-full mx-auto px-2.5 sm:px-4 py-2 sm:py-6 space-y-4 sm:space-y-8 pb-20 sm:pb-8">
             <ProductGrid
               products={activeMobileTab === 'saved' ? PRODUCTS.filter((p) => favoriteIds.includes(p.id)) : PRODUCTS}
               selectedCategory={selectedCategory}
@@ -283,38 +283,25 @@ export default function App() {
       )}
 
       {/* Subtle Floating Call & Live Chat Side Dock (Shifted up on mobile to avoid bottom bar collision) */}
+      {/* Холбоо барих — контент халхлахгүйн тулд зөвхөн дүрс */}
       <div className="fixed right-3 sm:right-5 bottom-20 sm:bottom-6 z-40 flex flex-col items-end gap-2">
-        {/* Subtle Call Button */}
         <a
           href="tel:+97677662277"
-          className="group flex items-center gap-2 pl-3 pr-3.5 py-2 rounded-full bg-white/90 hover:bg-white text-slate-700 hover:text-slate-950 border border-slate-200/80 hover:border-slate-300 shadow-md hover:shadow-lg backdrop-blur-md transition-all duration-200 cursor-pointer active:scale-95"
-          title="Лавлах утас: 7766-2277"
+          title="Лавлах: 7766-2277"
+          aria-label="Лавлах утас 7766-2277"
+          className="w-11 h-11 rounded-full bg-white border border-slate-200 text-slate-700 shadow-md hover:shadow-lg hover:text-slate-950 flex items-center justify-center transition-all active:scale-95"
         >
-          <div className="w-6 h-6 rounded-full bg-slate-100 group-hover:bg-amber-100 text-slate-700 group-hover:text-amber-600 flex items-center justify-center transition-colors">
-            <Phone className="w-3.5 h-3.5" />
-          </div>
-          <div className="flex flex-col text-left leading-none">
-            <span className="text-[10px] text-slate-600 font-medium">Лавлах</span>
-            <span className="text-xs font-mono font-bold text-slate-900">7766-2277</span>
-          </div>
+          <Phone className="w-4 h-4" />
         </a>
 
-        {/* Subtle Live Chat Button */}
         <button
           onClick={() => setIsLiveChatOpen(true)}
-          className="group flex items-center gap-2 pl-3 pr-3.5 py-2 rounded-full bg-slate-900/90 hover:bg-slate-900 text-white border border-slate-700/60 hover:border-slate-600 shadow-md hover:shadow-lg backdrop-blur-md transition-all duration-200 cursor-pointer active:scale-95"
-          title="Инженер, борлуулалтын зөвлөхтэй чатлах"
+          title="Зөвлөхтэй чатлах"
+          aria-label="Зөвлөхтэй чатлах"
+          className="relative w-11 h-11 rounded-full bg-slate-900 text-white shadow-md hover:shadow-lg hover:bg-slate-800 flex items-center justify-center transition-all active:scale-95 cursor-pointer"
         >
-          <div className="relative">
-            <div className="w-6 h-6 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center shadow-xs">
-              <MessageSquare className="w-3.5 h-3.5 fill-current" />
-            </div>
-            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-400 border border-slate-900 animate-pulse"></span>
-          </div>
-          <div className="flex flex-col text-left leading-none">
-            <span className="text-[10px] text-amber-400 font-medium">Шуурхай</span>
-            <span className="text-xs font-bold text-white">Чатлах</span>
-          </div>
+          <MessageSquare className="w-4 h-4" />
+          <span className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-emerald-400 border border-slate-900"></span>
         </button>
       </div>
 

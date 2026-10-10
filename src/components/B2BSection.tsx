@@ -22,7 +22,7 @@ export const B2BSection: React.FC<B2BSectionProps> = ({
       {/* Background architectural pattern */}
       <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none"></div>
 
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Copy */}
           <div className="lg:col-span-7 space-y-4">

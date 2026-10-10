@@ -28,7 +28,7 @@ export const Footer: React.FC<FooterProps> = ({
     <footer className="bg-slate-100/80 text-slate-600 text-xs border-t border-slate-200">
       {/* Top Warehouse Locations Grid */}
       <div className="border-b border-slate-200/90 py-8 bg-white/70">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-6xl mx-auto px-4">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
               <MapPin className="w-4 h-4 text-amber-600" />
@@ -57,7 +57,7 @@ export const Footer: React.FC<FooterProps> = ({
       </div>
 
       {/* Main Footer Links */}
-      <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand Col (2 cols) */}
           <div className="lg:col-span-2 space-y-4">

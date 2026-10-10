@@ -54,7 +54,7 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
   const CATEGORIES = useCategories();
   return (
     <section className="py-8 bg-white border-b border-slate-200">
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-slate-900 font-display">

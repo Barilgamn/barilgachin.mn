@@ -154,7 +154,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
       {/* Top Breadcrumbs & Back Bar */}
       <div className="bg-white border-b border-slate-200 sticky top-0 sm:top-[72px] z-30 shadow-2xs">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-3">
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-3">
           {/* Breadcrumbs */}
           <div className="flex items-center gap-1.5 sm:gap-2 text-xs text-slate-500 overflow-x-auto no-scrollbar py-0.5">
             <button
@@ -219,7 +219,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       </div>
 
       {/* Main Page Layout Container */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8 space-y-8 sm:space-y-12">
+      <div className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-8 space-y-8 sm:space-y-12">
         {/* Top Product Section: Left (Gallery + Tech Specs) & Right (Details + Buy Card) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-10">
           
@@ -347,8 +347,6 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   </span>
                   <span className="text-slate-400">•</span>
                   <span className="text-slate-500 font-mono">SKU: {product.sku}</span>
-                  <span className="text-slate-400">•</span>
-                  <span className="text-slate-500 font-mono">Баркод: {product.barcode}</span>
                 </div>
                 <h1 className="text-2xl sm:text-[30px] font-bold text-slate-900 font-display leading-[1.15]">
                   {product.name}
@@ -366,15 +364,10 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
               {/* Bulk Tiered Pricing Grid */}
               <div className="bg-slate-50/80 rounded-2xl p-4 border border-slate-200 space-y-3">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-[13px] font-semibold text-slate-900 flex items-center gap-1.5">
-                    <Tag className="w-3.5 h-3.5 text-amber-600" />
-                    <span>Бөөний шатлалт үнэ (Тоо хэмжээний хөнгөлөлт)</span>
-                  </h3>
-                  <span className="text-[11px] text-emerald-700 font-bold hidden sm:inline">
-                    Хэмжээнээс хамаарч автоматаар тооцогдоно
-                  </span>
-                </div>
+                <h3 className="text-[13px] font-semibold text-slate-900 flex items-center gap-1.5">
+                  <Tag className="w-3.5 h-3.5 text-amber-600" />
+                  <span>Бөөний үнэ</span>
+                </h3>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
                   {product.bulkTiers.map((tier, idx) => {
@@ -414,24 +407,20 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               <div className="p-5 bg-slate-900 text-white rounded-3xl shadow-xl space-y-5 border border-slate-800">
                 <div className="flex flex-wrap items-end justify-between gap-3 border-b border-slate-800 pb-4">
                   <div>
-                    <span className="text-xs text-slate-400 font-medium">Нэгжийн үнэ (НӨАТ орсон):</span>
+                    <span className="text-xs text-slate-400">Нэгжийн үнэ</span>
                     <div className="text-2xl sm:text-3xl font-bold text-amber-400 font-display tabular-nums">
                       {formatMNT(currentUnitPrice)}
+                      <span className="ml-1 text-sm font-normal text-slate-400">/{product.uom}</span>
                     </div>
-                    <span className="text-[11px] text-slate-400">
-                      Хэмжих нэгж: 1 {product.uom} • Жин: {formatWeight(product.weightKg)}
-                    </span>
                   </div>
 
                   <div className="text-right">
-                    <span className="text-xs text-slate-400 font-medium">
-                      Нийт үнэ ({quantity} {product.uom}):
-                    </span>
+                    <span className="text-xs text-slate-400">Нийт үнэ</span>
                     <div className="text-2xl sm:text-3xl font-bold text-white font-display tabular-nums">
                       {formatMNT(totalPrice)}
                     </div>
-                    <span className="text-xs text-amber-300 font-mono font-bold">
-                      Нийт жин: {formatWeight(totalWeight)}
+                    <span className="text-xs text-slate-400 tabular-nums">
+                      {formatWeight(totalWeight)}
                     </span>
                   </div>
                 </div>

@@ -331,7 +331,7 @@ export const Header: React.FC<HeaderProps> = ({
       {/* =========================================================================
           DESKTOP MAIN NAVBAR (Hidden on Mobile, Clean & Powerful on Desktop)
          ========================================================================= */}
-      <div className="hidden md:block max-w-7xl mx-auto px-4 py-3">
+      <div className="hidden md:block max-w-6xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between gap-4 lg:gap-6">
           {/* Logo & Category */}
           <div className="flex items-center gap-3">
