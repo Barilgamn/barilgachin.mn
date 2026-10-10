@@ -61,7 +61,7 @@ export const OrderTrackerModal: React.FC<OrderTrackerModalProps> = ({
   };
 
   const steps = [
-    { title: 'Захиалга баталгаажсан', desc: 'Odoo SO үүссэн', done: true, time: '13:00' },
+    { title: 'Захиалга баталгаажсан', desc: 'Захиалга үүссэн', done: true, time: '13:00' },
     { title: 'Агуулахын бэлтгэл', desc: 'Палет ачилтад бэлэн болсон', done: true, time: '13:45' },
     { title: 'Тээвэрт ачигдсан', desc: 'Кранаар машинд ачсан', done: true, time: '14:20' },
     { title: 'Хүргэгдэж байна', desc: 'Замд явж байна (Яармаг чиглэл)', done: true, current: true, time: '14:45' },
@@ -82,7 +82,7 @@ export const OrderTrackerModal: React.FC<OrderTrackerModalProps> = ({
                 Захиалга & Тээвэр хянах
               </h3>
               <p className="text-xs text-slate-400">
-                Odoo Delivery Picking баримт болон тээврийн хэрэгслийн бодит байршил
+                Ачилтын баримт болон тээврийн хэрэгслийн бодит байршил
               </p>
             </div>
           </div>
@@ -101,7 +101,7 @@ export const OrderTrackerModal: React.FC<OrderTrackerModalProps> = ({
             <Search className="w-4 h-4 text-slate-400 ml-2" />
             <input
               type="text"
-              placeholder="Захиалгын дугаар эсвэл Odoo SO дугаар оруулна уу... (жишээ: ORD-2026-88421)"
+              placeholder="Захиалгын дугаар оруулна уу… (жишээ: SO-2026-1234)"
               value={orderQuery}
               onChange={(e) => setOrderQuery(e.target.value)}
               className="flex-1 text-xs sm:text-sm font-semibold text-slate-900 bg-transparent outline-hidden"
@@ -146,7 +146,7 @@ export const OrderTrackerModal: React.FC<OrderTrackerModalProps> = ({
               {/* Progress Timeline */}
               <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">
-                  Хүргэлтийн үе шат (Odoo Dispatch Status)
+                  Хүргэлтийн үе шат
                 </h4>
 
                 <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 relative">

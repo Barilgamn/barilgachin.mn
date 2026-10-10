@@ -12,12 +12,10 @@ import {
 
 interface B2BSectionProps {
   onOpenRFQ: () => void;
-  onOpenOdooModal: () => void;
 }
 
 export const B2BSection: React.FC<B2BSectionProps> = ({
   onOpenRFQ,
-  onOpenOdooModal,
 }) => {
   return (
     <section className="py-12 bg-gradient-to-b from-slate-50 via-white to-slate-100/50 text-slate-900 border-y border-slate-200 relative overflow-hidden">

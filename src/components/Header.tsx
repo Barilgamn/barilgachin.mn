@@ -62,7 +62,6 @@ interface HeaderProps {
   onOpenCart: () => void;
   onOpenCalculator: () => void;
   onOpenRFQ: () => void;
-  onOpenOdooModal: () => void;
   onSelectCategory: (categoryId: string) => void;
   selectedCategory: string;
   searchQuery: string;
@@ -79,7 +78,6 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenCart,
   onOpenCalculator,
   onOpenRFQ,
-  onOpenOdooModal,
   onSelectCategory,
   selectedCategory,
   searchQuery,
@@ -166,15 +164,14 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Quick Actions (Warehouse badge & Cart) */}
           <div className="flex items-center gap-2 shrink-0">
-            {/* Odoo Warehouse Quick Indicator */}
-            <button
-              onClick={onOpenOdooModal}
-              className="px-2 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
+            {/* Салбар агуулахын тэмдэг */}
+            <span
+              className="px-2 py-1 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold flex items-center gap-1"
               title="4 салбар агуулахын бодит үлдэгдэл"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
               <span>4 Агуулах</span>
-            </button>
+            </span>
 
             {/* Quick Live Chat */}
             <button

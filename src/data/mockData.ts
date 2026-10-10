@@ -1044,21 +1044,6 @@ export const PRODUCTS: Product[] = [
 ];
 
 
-export const ODOO_CONFIG_INFO = {
-  version: 'Odoo 18.0+e (Enterprise Construction Edition)',
-  serverHost: 'https://erp.barilgachin.mn/xmlrpc/2',
-  databaseName: 'odoo_barilga_prod_2026',
-  connectedModules: [
-    { name: 'odoo_stock', label: 'Агуулахын бодит үлдэгдэл (stock.quant)', status: 'Active (Real-time)', count: '4 салбар' },
-    { name: 'odoo_sale', label: 'Борлуулалт ба B2B үнийн санал (sale.order)', status: 'Active', count: '1,420 захиалга' },
-    { name: 'odoo_product', label: 'Барааны матриц ба SKU (product.template)', status: 'Active', count: '10,840 бараа' },
-    { name: 'odoo_account', label: 'НӨАТ ба Цахим нэхэмжлэх (account.move)', status: 'Active', count: 'E-barimt 3.0' },
-    { name: 'odoo_fleet', label: 'Хүргэлт & Логистик диспетчер (fleet.vehicle)', status: 'Active', count: '18 тээврийн хэрэгсэл' },
-  ],
-  syncLatencyMs: 42,
-  lastSyncTimestamp: '2026-08-29 13:00:15',
-};
-
 export const POPULAR_SEARCH_TERMS = [
   'МАК цемент M500',
   'Хийт бетон Евроблок',

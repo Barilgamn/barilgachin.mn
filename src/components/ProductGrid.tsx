@@ -63,7 +63,6 @@ interface ProductGridProps {
   onAddToRFQ: (product: Product) => void;
   onOpenCalculator?: () => void;
   onOpenRFQModal?: () => void;
-  onOpenOdooModal?: () => void;
   favoriteIds?: string[];
   onToggleFavorite?: (productId: string) => void;
 }
@@ -893,7 +892,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
               <span>Анхааруулга</span>
             </div>
             <p className="text-[11px] leading-relaxed text-[#614522]">
-              Барилгын материалын бөөний болон төслийн захиалгыг 5–20тн крантай машинаар 24-48 цагт Odoo ERP салбар агуулахуудаас шууд хүргэнэ. MNS стандартын чанарын паспорт болон НӨАТ-ын баримт олгогдоно.
+              Барилгын материалын бөөний болон төслийн захиалгыг 5–20тн крантай машинаар 24-48 цагт салбар агуулахуудаас шууд хүргэнэ. MNS стандартын чанарын паспорт болон НӨАТ-ын баримт олгогдоно.
             </p>
           </div>
 

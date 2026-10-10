@@ -9,7 +9,6 @@ import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
 import { MaterialCalculatorModal } from './components/MaterialCalculatorModal';
 import { RFQModal } from './components/RFQModal';
-import { OdooSyncModal } from './components/OdooSyncModal';
 import { OrderTrackerModal } from './components/OrderTrackerModal';
 import { LiveChatModal } from './components/LiveChatModal';
 import { MobileBottomNav, MobileTab } from './components/MobileBottomNav';
@@ -44,7 +43,6 @@ export default function App() {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState<boolean>(false);
   const [isCalculatorOpen, setIsCalculatorOpen] = useState<boolean>(false);
   const [isRfqOpen, setIsRfqOpen] = useState<boolean>(false);
-  const [isOdooModalOpen, setIsOdooModalOpen] = useState<boolean>(false);
   const [isOrderTrackerOpen, setIsOrderTrackerOpen] = useState<boolean>(false);
   const [isLiveChatOpen, setIsLiveChatOpen] = useState<boolean>(false);
 
@@ -208,7 +206,6 @@ export default function App() {
           setRfqTargetProduct(null);
           setIsRfqOpen(true);
         }}
-        onOpenOdooModal={() => setIsOdooModalOpen(true)}
         onOpenOrderTracker={() => setIsOrderTrackerOpen(true)}
         onOpenLiveChat={() => setIsLiveChatOpen(true)}
         onSelectCategory={(catId) => {
@@ -260,7 +257,6 @@ export default function App() {
                 setRfqTargetProduct(null);
                 setIsRfqOpen(true);
               }}
-              onOpenOdooModal={() => setIsOdooModalOpen(true)}
               favoriteIds={favoriteIds}
               onToggleFavorite={toggleFavorite}
             />
@@ -282,7 +278,6 @@ export default function App() {
               setRfqTargetProduct(null);
               setIsRfqOpen(true);
             }}
-            onOpenOdooModal={() => setIsOdooModalOpen(true)}
           />
         </>
       )}
@@ -330,7 +325,6 @@ export default function App() {
           setRfqTargetProduct(null);
           setIsRfqOpen(true);
         }}
-        onOpenOdooModal={() => setIsOdooModalOpen(true)}
       />
 
       {/* Mobile Bottom Navigation Dock (Apple Liquid Glass Design) */}
@@ -351,7 +345,6 @@ export default function App() {
         savedCount={favoriteIds.length}
         cartCount={cartCount}
         onOpenCart={() => setIsCartOpen(true)}
-        onOpenOdooModal={() => setIsOdooModalOpen(true)}
         onOpenCategories={() => {
           setSelectedProduct(null);
           const el = document.getElementById('catalog-section');
@@ -420,10 +413,6 @@ export default function App() {
         initialProduct={rfqTargetProduct}
       />
 
-      <OdooSyncModal
-        isOpen={isOdooModalOpen}
-        onClose={() => setIsOdooModalOpen(false)}
-      />
 
       <OrderTrackerModal
         isOpen={isOrderTrackerOpen}

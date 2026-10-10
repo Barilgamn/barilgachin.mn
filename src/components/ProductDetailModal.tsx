@@ -144,7 +144,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           </div>
 
           {/* =========================================================================
-              RIGHT COLUMN: Details, Tier Pricing, Odoo Stock & Purchase Actions (7 / 12)
+              RIGHT COLUMN: Details, Tier Pricing, Stock & Purchase Actions (7 / 12)
              ========================================================================= */}
           <div className="md:col-span-7 space-y-5">
             {/* Title & Brand Header */}
@@ -216,7 +216,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             <div className="space-y-2">
               <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-800 flex items-center gap-1.5">
                 <Building className="w-3.5 h-3.5 text-blue-600" />
-                <span>Салбар агуулахуудын бодит үлдэгдэл (Odoo ERP)</span>
+                <span>Салбар агуулахуудын үлдэгдэл</span>
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                 {product.stockLocations.map((loc, idx) => (

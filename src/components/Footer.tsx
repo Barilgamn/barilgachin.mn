@@ -16,13 +16,11 @@ import {
 interface FooterProps {
   onOpenCalculator: () => void;
   onOpenRFQ: () => void;
-  onOpenOdooModal: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
   onOpenCalculator,
   onOpenRFQ,
-  onOpenOdooModal,
 }) => {
   const WAREHOUSES = useWarehouses();
   return (

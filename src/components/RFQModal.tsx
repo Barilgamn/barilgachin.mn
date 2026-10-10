@@ -115,7 +115,7 @@ export const RFQModal: React.FC<RFQModalProps> = ({
     setIsSubmitting(true);
     setTimeout(() => {
       setIsSubmitting(false);
-      const generatedLead = `ODOO-RFQ-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+      const generatedLead = `RFQ-2026-${Math.floor(1000 + Math.random() * 9000)}`;
       setSubmittedLeadId(generatedLead);
     }, 1500);
   };
@@ -136,7 +136,7 @@ export const RFQModal: React.FC<RFQModalProps> = ({
                 </h3>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30">
                   <Database className="w-3 h-3" />
-                  Odoo Sales Pipeline
+                  Борлуулалтын баг
                 </span>
               </div>
               <p className="text-xs text-slate-400">
@@ -163,13 +163,13 @@ export const RFQModal: React.FC<RFQModalProps> = ({
                 Үнийн саналын хүсэлт амжилттай үүслээ!
               </h4>
               <p className="text-sm text-slate-600 max-w-lg mx-auto">
-                Таны хүсэлт Odoo ERP системд бүртгэгдсэн бөгөөд манай B2B төслийн менежер <strong>15-30 минутын дотор</strong> албан ёсны үнийн саналыг илгээнэ.
+                Таны хүсэлт бүртгэгдсэн бөгөөд манай B2B төслийн менежер <strong>15-30 минутын дотор</strong> албан ёсны үнийн саналыг илгээнэ.
               </p>
             </div>
 
             <div className="max-w-md mx-auto p-4 rounded-2xl bg-slate-50 border border-slate-200 text-left space-y-2 text-xs">
               <div className="flex justify-between">
-                <span className="text-slate-500">Odoo RFQ Дугаар:</span>
+                <span className="text-slate-500">Хүсэлтийн дугаар:</span>
                 <span className="font-mono font-bold text-purple-700">{submittedLeadId}</span>
               </div>
               <div className="flex justify-between">
@@ -411,12 +411,12 @@ export const RFQModal: React.FC<RFQModalProps> = ({
                 {isSubmitting ? (
                   <>
                     <Database className="w-4 h-4 text-white animate-spin" />
-                    <span className="text-white">Odoo ERP руу илгээж байна...</span>
+                    <span className="text-white">Илгээж байна...</span>
                   </>
                 ) : (
                   <>
                     <Send className="w-4 h-4 text-white" />
-                    <span className="text-white">Үнийн саналын хүсэлт илгээх (Odoo CRM)</span>
+                    <span className="text-white">Үнийн саналын хүсэлт илгээх</span>
                   </>
                 )}
               </button>

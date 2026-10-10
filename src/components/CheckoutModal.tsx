@@ -52,7 +52,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     };
   }, [isOpen]);
 
-  // Step Wizard State (1: Customer -> 2: Shipping/Pickup -> 3: VAT/E-barimt -> 4: Payment & Odoo)
+  // Step Wizard State (1: Customer -> 2: Shipping/Pickup -> 3: VAT/E-barimt -> 4: Payment)
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1);
 
   // Step 1: Customer Info
@@ -76,7 +76,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const [companyName, setCompanyName] = useState('Ган Хийц Констракшн ХХК');
   const [vatEmail, setVatEmail] = useState('accounting@ganhiits.mn');
 
-  // Step 4: Payment Method & Odoo Sync
+  // Step 4: Payment Method
   const [paymentMethod, setPaymentMethod] = useState<'qpay' | 'socialpay' | 'khanbank' | 'storepay' | 'invoice_odoo'>('qpay');
   const [isProcessing, setIsProcessing] = useState(false);
   const [copiedField, setCopiedField] = useState<string | null>(null);
@@ -174,13 +174,13 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     { num: 1, label: 'Захиалагч' },
     { num: 2, label: 'Хүргэлт & Салбар' },
     { num: 3, label: 'НӨАТ 3.0' },
-    { num: 4, label: 'Төлбөр & Odoo ERP' },
+    { num: 4, label: 'Төлбөр' },
   ];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm animate-in fade-in overflow-y-auto">
       <div className="bg-white w-full max-w-4xl rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[92vh] my-auto">
-        {/* Header with Odoo Live Integration Badge */}
+        {/* Header */}
         <div className="bg-slate-900 text-white p-5 flex items-center justify-between border-b border-slate-800">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-bold shadow-md">
@@ -193,11 +193,11 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 </h3>
                 <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-purple-950/80 text-purple-300 border border-purple-800 text-[10px] font-mono">
                   <Database className="w-3 h-3 text-purple-400" />
-                  Odoo 18.0+e Sync
+                  Баталгаат захиалга
                 </span>
               </div>
               <p className="text-xs text-slate-400">
-                Захиалгын мэдээлэл Odoo ERP борлуулалтын модульд автоматаар бүртгэгдэнэ
+                Захиалгын мэдээлэл манай системд бүртгэгдэж, борлуулалтын менежер холбогдоно
               </p>
             </div>
           </div>
@@ -267,7 +267,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 Захиалга амжилттай баталгаажлаа!
               </h4>
               <p className="text-xs sm:text-sm text-slate-600 max-w-lg mx-auto">
-                Баярлалаа! Таны барилгын материалын захиалга Odoo 18.0 ERP системд бүртгэгдэж, агуулахын ачилтын дараалалд орлоо.
+                Баярлалаа! Таны барилгын материалын захиалга бүртгэгдэж, агуулахын ачилтын дараалалд орлоо.
               </p>
             </div>
 
@@ -288,7 +288,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               </div>
 
               <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-                <span className="text-slate-500">Odoo Борлуулалтын захиалга (Sale Order):</span>
+                <span className="text-slate-500">Борлуулалтын захиалгын дугаар:</span>
                 <div className="flex items-center gap-2">
                   <span className="font-mono font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-200">
                     {orderCompleted.odooSaleOrder}
@@ -303,7 +303,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               </div>
 
               <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-                <span className="text-slate-500">Odoo Агуулахын ачилтын хуудас (Picking):</span>
+                <span className="text-slate-500">Агуулахын ачилтын хуудас:</span>
                 <div className="flex items-center gap-2">
                   <span className="font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
                     {orderCompleted.odooPickingRef}
@@ -683,7 +683,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 </div>
               )}
 
-              {/* STEP 4: Payment Methods & Odoo Order Creation */}
+              {/* STEP 4: Payment Methods & Order Creation */}
               {currentStep === 4 && (
                 <div className="bg-white p-5 rounded-2xl border border-slate-200 space-y-4 shadow-2xs animate-in fade-in">
                   <div className="border-b border-slate-100 pb-3">
@@ -698,7 +698,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                       { id: 'qpay', label: 'QPay QR', desc: 'Бүх банкны апп', icon: QrCode },
                       { id: 'socialpay', label: 'SocialPay', desc: 'Голомт банк', icon: CreditCard },
                       { id: 'khanbank', label: 'Хаан Банк', desc: 'Корпорэйт гүйлгээ', icon: Building2 },
-                      { id: 'invoice_odoo', label: 'Odoo Нэхэмжлэх', desc: 'Гэрээт B2B нэхэмжлэх', icon: Database },
+                      { id: 'invoice_odoo', label: 'Нэхэмжлэхээр', desc: 'Гэрээт B2B нэхэмжлэх', icon: Database },
                     ].map((method) => {
                       const Icon = method.icon;
                       const isSelected = paymentMethod === method.id;
@@ -745,10 +745,10 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     <div className="p-4 bg-purple-50 rounded-2xl border border-purple-200 text-xs space-y-2">
                       <div className="font-bold text-purple-950 flex items-center gap-2">
                         <Database className="w-4 h-4 text-purple-700" />
-                        <span>Odoo 18.0 ERP B2B Цахим нэхэмжлэх үүсэх</span>
+                        <span>B2B цахим нэхэмжлэх үүснэ</span>
                       </div>
                       <p className="text-purple-900 leading-relaxed text-[11px]">
-                        Захиалга батлагдмагц Odoo системээс байгууллагын ТТД <strong>{companyRegister || '6784912'}</strong> дээр албан ёсны цахим нэхэмжлэх (Invoice) үүсэж таны и-мэйл хаягаар илгээгдэнэ.
+                        Захиалга батлагдмагц байгууллагын ТТД <strong>{companyRegister || '6784912'}</strong> дээр албан ёсны цахим нэхэмжлэх (Invoice) үүсэж таны и-мэйл хаягаар илгээгдэнэ.
                       </p>
                     </div>
                   )}
@@ -857,11 +857,11 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     {isProcessing ? (
                       <>
                         <Database className="w-4 h-4 text-white animate-spin" />
-                        <span className="text-white">Odoo системд захиалга бүртгэж байна...</span>
+                        <span className="text-white">Захиалга бүртгэж байна...</span>
                       </>
                     ) : (
                       <>
-                        <span className="text-white">Төлбөр төлж Odoo захиалга үүсгэх</span>
+                        <span className="text-white">Төлбөр төлж захиалга үүсгэх</span>
                         <ArrowRight className="w-4 h-4 text-white" />
                       </>
                     )}

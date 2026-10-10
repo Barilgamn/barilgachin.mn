@@ -16,14 +16,12 @@ import { formatMNT } from '../utils/formatters';
 interface HeroSectionProps {
   onOpenCalculator: () => void;
   onOpenRFQ: () => void;
-  onOpenOdooModal: () => void;
   onSelectCategory: (catId: string) => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   onOpenCalculator,
   onOpenRFQ,
-  onOpenOdooModal,
   onSelectCategory,
 }) => {
   return (

@@ -17,7 +17,6 @@ interface MobileBottomNavProps {
   savedCount: number;
   cartCount: number;
   onOpenCart: () => void;
-  onOpenOdooModal: () => void;
   onOpenCategories: () => void;
   onOpenBrands: () => void;
   onOpenFeatured: () => void;
@@ -29,7 +28,6 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   savedCount,
   cartCount,
   onOpenCart,
-  onOpenOdooModal,
   onOpenCategories,
   onOpenBrands,
   onOpenFeatured,
@@ -130,12 +128,9 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
         <span className="text-[10px] tracking-tight">Хадгалсан</span>
       </button>
 
-      {/* 6. Профайл / Odoo (Profile) */}
+      {/* 6. Профайл */}
       <button
-        onClick={() => {
-          onTabChange('profile');
-          onOpenOdooModal();
-        }}
+        onClick={() => onTabChange('profile')}
         className={`flex flex-col items-center justify-center py-1 px-2 relative transition-all cursor-pointer ${
           activeTab === 'profile' ? 'text-slate-950 font-bold' : 'text-slate-500 hover:text-slate-800'
         }`}

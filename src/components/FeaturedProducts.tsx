@@ -92,7 +92,7 @@ export const FeaturedProducts: React.FC<FeaturedProductsProps> = ({
             Шилдэг барилгын материалууд
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-xl">
-            Odoo ERP-ээр шууд холбогдсон 4 агуулахын бодит үлдэгдэлтэй, баталгаат MNS сертификаттай бүтээгдэхүүнүүд.
+            4 салбар агуулахын бодит үлдэгдэлтэй, баталгаат MNS сертификаттай бүтээгдэхүүнүүд.
           </p>
         </div>
 
