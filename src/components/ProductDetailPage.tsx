@@ -241,24 +241,6 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   className="w-full h-full object-contain p-2 sm:p-4 group-hover:scale-105 transition-transform duration-300"
                 />
 
-                {/* Overlaid Badges */}
-                <div className="absolute top-3.5 left-3.5 flex flex-col gap-1.5 items-start">
-                  <span className="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-slate-900/90 text-amber-400 backdrop-blur-md shadow-xs">
-                    {product.brand}
-                  </span>
-                  {product.isMNSCertified && (
-                    <span className="flex items-center gap-1 text-[11px] font-bold text-emerald-800 bg-emerald-100/90 border border-emerald-300 px-2 py-0.5 rounded-md backdrop-blur-md">
-                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                      <span>{product.mnsStandard}</span>
-                    </span>
-                  )}
-                </div>
-
-                <div className="absolute top-3.5 right-3.5">
-                  <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-white/90 text-slate-800 border border-slate-200 shadow-xs">
-                    Нөөцтэй ({product.totalStock.toLocaleString()} {product.uom})
-                  </span>
-                </div>
               </div>
 
               {/* Thumbnails list */}
@@ -341,13 +323,6 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             {/* Header & Product Information */}
             <div className="bg-white rounded-3xl p-5 sm:p-7 border border-slate-200 shadow-sm space-y-4">
               <div className="space-y-1.5 border-b border-slate-100 pb-4">
-                <div className="flex items-center gap-2 text-xs font-bold flex-wrap">
-                  <span className="px-2.5 py-1 rounded-md bg-amber-100 text-amber-900 font-semibold tracking-wide uppercase">
-                    {product.brand}
-                  </span>
-                  <span className="text-slate-400">•</span>
-                  <span className="text-slate-500 font-mono">SKU: {product.sku}</span>
-                </div>
                 <h1 className="text-2xl sm:text-[30px] font-bold text-slate-900 font-display leading-[1.15]">
                   {product.name}
                 </h1>
@@ -456,7 +431,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   {/* Add to Cart button */}
                   <button
                     onClick={handleAddToCart}
-                    className={`flex-1 py-3.5 px-6 rounded-xl font-extrabold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg active:scale-98 ${
+                    className={`flex-1 min-w-[9rem] py-3.5 px-5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 whitespace-nowrap transition-all cursor-pointer shadow-lg active:scale-98 ${
                       isAdded
                         ? 'bg-emerald-500 text-white shadow-emerald-500/20'
                         : 'btn-liquid-dark'
@@ -465,7 +440,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                     {isAdded ? (
                       <>
                         <Check className="w-5 h-5 text-white" />
-                        <span className="text-white">Сагсанд амжилттай нэмэгдлээ!</span>
+                        <span className="text-white">Нэмэгдлээ</span>
                       </>
                     ) : (
                       <>
@@ -478,11 +453,11 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   {/* RFQ Quote Button */}
                   <button
                     onClick={() => onAddToRFQ(product)}
-                    className="px-4 py-3.5 rounded-xl btn-liquid-glass text-white font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer shrink-0 border border-white/20 hover:border-white/40"
+                    className="px-4 py-3.5 rounded-xl bg-white/10 hover:bg-white/15 text-white font-semibold text-xs flex items-center justify-center gap-1.5 cursor-pointer shrink-0 border border-white/25 hover:border-white/40 transition-colors whitespace-nowrap"
                     title="B2B Төслийн үнийн санал авах"
                   >
-                    <FileText className="w-4 h-4 text-slate-300" />
-                    <span className="text-white">B2B Үнийн санал</span>
+                    <FileText className="w-4 h-4" />
+                    <span>Үнийн санал</span>
                   </button>
                 </div>
 

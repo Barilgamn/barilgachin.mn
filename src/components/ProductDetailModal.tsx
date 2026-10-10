@@ -335,11 +335,11 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                     onAddToRFQ(product);
                     onClose();
                   }}
-                  className="px-3 sm:px-4 py-3 rounded-xl btn-liquid-glass text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shrink-0 border border-white/20"
+                  className="px-3 sm:px-4 py-3 rounded-xl bg-white/10 hover:bg-white/15 text-white font-semibold text-xs flex items-center gap-1.5 cursor-pointer shrink-0 border border-white/25 transition-colors"
                   title="B2B Төслийн үнийн санал авах"
                 >
-                  <FileText className="w-4 h-4 text-slate-300" />
-                  <span className="hidden sm:inline text-white">B2B Үнийн санал</span>
+                  <FileText className="w-4 h-4" />
+                  <span className="hidden sm:inline">Үнийн санал</span>
                 </button>
               </div>
             </div>
