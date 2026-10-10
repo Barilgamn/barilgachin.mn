@@ -1,4 +1,5 @@
 import React from 'react';
+import { useWarehouses } from '../CatalogProvider';
 import {
   Building2,
   Phone,
@@ -11,7 +12,6 @@ import {
   Calculator,
   FileText,
 } from 'lucide-react';
-import { WAREHOUSES } from '../data/mockData';
 
 interface FooterProps {
   onOpenCalculator: () => void;
@@ -24,6 +24,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenRFQ,
   onOpenOdooModal,
 }) => {
+  const WAREHOUSES = useWarehouses();
   return (
     <footer className="bg-slate-100/80 text-slate-600 text-xs border-t border-slate-200">
       {/* Top Warehouse Locations Grid */}

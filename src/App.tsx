@@ -13,11 +13,13 @@ import { OdooSyncModal } from './components/OdooSyncModal';
 import { OrderTrackerModal } from './components/OrderTrackerModal';
 import { LiveChatModal } from './components/LiveChatModal';
 import { MobileBottomNav, MobileTab } from './components/MobileBottomNav';
-import { PRODUCTS } from './data/mockData';
+import { useCatalogState } from './CatalogProvider';
 import { Product, CartItem, UnitOfMeasure } from './types';
 import { MessageSquare, Phone } from 'lucide-react';
 
 export default function App() {
+  const { products: PRODUCTS, loading, error } = useCatalogState();
+
   // Navigation & Search State
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -33,23 +35,9 @@ export default function App() {
     });
   };
 
-  // Cart State (Pre-populated with 2 construction items so users immediately see freight weight & bulk math)
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      product: PRODUCTS[0], // MAK Eurocement
-      quantity: 50,
-      selectedUom: 'шуудай 50кг',
-      itemTotal: 50 * 18500, // 50+ tier: 18,500
-      itemWeightTotal: 50 * 50, // 2500 kg
-    },
-    {
-      product: PRODUCTS[1], // MAK Euroblock AAC
-      quantity: 20,
-      selectedUom: 'ширхэг',
-      itemTotal: 20 * 13500, // 270,000
-      itemWeightTotal: 20 * 22, // 440 kg
-    },
-  ]);
+  // Сагс хоосноос эхэлнэ. Өмнө нь жишээ 2 бараагаар дүүргэсэн байсан нь
+  // статик каталогт тулгуурладаг байсан бөгөөд жинхэнэ дэлгүүрт буруу.
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   // Modals visibility state
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
@@ -171,6 +159,33 @@ export default function App() {
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const totalCartWeight = cartItems.reduce((sum, item) => sum + item.itemWeightTotal, 0);
   const totalCartAmount = cartItems.reduce((sum, item) => sum + item.itemTotal, 0);
+
+  // Каталог баазаас ирэх хүртэл, эсвэл алдаа гарвал юу болсныг шууд хэлнэ.
+  if (loading) {
+    return (
+      <div className="min-h-screen grid place-items-center bg-white">
+        <p className="text-sm text-slate-400">Каталог ачаалж байна…</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen grid place-items-center bg-white px-6 text-center">
+        <div className="max-w-sm">
+          <p className="font-semibold text-slate-900">Каталог ачаалж чадсангүй</p>
+          <p className="mt-1 text-sm text-slate-500">{error}</p>
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="btn-liquid-dark mt-5 px-4 py-2 text-sm font-semibold cursor-pointer"
+          >
+            Дахин оролдох
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans selection:bg-amber-500 selection:text-slate-950">

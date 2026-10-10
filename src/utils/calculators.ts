@@ -1,11 +1,11 @@
-import { PRODUCTS } from '../data/mockData';
-import { CalculationResult } from '../types';
+import { CalculationResult, Product } from '../types';
 
 /**
  * 1. Хана, блокийн тооцоолуур
  * Тооцоолох: Ханын урт (м), өндөр (м), хаалга/цонхны талбай (м²), блокийн зузаан (200мм / 300мм)
  */
 export function calculateWallBlocks(
+  products: Product[],
   lengthM: number,
   heightM: number,
   openingsAreaM2: number,
@@ -25,8 +25,8 @@ export function calculateWallBlocks(
   const adhesiveBags = Math.max(1, Math.ceil(wallVolume / 1.1));
 
   // Find products from catalog
-  const blockProduct = PRODUCTS.find((p) => p.sku === 'BLK-MAK-AAC600') || PRODUCTS[1];
-  const adhesiveProduct = PRODUCTS.find((p) => p.sku === 'ADH-KNAUF-FLIESEN') || PRODUCTS[5];
+  const blockProduct = products.find((p) => p.sku === 'BLK-MAK-AAC600') || products[1];
+  const adhesiveProduct = products.find((p) => p.sku === 'ADH-KNAUF-FLIESEN') || products[5];
 
   const materials = [
     {
@@ -68,11 +68,11 @@ export function calculateWallBlocks(
  * - Хайрга: 0.85 м³ (~1250 кг)
  * - Ус: 180-200 л
  */
-export function calculateConcreteMix(volumeM3: number, concreteGrade: 'M200' | 'M250' | 'M300' = 'M250'): CalculationResult {
+export function calculateConcreteMix(products: Product[], volumeM3: number, concreteGrade: 'M200' | 'M250' | 'M300' = 'M250'): CalculationResult {
   const cementPerM3Kg = concreteGrade === 'M300' ? 380 : concreteGrade === 'M250' ? 340 : 290;
   const cementSacks = Math.ceil((volumeM3 * cementPerM3Kg) / 50);
 
-  const cementProduct = PRODUCTS.find((p) => p.sku === 'CEM-MAK-PC425') || PRODUCTS[0];
+  const cementProduct = products.find((p) => p.sku === 'CEM-MAK-PC425') || products[0];
 
   const materials = [
     {
@@ -101,13 +101,13 @@ export function calculateConcreteMix(volumeM3: number, concreteGrade: 'M200' | '
  * 3. Дулаалгын эрдэс хөвөн тооцоолуур
  * Тооцоолох: Дулаалах талбай (м²), Зузаан (50мм / 100мм), Давхарга
  */
-export function calculateInsulation(areaM2: number, thicknessMm: number = 100): CalculationResult {
+export function calculateInsulation(products: Product[], areaM2: number, thicknessMm: number = 100): CalculationResult {
   // 1 bundle of KNAUF RW100 covers 5.76 m2
   const coveragePerBundle = thicknessMm === 100 ? 5.76 : 11.52;
   const wastage = 1.05;
   const bundles = Math.ceil((areaM2 / coveragePerBundle) * wastage);
 
-  const insulationProduct = PRODUCTS.find((p) => p.sku === 'INS-KNAUF-RW100') || PRODUCTS[3];
+  const insulationProduct = products.find((p) => p.sku === 'INS-KNAUF-RW100') || products[3];
 
   const materials = [
     {
@@ -136,10 +136,10 @@ export function calculateInsulation(areaM2: number, thicknessMm: number = 100): 
  * 4. Плита ба Цавууны тооцоолуур
  * Тооцоолох: Шал/ханын талбай (м²), Наах арга, Хаягдал (7-10%)
  */
-export function calculateTiling(areaM2: number): CalculationResult {
+export function calculateTiling(products: Product[], areaM2: number): CalculationResult {
   // Adhesive: ~4 kg/m2 -> 25kg bag covers ~6 m2
   const adhesiveBags = Math.ceil((areaM2 * 4) / 25);
-  const adhesiveProduct = PRODUCTS.find((p) => p.sku === 'ADH-KNAUF-FLIESEN') || PRODUCTS[5];
+  const adhesiveProduct = products.find((p) => p.sku === 'ADH-KNAUF-FLIESEN') || products[5];
 
   const materials = [
     {
@@ -168,12 +168,12 @@ export function calculateTiling(areaM2: number): CalculationResult {
  * 5. Будаг, эмульсийн тооцоолуур
  * Тооцоолох: Будах ханын нийт талбай (м²), Давхаргын тоо (2 үе)
  */
-export function calculatePaint(areaM2: number, coats: number = 2): CalculationResult {
+export function calculatePaint(products: Product[], areaM2: number, coats: number = 2): CalculationResult {
   // 1 bucket 18L covers ~80 m2 in 2 coats (or 160m2 in 1 coat)
   const totalPaintArea = areaM2 * coats;
   const buckets = Math.max(1, Math.ceil(totalPaintArea / 160));
 
-  const paintProduct = PRODUCTS.find((p) => p.sku === 'PNT-TIK-LUMI20') || PRODUCTS[4];
+  const paintProduct = products.find((p) => p.sku === 'PNT-TIK-LUMI20') || products[4];
 
   const materials = [
     {

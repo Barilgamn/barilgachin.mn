@@ -16,8 +16,9 @@ import {
   Database,
   ArrowRight,
 } from 'lucide-react';
+import { useProducts } from '../CatalogProvider';
 import { Product, UnitOfMeasure } from '../types';
-import { PRODUCTS } from '../data/mockData';
+
 import { formatMNT } from '../utils/formatters';
 
 interface RFQModalProps {
@@ -31,6 +32,7 @@ export const RFQModal: React.FC<RFQModalProps> = ({
   onClose,
   initialProduct,
 }) => {
+  const PRODUCTS = useProducts();
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';

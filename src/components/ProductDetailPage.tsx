@@ -20,9 +20,9 @@ import {
   ExternalLink,
   Zap,
 } from 'lucide-react';
+import { useCategories } from '../CatalogProvider';
 import { Product, UnitOfMeasure, CartItem } from '../types';
 import { formatMNT, formatWeight } from '../utils/formatters';
-import { CATEGORIES } from '../data/mockData';
 
 interface ProductDetailPageProps {
   product: Product;
@@ -49,6 +49,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   onSelectCategory,
   onOpenCalculator,
 }) => {
+  const CATEGORIES = useCategories();
   const [selectedImage, setSelectedImage] = useState<string>(product.images[0] || '');
   const [quantity, setQuantity] = useState<number>(1);
   const [isAdded, setIsAdded] = useState<boolean>(false);

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useWarehouses } from '../CatalogProvider';
 import {
   X,
   CheckCircle2,
@@ -25,7 +26,6 @@ import {
 import confetti from 'canvas-confetti';
 import { CartItem } from '../types';
 import { formatMNT, formatWeight, getRecommendedVehicle } from '../utils/formatters';
-import { WAREHOUSES } from '../data/mockData';
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -40,6 +40,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   items,
   onOrderSuccess,
 }) => {
+  const WAREHOUSES = useWarehouses();
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';

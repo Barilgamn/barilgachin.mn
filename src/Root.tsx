@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import App from './App';
+import { CatalogProvider } from './CatalogProvider';
 
 // Админ багцыг дэлгүүрийн багцаас тусгаарлана — худалдан авагч үүнийг татахгүй.
 const AdminApp = lazy(() =>
@@ -24,7 +25,14 @@ export const Root: React.FC = () => (
           </Suspense>
         }
       />
-      <Route path="*" element={<App />} />
+      <Route
+        path="*"
+        element={
+          <CatalogProvider>
+            <App />
+          </CatalogProvider>
+        }
+      />
     </Routes>
   </BrowserRouter>
 );

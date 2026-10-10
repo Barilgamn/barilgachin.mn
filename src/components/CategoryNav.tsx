@@ -1,5 +1,6 @@
 import React from 'react';
-import { CATEGORIES } from '../data/mockData';
+import { useCategories } from '../CatalogProvider';
+
 import {
   Truck,
   Grid3X3,
@@ -50,6 +51,7 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
   selectedCategory,
   onSelectCategory,
 }) => {
+  const CATEGORIES = useCategories();
   return (
     <section className="py-8 bg-white border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4">

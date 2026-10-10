@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
+import { useCategories, useWarehouses } from '../CatalogProvider';
 import { Product, UnitOfMeasure } from '../types';
 import { ProductCard } from './ProductCard';
-import { CATEGORIES, WAREHOUSES } from '../data/mockData';
+
 import { CONSTRUCTION_BRANDS } from '../data/brandsData';
 import {
   ChevronRight,
@@ -79,6 +80,8 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
   favoriteIds = [],
   onToggleFavorite,
 }) => {
+  const CATEGORIES = useCategories();
+  const WAREHOUSES = useWarehouses();
   // Multiple Brand selection state
   const [selectedBrandIds, setSelectedBrandIds] = useState<string[]>([]);
 

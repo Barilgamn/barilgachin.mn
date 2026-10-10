@@ -21,6 +21,7 @@ import {
   calculatePaint,
 } from '../utils/calculators';
 import { formatMNT, formatWeight, getRecommendedVehicle } from '../utils/formatters';
+import { useProducts } from '../CatalogProvider';
 import { CalculationResult, Product, UnitOfMeasure } from '../types';
 
 interface MaterialCalculatorModalProps {
@@ -70,28 +71,30 @@ export const MaterialCalculatorModal: React.FC<MaterialCalculatorModalProps> = (
 
   const [addedBatchSuccess, setAddedBatchSuccess] = useState<boolean>(false);
 
+  const products = useProducts();
+
   if (!isOpen) return null;
 
   // Compute active calculation
   let currentResult: CalculationResult;
   switch (activeTab) {
     case 'wall':
-      currentResult = calculateWallBlocks(wallLength, wallHeight, wallOpenings, blockThickness);
+      currentResult = calculateWallBlocks(products, wallLength, wallHeight, wallOpenings, blockThickness);
       break;
     case 'concrete':
-      currentResult = calculateConcreteMix(concreteVolume, concreteGrade);
+      currentResult = calculateConcreteMix(products, concreteVolume, concreteGrade);
       break;
     case 'insulation':
-      currentResult = calculateInsulation(insulationArea, insulationThickness);
+      currentResult = calculateInsulation(products, insulationArea, insulationThickness);
       break;
     case 'tiling':
-      currentResult = calculateTiling(tilingArea);
+      currentResult = calculateTiling(products, tilingArea);
       break;
     case 'paint':
-      currentResult = calculatePaint(paintArea, paintCoats);
+      currentResult = calculatePaint(products, paintArea, paintCoats);
       break;
     default:
-      currentResult = calculateWallBlocks(wallLength, wallHeight, wallOpenings);
+      currentResult = calculateWallBlocks(products, wallLength, wallHeight, wallOpenings);
   }
 
   const recommendedVehicle = getRecommendedVehicle(currentResult.totalWeight);

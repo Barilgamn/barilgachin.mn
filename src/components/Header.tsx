@@ -22,8 +22,9 @@ import {
   Droplets,
   Wrench,
 } from 'lucide-react';
-import { CATEGORIES, PRODUCTS, POPULAR_SEARCH_TERMS } from '../data/mockData';
+import { POPULAR_SEARCH_TERMS } from '../data/mockData';
 import { formatMNT, formatWeight } from '../utils/formatters';
+import { useCategories, useProducts } from '../CatalogProvider';
 import { Product } from '../types';
 
 const getCategoryIcon = (iconName: string, className = "w-4 h-4") => {
@@ -87,6 +88,8 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenOrderTracker,
   onOpenLiveChat,
 }) => {
+  const CATEGORIES = useCategories();
+  const PRODUCTS = useProducts();
   const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
