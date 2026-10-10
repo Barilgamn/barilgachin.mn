@@ -11,18 +11,6 @@
         "--port=3001"
       ],
       "port": 3001
-    },
-    {
-      "name": "barilga-setguul",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": [
-        "--prefix",
-        "/Users/ochir/Desktop/BARILGA-SETGUUL",
-        "run",
-        "dev"
-      ],
-      "port": 3000,
-      "autoPort": true
     }
   ]
 }
