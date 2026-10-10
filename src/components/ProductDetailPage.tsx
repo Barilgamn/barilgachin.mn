@@ -378,36 +378,35 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 </div>
               </div>
 
-              {/* Purchase Action Box (Sticky/Prominent Dark Card) */}
-              <div className="p-5 bg-slate-900 text-white rounded-3xl shadow-xl space-y-5 border border-slate-800">
-                <div className="flex flex-wrap items-end justify-between gap-3 border-b border-slate-800 pb-4">
-                  <div>
-                    <span className="text-xs text-slate-400">Нэгжийн үнэ</span>
-                    <div className="text-2xl sm:text-3xl font-bold text-amber-400 font-display tabular-nums">
-                      {formatMNT(currentUnitPrice)}
-                      <span className="ml-1 text-sm font-normal text-slate-400">/{product.uom}</span>
-                    </div>
-                  </div>
-
-                  <div className="text-right">
-                    <span className="text-xs text-slate-400">Нийт үнэ</span>
-                    <div className="text-2xl sm:text-3xl font-bold text-white font-display tabular-nums">
-                      {formatMNT(totalPrice)}
-                    </div>
-                    <span className="text-xs text-slate-400 tabular-nums">
-                      {formatWeight(totalWeight)}
-                    </span>
-                  </div>
+              {/* Худалдан авах хэсэг */}
+              <div className="p-5 bg-slate-900 text-white rounded-3xl shadow-xl border border-slate-800 space-y-4">
+                {/* Нэгжийн үнэ — хоёрдогч мэдээлэл */}
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="text-xs text-slate-400">Нэгжийн үнэ</span>
+                  <span className="text-base font-semibold text-amber-400 tabular-nums">
+                    {formatMNT(currentUnitPrice)}
+                    <span className="ml-0.5 text-xs font-normal text-slate-500">/{product.uom}</span>
+                  </span>
                 </div>
 
-                {/* Quantity input and Buttons */}
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                  {/* Quantity selector */}
-                  <div className="flex items-center justify-between bg-slate-800 rounded-xl p-1.5 border border-slate-700 shrink-0">
+                {/* Нийт дүн — хэрэглэгчийн төлөх дүн тул хамгийн тод */}
+                <div className="border-t border-slate-800 pt-4">
+                  <span className="text-xs text-slate-400">Нийт үнэ</span>
+                  <div className="mt-0.5 text-3xl sm:text-4xl font-bold font-display tabular-nums leading-none">
+                    {formatMNT(totalPrice)}
+                  </div>
+                  <p className="mt-1.5 text-xs text-slate-400 tabular-nums">
+                    {quantity} {product.uom} · {formatWeight(totalWeight)}
+                  </p>
+                </div>
+
+                {/* Тоо ширхэг ба сагслах — хамт явдаг тул нэг мөрөнд */}
+                <div className="flex items-stretch gap-2.5">
+                  <div className="flex items-center rounded-xl bg-slate-800 border border-slate-700 shrink-0">
                     <button
                       onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
                       disabled={quantity <= 1}
-                      className="w-10 h-10 flex items-center justify-center text-slate-300 hover:text-white disabled:opacity-30 cursor-pointer transition-colors"
+                      className="w-10 h-12 grid place-items-center text-slate-300 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
                       aria-label="Хасах"
                     >
                       <Minus className="w-4 h-4" />
@@ -417,60 +416,58 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                       min="1"
                       value={quantity}
                       onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                      className="w-14 sm:w-16 text-center text-base font-bold bg-transparent text-white outline-hidden"
+                      aria-label="Тоо ширхэг"
+                      className="w-12 text-center text-base font-semibold bg-transparent text-white outline-hidden tabular-nums"
                     />
                     <button
                       onClick={() => setQuantity((prev) => prev + 1)}
-                      className="w-10 h-10 flex items-center justify-center text-slate-300 hover:text-white cursor-pointer transition-colors"
+                      className="w-10 h-12 grid place-items-center text-slate-300 hover:text-white cursor-pointer transition-colors"
                       aria-label="Нэмэх"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
                   </div>
 
-                  {/* Add to Cart button */}
                   <button
                     onClick={handleAddToCart}
-                    className={`flex-1 min-w-[9rem] py-3.5 px-5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 whitespace-nowrap transition-all cursor-pointer shadow-lg active:scale-98 ${
+                    className={`flex-1 h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer ${
                       isAdded
-                        ? 'bg-emerald-500 text-white shadow-emerald-500/20'
-                        : 'btn-liquid-dark'
+                        ? 'bg-emerald-500 text-white'
+                        : 'bg-amber-400 text-slate-950 hover:bg-amber-300'
                     }`}
                   >
                     {isAdded ? (
                       <>
-                        <Check className="w-5 h-5 text-white" />
-                        <span className="text-white">Нэмэгдлээ</span>
+                        <Check className="w-4 h-4" />
+                        <span>Нэмэгдлээ</span>
                       </>
                     ) : (
                       <>
-                        <ShoppingCart className="w-5 h-5 text-white" />
-                        <span className="text-white">Сагсанд нэмэх</span>
+                        <ShoppingCart className="w-4 h-4" />
+                        <span>Сагслах</span>
                       </>
                     )}
                   </button>
-
-                  {/* RFQ Quote Button */}
-                  <button
-                    onClick={() => onAddToRFQ(product)}
-                    className="px-4 py-3.5 rounded-xl bg-white/10 hover:bg-white/15 text-white font-semibold text-xs flex items-center justify-center gap-1.5 cursor-pointer shrink-0 border border-white/25 hover:border-white/40 transition-colors whitespace-nowrap"
-                    title="B2B Төслийн үнийн санал авах"
-                  >
-                    <FileText className="w-4 h-4" />
-                    <span>Үнийн санал</span>
-                  </button>
                 </div>
 
-                {/* Logistics note */}
-                <div className="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-800">
-                  <div className="flex items-center gap-1.5">
-                    <Truck className="w-3.5 h-3.5 text-amber-400" />
-                    <span>УБ хот дотор 2-4 цагт хүргэлт эсвэл агуулахаас очиж авах</span>
-                  </div>
+                {/* Хоёрдогч үйлдэл — өөрийн мөрөнд, давчуурахгүй */}
+                <button
+                  onClick={() => onAddToRFQ(product)}
+                  className="w-full h-11 rounded-xl border border-slate-700 text-slate-300 hover:text-white hover:border-slate-500 text-sm font-medium flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                >
+                  <FileText className="w-4 h-4" />
+                  <span>Бөөний үнийн санал авах</span>
+                </button>
+
+                <div className="flex items-center justify-between gap-3 border-t border-slate-800 pt-3 text-[11px] text-slate-400">
+                  <span className="flex items-center gap-1.5">
+                    <Truck className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                    УБ дотор 2-4 цагт хүргэнэ
+                  </span>
                   {onOpenCalculator && (
                     <button
                       onClick={onOpenCalculator}
-                      className="text-amber-400 hover:text-amber-300 font-bold underline cursor-pointer"
+                      className="text-amber-400 hover:text-amber-300 font-medium underline cursor-pointer shrink-0"
                     >
                       Материал тооцоолох
                     </button>
@@ -546,7 +543,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                         onAddToCart(item, 1, item.uom);
                       }}
                       className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white transition-colors cursor-pointer shadow-xs"
-                      title="Сагсанд нэмэх"
+                      title="Сагслах"
                     >
                       <ShoppingCart className="w-4 h-4" />
                     </button>

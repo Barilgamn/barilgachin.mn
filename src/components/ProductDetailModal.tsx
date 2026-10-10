@@ -324,7 +324,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   ) : (
                     <>
                       <ShoppingCart className="w-4 h-4 text-white" />
-                      <span className="text-white">Сагсанд нэмэх</span>
+                      <span className="text-white">Сагслах</span>
                     </>
                   )}
                 </button>
