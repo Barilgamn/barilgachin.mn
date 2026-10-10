@@ -112,8 +112,8 @@ export const LiveChatModal: React.FC<LiveChatModalProps> = ({
         reply = 'Та манай B2B системээр дамжуулан албан байгууллагын НӨАТ-тай үнийн санал (RFQ)-ыг 5 минутад автоматаар үүсгэн авах боломжтой.';
         action = { label: 'B2B Үнийн санал нээх', type: 'rfq' };
       } else {
-        reply = `Таны асуултыг хүлээн авлаа. Манай төслийн инженер тантай шууд холбогдож дэлгэрэнгүй мэдээлэл өгөх боломжтой. Яаралтай бол 7711-2244 утсаар залгаарай.`;
-        action = { label: '7711-2244 руу залгах', type: 'call' };
+        reply = `Таны асуултыг хүлээн авлаа. Манай төслийн инженер тантай шууд холбогдож дэлгэрэнгүй мэдээлэл өгөх боломжтой. Яаралтай бол 7766-2277 утсаар залгаарай.`;
+        action = { label: '7766-2277 руу залгах', type: 'call' };
       }
 
       setMessages((prev) => [
@@ -174,7 +174,7 @@ export const LiveChatModal: React.FC<LiveChatModalProps> = ({
           </div>
           <div className="flex items-center gap-1">
             <a
-              href="tel:77112244"
+              href="tel:+97677662277"
               className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-400 transition-colors"
               title="Шууд залгах"
             >
@@ -196,11 +196,11 @@ export const LiveChatModal: React.FC<LiveChatModalProps> = ({
             <span>Шуурхай лавлах утас:</span>
           </div>
           <a
-            href="tel:77112244"
+            href="tel:+97677662277"
             className="font-black text-amber-700 hover:underline flex items-center gap-1"
           >
             <Phone className="w-3 h-3" />
-            <span>7711-2244</span>
+            <span>7766-2277</span>
           </a>
         </div>
 
@@ -242,7 +242,7 @@ export const LiveChatModal: React.FC<LiveChatModalProps> = ({
                       )}
                       {msg.action.type === 'call' && (
                         <a
-                          href="tel:77112244"
+                          href="tel:+97677662277"
                           className="w-full py-1.5 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-colors flex items-center justify-center gap-1.5"
                         >
                           <Phone className="w-3.5 h-3.5" />

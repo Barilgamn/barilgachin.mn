@@ -286,16 +286,16 @@ export default function App() {
       <div className="fixed right-3 sm:right-5 bottom-20 sm:bottom-6 z-40 flex flex-col items-end gap-2">
         {/* Subtle Call Button */}
         <a
-          href="tel:77112244"
+          href="tel:+97677662277"
           className="group flex items-center gap-2 pl-3 pr-3.5 py-2 rounded-full bg-white/90 hover:bg-white text-slate-700 hover:text-slate-950 border border-slate-200/80 hover:border-slate-300 shadow-md hover:shadow-lg backdrop-blur-md transition-all duration-200 cursor-pointer active:scale-95"
-          title="Лавлах утас: 7711-2244"
+          title="Лавлах утас: 7766-2277"
         >
           <div className="w-6 h-6 rounded-full bg-slate-100 group-hover:bg-amber-100 text-slate-700 group-hover:text-amber-600 flex items-center justify-center transition-colors">
             <Phone className="w-3.5 h-3.5" />
           </div>
           <div className="flex flex-col text-left leading-none">
             <span className="text-[10px] text-slate-600 font-medium">Лавлах</span>
-            <span className="text-xs font-mono font-bold text-slate-900">7711-2244</span>
+            <span className="text-xs font-mono font-bold text-slate-900">7766-2277</span>
           </div>
         </a>
 

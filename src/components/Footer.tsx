@@ -1,5 +1,6 @@
 import React from 'react';
 import { useWarehouses } from '../CatalogProvider';
+import { WAREHOUSE } from '../lib/contact';
 import {
   Building2,
   Phone,
@@ -151,14 +152,25 @@ export const Footer: React.FC<FooterProps> = ({
             <div className="space-y-2 text-slate-600">
               <div className="flex items-center gap-2">
                 <Phone className="w-3.5 h-3.5 text-amber-600" />
-                <a href="tel:77112244" className="font-bold text-slate-900 hover:text-amber-700 hover:underline">
-                  7711-2244, 9911-0022
+                <a href="tel:+97677662277" className="font-bold text-slate-900 hover:text-amber-700 hover:underline">
+                  7766-2277, 7711-1177
                 </a>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-3.5 h-3.5 text-amber-600" />
-                <a href="mailto:info@barilga.mn" className="font-semibold text-slate-800 hover:underline">
-                  info@barilga.mn
+                <a href="mailto:haus@barilgachin.mn" className="font-semibold text-slate-800 hover:underline">
+                  haus@barilgachin.mn
+                </a>
+              </div>
+              <div className="flex items-start gap-2">
+                <MapPin className="w-3.5 h-3.5 text-amber-600 mt-0.5 shrink-0" />
+                <a
+                  href={WAREHOUSE.mapsUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-slate-900 hover:underline"
+                >
+                  {WAREHOUSE.address}
                 </a>
               </div>
               <div className="flex items-center gap-2">

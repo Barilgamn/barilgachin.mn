@@ -485,13 +485,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
                             />
                             <span className="truncate">{brand.name}</span>
                           </div>
-                          <span
-                            className="text-[10px] font-bold px-1 rounded shrink-0"
-                            style={{
-                              backgroundColor: brand.bgColor,
-                              color: brand.textColor,
-                            }}
-                          >
+                          <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded shrink-0 bg-slate-100 text-slate-600">
                             {brand.shortCode}
                           </span>
                         </label>
@@ -883,19 +877,6 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
             </button>
           </div>
 
-          {/* ================= MOBILE NOTICE / ALERT BOX (Exact Match to Screenshot) ================= */}
-          <div className="lg:hidden bg-[#fef9ee] border border-[#f9e2af] text-[#4a3419] rounded-2xl p-3 sm:p-4 space-y-1 shadow-2xs">
-            <div className="flex items-center gap-1.5 text-[#5c3e10] font-black text-xs">
-              <div className="w-4 h-4 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center text-[10px] font-black">
-                ⓘ
-              </div>
-              <span>Анхааруулга</span>
-            </div>
-            <p className="text-[11px] leading-relaxed text-[#614522]">
-              Барилгын материалын бөөний болон төслийн захиалгыг 5–20тн крантай машинаар 24-48 цагт салбар агуулахуудаас шууд хүргэнэ. MNS стандартын чанарын паспорт болон НӨАТ-ын баримт олгогдоно.
-            </p>
-          </div>
-
           {/* Top Header: Category Title | Count & Sort Dropdown */}
           <div className="flex items-center justify-between gap-2 pb-1.5 sm:pb-2 border-b border-slate-100">
             {/* Title | Count */}
@@ -1031,13 +1012,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
                         <Check className="w-2.5 h-2.5 stroke-[3]" />
                       </div>
                     )}
-                    <div
-                      className="w-full py-0.5 px-1.5 rounded-md text-xs font-black tracking-wider text-center truncate flex items-center justify-center shadow-2xs"
-                      style={{
-                        backgroundColor: brand.bgColor,
-                        color: brand.textColor,
-                      }}
-                    >
+                    <div className="w-full py-0.5 px-1.5 rounded-md text-xs font-bold tracking-wide text-center truncate flex items-center justify-center bg-slate-900 text-white">
                       <span>{brand.shortCode}</span>
                     </div>
                     <span className="text-[10px] text-slate-500 font-medium truncate max-w-full leading-none mb-0.5">

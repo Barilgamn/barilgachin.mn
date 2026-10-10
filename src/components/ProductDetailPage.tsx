@@ -12,7 +12,6 @@ import {
   Share2,
   Truck,
   CheckCircle2,
-  Sparkles,
   ChevronRight,
   Layers,
   Award,
@@ -293,9 +292,6 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                     <h3 className="text-base font-semibold text-slate-900 font-display">
                       Техникийн үзүүлэлтүүд
                     </h3>
-                    <p className="text-xs text-slate-500 font-medium">
-                      Үйлдвэрийн албан ёсны лабораторийн сорилтын баталгаа
-                    </p>
                   </div>
                 </div>
 
@@ -362,12 +358,11 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 </div>
               </div>
 
-              {/* Description */}
-              <div className="space-y-2">
+              {product.description && (
                 <p className="max-w-[62ch] text-sm text-slate-600 leading-[1.7]">
-                  {product.fullDescription || product.description}
+                  {product.description}
                 </p>
-              </div>
+              )}
 
               {/* Bulk Tiered Pricing Grid */}
               <div className="bg-slate-50/80 rounded-2xl p-4 border border-slate-200 space-y-3">
@@ -529,19 +524,10 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             BOTTOM SECTION: RELATED / COMPLEMENTARY PRODUCTS (Холбоотой бүтээгдэхүүнүүд)
            ========================================================================= */}
         <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-100 pb-4">
-            <div>
-              <div className="flex items-center gap-2 text-amber-600 text-xs font-semibold tracking-wide mb-1">
-                <Sparkles className="w-4 h-4" />
-                <span>Зөвлөмж & Дагалдах материалууд</span>
-              </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 font-display">
-                Холбоотой & Цуг захиалагддаг бүтээгдэхүүнүүд
-              </h2>
-            </div>
-            <p className="text-xs text-slate-500 font-medium">
-              Энэхүү бүтээгдэхүүнийг ашиглахад шаардагдах хамгийн тохиромжтой материалууд
-            </p>
+          <div className="border-b border-slate-100 pb-4">
+            <h2 className="text-xl font-bold text-slate-900 font-display">
+              Холбоотой бараа
+            </h2>
           </div>
 
           {/* Related Products Grid */}
