@@ -4,6 +4,8 @@ import { supabase } from '../lib/supabase';
 import { slugify, uniqueSlug } from '../lib/slug';
 import type { CategoryRow, ProductRow } from '../types/db';
 import { ProductImages } from './ProductImages';
+import { ProductTiers } from './ProductTiers';
+import { ProductStock } from './ProductStock';
 
 const UOMS = [
   'ширхэг', 'шуудай 50кг', 'шуудай 25кг', 'тн', 'м²', 'м³', 'у/м',
@@ -311,10 +313,18 @@ export const ProductsPage: React.FC = () => {
 
           {editingId === 'new' ? (
             <p className="text-[11px] text-slate-400">
-              Зураг нэмэхийн тулд эхлээд барааг хадгална уу.
+              Зураг, бөөний үнэ, үлдэгдлийг нэмэхийн тулд эхлээд барааг хадгална уу.
             </p>
           ) : (
-            <ProductImages productId={editingId} productName={draft.name} />
+            <div className="space-y-3">
+              <ProductImages productId={editingId} productName={draft.name} />
+              <ProductTiers
+                productId={editingId}
+                basePrice={draft.price}
+                uom={draft.uom}
+              />
+              <ProductStock productId={editingId} uom={draft.uom} />
+            </div>
           )}
 
           <div className="flex flex-wrap items-center gap-4 pt-1">
@@ -353,10 +363,6 @@ export const ProductsPage: React.FC = () => {
               </button>
             </div>
           </div>
-
-          <p className="text-[11px] text-slate-400">
-            Бөөний үнэ, агуулахын үлдэгдлийг дараагийн алхамд нэмнэ.
-          </p>
         </div>
       )}
 
