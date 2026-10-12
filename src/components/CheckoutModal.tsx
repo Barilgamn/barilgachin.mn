@@ -26,6 +26,7 @@ import {
 import confetti from 'canvas-confetti';
 import { CartItem } from '../types';
 import { formatMNT, formatWeight, getRecommendedVehicle } from '../utils/formatters';
+import { placeOrder } from '../lib/orders';
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -56,25 +57,25 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1);
 
   // Step 1: Customer Info
-  const [customerName, setCustomerName] = useState('Батбаяр');
-  const [phone, setPhone] = useState('9911-2244');
-  const [email, setEmail] = useState('batbayar@construction.mn');
-  const [projectName, setProjectName] = useState('Хан-Уул Орон сууцны төсөл №3');
-  const [customerType, setCustomerType] = useState<'individual' | 'corporate'>('corporate');
+  const [customerName, setCustomerName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [projectName, setProjectName] = useState('');
+  const [customerType, setCustomerType] = useState<'individual' | 'corporate'>('individual');
 
   // Step 2: Delivery vs Pickup
   const [deliveryType, setDeliveryType] = useState<'delivery' | 'pickup'>('delivery');
   const [selectedPickupBranch, setSelectedPickupBranch] = useState(WAREHOUSES[0].branchId);
-  const [district, setDistrict] = useState('Хан-Уул дүүрэг');
-  const [khoroo, setKhoroo] = useState('4-р хороо');
-  const [streetAddress, setStreetAddress] = useState('Яармагийн шинэ суурьшлын бүс, Барилгын талбай №12');
-  const [deliveryNotes, setDeliveryNotes] = useState('Манипулятор крантай машин шаардлагатай, хаалгаар нэвтрэх зөвшөөрөл авсан.');
+  const [district, setDistrict] = useState('');
+  const [khoroo, setKhoroo] = useState('');
+  const [streetAddress, setStreetAddress] = useState('');
+  const [deliveryNotes, setDeliveryNotes] = useState('');
 
   // Step 3: VAT / E-barimt 3.0
-  const [vatType, setVatType] = useState<'individual' | 'company'>('company');
-  const [companyRegister, setCompanyRegister] = useState('6784912');
-  const [companyName, setCompanyName] = useState('Ган Хийц Констракшн ХХК');
-  const [vatEmail, setVatEmail] = useState('accounting@ganhiits.mn');
+  const [vatType, setVatType] = useState<'individual' | 'company'>('individual');
+  const [companyRegister, setCompanyRegister] = useState('');
+  const [companyName, setCompanyName] = useState('');
+  const [vatEmail, setVatEmail] = useState('');
 
   // Step 4: Payment Method
   const [paymentMethod, setPaymentMethod] = useState<'qpay' | 'socialpay' | 'khanbank' | 'storepay' | 'invoice_odoo'>('qpay');
@@ -82,11 +83,12 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
   // Completed Order State
+  const [orderError, setOrderError] = useState<string | null>(null);
   const [orderCompleted, setOrderCompleted] = useState<{
     orderNumber: string;
-    odooSaleOrder: string;
-    odooPickingRef: string;
-    invoiceRef: string;
+    total: number;
+    deliveryFee: number;
+    weightKg: number;
     timestamp: string;
   } | null>(null);
 
@@ -136,38 +138,56 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     }
   };
 
-  const handleCompleteOrder = (e: React.FormEvent) => {
+  const handleCompleteOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsProcessing(true);
+    setOrderError(null);
 
-    setTimeout(() => {
-      setIsProcessing(false);
-      const generatedOrder = `ORD-2026-${Math.floor(10000 + Math.random() * 90000)}`;
-      const generatedOdooSO = `SO-2026-${Math.floor(1000 + Math.random() * 9000)}`;
-      const generatedPicking = `WH/OUT/2026/${Math.floor(1000 + Math.random() * 9000)}`;
-      const generatedInvoice = `INV/2026/${Math.floor(10000 + Math.random() * 90000)}`;
+    try {
+      const placed = await placeOrder(
+        {
+          name: customerName,
+          phone,
+          email,
+          customerType,
+          companyName: vatType === 'company' ? companyName : undefined,
+          companyRegister: vatType === 'company' ? companyRegister : undefined,
+        },
+        {
+          deliveryType,
+          warehouseCode: deliveryType === 'pickup' ? selectedPickupBranch : undefined,
+          district,
+          khoroo,
+          streetAddress,
+          notes: deliveryNotes,
+        },
+        { vatType, companyRegister, companyName, vatEmail },
+        paymentMethod,
+        items,
+      );
 
       setOrderCompleted({
-        orderNumber: generatedOrder,
-        odooSaleOrder: generatedOdooSO,
-        odooPickingRef: generatedPicking,
-        invoiceRef: generatedInvoice,
+        orderNumber: placed.orderNo,
+        total: placed.total,
+        deliveryFee: placed.deliveryFee,
+        weightKg: placed.weightKg,
         timestamp: new Date().toLocaleString('mn-MN'),
       });
 
-      // Fire festive celebration
       try {
-        confetti({
-          particleCount: 120,
-          spread: 80,
-          origin: { y: 0.6 },
-        });
-      } catch (err) {
-        // ignore
+        confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+      } catch {
+        // Баярын эффект бүтэхгүй бол захиалгад хамаагүй.
       }
 
-      onOrderSuccess(generatedOrder);
-    }, 1600);
+      onOrderSuccess(placed.orderNo);
+    } catch (err) {
+      setOrderError(
+        err instanceof Error ? err.message : 'Захиалга илгээхэд алдаа гарлаа.',
+      );
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const stepsList = [
@@ -271,7 +291,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               </p>
             </div>
 
-            {/* Generated Documents & Reference Numbers */}
+            {/* Захиалгын хураангуй — дүнг бааз өөрөө тооцсон. */}
             <div className="max-w-xl mx-auto p-5 rounded-2xl bg-slate-50 border border-slate-200 text-left space-y-3 text-xs shadow-2xs">
               <div className="flex items-center justify-between border-b border-slate-200 pb-2">
                 <span className="text-slate-500">Цахим захиалгын дугаар:</span>
@@ -287,36 +307,6 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-                <span className="text-slate-500">Борлуулалтын захиалгын дугаар:</span>
-                <div className="flex items-center gap-2">
-                  <span className="font-mono font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-200">
-                    {orderCompleted.odooSaleOrder}
-                  </span>
-                  <button
-                    onClick={() => handleCopy(orderCompleted.odooSaleOrder, 'so')}
-                    className="p-1 text-slate-400 hover:text-slate-900"
-                  >
-                    {copiedField === 'so' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-                <span className="text-slate-500">Агуулахын ачилтын хуудас:</span>
-                <div className="flex items-center gap-2">
-                  <span className="font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-                    {orderCompleted.odooPickingRef}
-                  </span>
-                  <button
-                    onClick={() => handleCopy(orderCompleted.odooPickingRef, 'picking')}
-                    className="p-1 text-slate-400 hover:text-slate-900"
-                  >
-                    {copiedField === 'picking' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-                  </button>
-                </div>
-              </div>
-
               <div className="flex justify-between border-b border-slate-200 pb-2">
                 <span className="text-slate-500">Хүлээн авагч:</span>
                 <span className="font-semibold text-slate-900">{customerName} ({phone})</span>
@@ -325,21 +315,33 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               <div className="flex justify-between border-b border-slate-200 pb-2">
                 <span className="text-slate-500">Хүргэлтийн хаяг / Агуулах:</span>
                 <span className="font-semibold text-slate-900 text-right max-w-xs truncate">
-                  {deliveryType === 'delivery' ? `${district}, ${streetAddress}` : 'Агуулахаас өөрөө ачих'}
+                  {deliveryType === 'delivery'
+                    ? [district, khoroo, streetAddress].filter(Boolean).join(', ')
+                    : 'Агуулахаас өөрөө ачих'}
                 </span>
               </div>
 
               <div className="flex justify-between border-b border-slate-200 pb-2">
                 <span className="text-slate-500">Нийт жин & Тээврийн ангилал:</span>
                 <span className="font-semibold text-slate-900">
-                  {formatWeight(totalWeight)} • {recommendedVehicle.name}
+                  {formatWeight(orderCompleted.weightKg)} •{' '}
+                  {getRecommendedVehicle(orderCompleted.weightKg).name}
+                </span>
+              </div>
+
+              <div className="flex justify-between border-b border-slate-200 pb-2">
+                <span className="text-slate-500">Хүргэлтийн төлбөр:</span>
+                <span className="font-semibold text-slate-900">
+                  {orderCompleted.deliveryFee > 0
+                    ? formatMNT(orderCompleted.deliveryFee)
+                    : 'Өөрөө ачих'}
                 </span>
               </div>
 
               <div className="flex justify-between font-bold text-sm pt-1 text-slate-900">
                 <span>Нийт төлбөрийн дүн:</span>
                 <span className="text-amber-600 font-black font-display text-base">
-                  {formatMNT(grandTotal)}
+                  {formatMNT(orderCompleted.total)}
                 </span>
               </div>
             </div>
@@ -846,6 +848,15 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     </span>
                   </div>
                 </div>
+
+                {orderError && (
+                  <p
+                    role="alert"
+                    className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700"
+                  >
+                    {orderError}
+                  </p>
+                )}
 
                 {/* Submit button when on final step */}
                 {currentStep === 4 ? (
