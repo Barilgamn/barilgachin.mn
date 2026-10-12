@@ -30,26 +30,41 @@ export const Footer: React.FC<FooterProps> = ({
       <div className="border-b border-slate-200/90 py-8 bg-white/70">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
               <MapPin className="w-4 h-4 text-amber-600" />
-              <span>Улаанбаатар хот дахь 4 их агуулахын байршил</span>
+              <span>
+                {WAREHOUSES.length > 1
+                  ? `Улаанбаатар хот дахь ${WAREHOUSES.length} агуулахын байршил`
+                  : 'Агуулахын байршил'}
+              </span>
             </h3>
             <span className="text-[11px] text-emerald-700 font-bold hidden sm:inline">
-              ● Бүх агуулахад бэлэн ачилт явагдаж байна
+              ● Бэлэн ачилт явагдаж байна
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div
+            className={`grid gap-3 ${
+              WAREHOUSES.length > 1 ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4' : 'grid-cols-1'
+            }`}
+          >
             {WAREHOUSES.map((wh) => (
               <div
                 key={wh.branchId}
-                className="p-3.5 rounded-xl bg-white border border-slate-200 space-y-1 hover:border-slate-300 shadow-2xs transition-colors"
+                className="p-3.5 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-2xs transition-colors flex flex-wrap items-center justify-between gap-2"
               >
-                <div className="font-bold text-slate-900 text-xs">{wh.branchName}</div>
-                <div className="text-[11px] text-slate-500 leading-snug">{wh.address}</div>
-                <div className="text-[10px] font-mono text-slate-500 pt-1 font-semibold">
-                  Код: {wh.locationCode}
+                <div className="min-w-0 space-y-1">
+                  <div className="font-bold text-slate-900 text-xs">{wh.branchName}</div>
+                  <div className="text-[11px] text-slate-500 leading-snug">{wh.address}</div>
                 </div>
+                <a
+                  href={WAREHOUSE.mapsUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[11px] font-semibold text-amber-700 hover:text-amber-800 shrink-0"
+                >
+                  Google Maps →
+                </a>
               </div>
             ))}
           </div>

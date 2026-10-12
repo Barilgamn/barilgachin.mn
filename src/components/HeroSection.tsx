@@ -12,6 +12,8 @@ import {
   Zap,
 } from 'lucide-react';
 import { formatMNT } from '../utils/formatters';
+import { useWarehouses } from '../CatalogProvider';
+import { WAREHOUSE } from '../lib/contact';
 
 interface HeroSectionProps {
   onOpenCalculator: () => void;
@@ -24,6 +26,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   onOpenRFQ,
   onSelectCategory,
 }) => {
+  const warehouses = useWarehouses();
+
   return (
     <section className="relative bg-gradient-to-b from-white via-slate-50 to-amber-50/20 text-slate-900 border-b border-slate-200/80 overflow-hidden py-9 lg:py-14">
       {/* Subtle light architectural grid background */}
@@ -80,8 +84,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <div className="text-xs text-slate-500 mt-0.5 font-medium">Баталгаат бүтээгдэхүүн</div>
               </div>
               <div>
-                <div className="text-2xl font-black text-amber-600 font-display">4 Агуулах</div>
-                <div className="text-xs text-slate-500 mt-0.5 font-medium">УБ хотод бодит үлдэгдэл</div>
+                <div className="text-2xl font-black text-amber-600 font-display">
+                  {warehouses.length} Агуулах
+                </div>
+                <div className="text-xs text-slate-500 mt-0.5 font-medium">
+                  {warehouses.length === 1 ? WAREHOUSE.shortAddress : 'УБ хотод бодит үлдэгдэл'}
+                </div>
               </div>
               <div>
                 <div className="text-2xl font-black text-slate-900 font-display">2-4 Цаг</div>

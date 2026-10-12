@@ -26,6 +26,7 @@ import { POPULAR_SEARCH_TERMS } from '../data/mockData';
 import { formatMNT, formatWeight } from '../utils/formatters';
 import { useCategories, useProducts } from '../CatalogProvider';
 import { Product } from '../types';
+import { WAREHOUSE } from '../lib/contact';
 
 const getCategoryIcon = (iconName: string, className = "w-4 h-4") => {
   switch (iconName) {
@@ -164,14 +165,17 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Quick Actions (Warehouse badge & Cart) */}
           <div className="flex items-center gap-2 shrink-0">
-            {/* Салбар агуулахын тэмдэг */}
-            <span
-              className="px-2 py-1 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold flex items-center gap-1"
-              title="4 салбар агуулахын бодит үлдэгдэл"
+            {/* Агуулахын тэмдэг */}
+            <a
+              href={WAREHOUSE.mapsUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="px-2 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold flex items-center gap-1 transition-colors"
+              title={`${WAREHOUSE.name} — ${WAREHOUSE.address}`}
             >
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-              <span>4 Агуулах</span>
-            </span>
+              <span>{WAREHOUSE.shortAddress}</span>
+            </a>
 
             {/* Quick Live Chat */}
             <button
