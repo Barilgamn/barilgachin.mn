@@ -29,7 +29,14 @@ export const Root: React.FC = () => (
       />
       <Route path="/zahialga" element={<OrderLookupPage />} />
       <Route path="/medee" element={<NewsListPage />} />
-      <Route path="/medee/:slug" element={<NewsDetailPage />} />
+      <Route
+        path="/medee/:slug"
+        element={
+          <CatalogProvider>
+            <NewsDetailPage />
+          </CatalogProvider>
+        }
+      />
       <Route
         path="*"
         element={

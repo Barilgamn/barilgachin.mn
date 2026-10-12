@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Header } from './components/Header';
 import { PromoShowcaseSection } from './components/PromoShowcaseSection';
 import { NewsSection } from './components/NewsSection';
@@ -50,6 +51,24 @@ export default function App() {
   // Selected product for technical datasheet modal / single RFQ
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [rfqTargetProduct, setRfqTargetProduct] = useState<Product | null>(null);
+
+  // Мэдээн доторх зар бараа, ангилал руу шууд хөтөлдөг.
+  const [searchParams, setSearchParams] = useSearchParams();
+  useEffect(() => {
+    const sku = searchParams.get('product');
+    const category = searchParams.get('category');
+    if (!sku && !category) return;
+
+    // Каталог ачаалахаас өмнө ирвэл бараа олдохгүй — ачаалмагц дахин оролдоно.
+    if (sku) {
+      const hit = PRODUCTS.find((p) => p.sku.toLowerCase() === sku.toLowerCase());
+      if (!hit) return;
+      setSelectedProduct(hit);
+    } else if (category) {
+      setSelectedCategory(category);
+    }
+    setSearchParams({}, { replace: true });
+  }, [searchParams, PRODUCTS, setSearchParams]);
 
   // Success notifications
   const [toastMessage, setToastMessage] = useState<string | null>(null);

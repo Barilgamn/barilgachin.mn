@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { fetchPostBySlug, fetchPosts } from '../lib/content';
+import { parsePostBody, toParagraphs } from '../lib/postBlocks';
+import { PostProductAd } from './PostProductAd';
 import type { PostRow } from '../types/db';
 
 const formatDate = (iso: string | null) =>
@@ -112,17 +114,19 @@ export const NewsDetailPage: React.FC = () => {
               </p>
             )}
 
-            {/* Агуулгыг хоосон мөрөөр нь догол мөр болгон хуваана. */}
+            {/* Текст ба барааны блокууд. */}
             <div className="mt-4 space-y-3 text-[15px] text-slate-700 leading-relaxed">
-              {(post.body ?? '')
-                .split(/\n\s*\n/)
-                .map((para) => para.trim())
-                .filter(Boolean)
-                .map((para, i) => (
-                  <p key={i} className="whitespace-pre-line">
-                    {para}
-                  </p>
-                ))}
+              {parsePostBody(post.body ?? '').map((block, bi) =>
+                block.kind === 'products' ? (
+                  <PostProductAd key={bi} block={block} />
+                ) : (
+                  toParagraphs(block.value).map((para, pi) => (
+                    <p key={`${bi}-${pi}`} className="whitespace-pre-line">
+                      {para}
+                    </p>
+                  ))
+                ),
+              )}
             </div>
           </>
         )}

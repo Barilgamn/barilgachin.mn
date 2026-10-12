@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase';
 import { slugify, uniqueSlug } from '../lib/slug';
 import type { PostRow } from '../types/db';
 import { ImageField } from './ImageField';
+import { ProductAdInserter } from './ProductAdInserter';
 import { formatDate } from './orderLabels';
 
 type Draft = Pick<
@@ -196,6 +197,12 @@ export const PostsPage: React.FC = () => {
               className={field}
             />
           </label>
+
+          <ProductAdInserter
+            onInsert={(token) =>
+              setDraft((d) => ({ ...d, body: `${d.body ?? ''}${token}`.trimStart() }))
+            }
+          />
 
           <ImageField
             value={draft.cover_url}

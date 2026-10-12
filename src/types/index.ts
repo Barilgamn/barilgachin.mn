@@ -23,7 +23,7 @@ export interface TechnicalSpec {
 
 export interface Product {
   id: string;
-  sku: string; // Odoo default_code (e.g., 'CEM-MAK-425')
+  sku: string; // Барааны код (жишээ нь 'CEM-MAK-PC425')
   barcode: string;
   name: string;
   mongolianName: string;
