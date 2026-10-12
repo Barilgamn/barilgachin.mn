@@ -147,7 +147,7 @@ export const Header: React.FC<HeaderProps> = ({
             title="Нүүр хуудас"
           >
             <img
-              src="https://barilgachin.mn/web/image/website/4/logo/Barilgachin?unique=5f8cd8a"
+              src="/barilgachin-logo.webp"
               alt="Barilgachin.mn"
               className="h-7 sm:h-8 w-auto object-contain max-w-[140px]"
               onError={(e) => {
@@ -351,7 +351,7 @@ export const Header: React.FC<HeaderProps> = ({
               title="Нүүр хуудас"
             >
               <img
-                src="https://barilgachin.mn/web/image/website/4/logo/Barilgachin?unique=5f8cd8a"
+                src="/barilgachin-logo.webp"
                 alt="Barilgachin.mn"
                 className="h-10 sm:h-11 w-auto object-contain max-w-[200px] transition-transform group-hover:scale-102"
                 onError={(e) => {

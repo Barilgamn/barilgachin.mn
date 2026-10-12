@@ -87,7 +87,7 @@ export const Footer: React.FC<FooterProps> = ({
               aria-label="Нүүр хуудас"
             >
               <img
-                src="https://barilgachin.mn/web/image/website/4/logo/Barilgachin?unique=5f8cd8a"
+                src="/barilgachin-logo.webp"
                 alt="Barilgachin.mn"
                 className="h-9 w-auto object-contain group-hover:opacity-95 transition-opacity"
                 onError={(e) => {
