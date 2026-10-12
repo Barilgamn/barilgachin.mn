@@ -348,13 +348,13 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
             {/* Print & Return Actions */}
             <div className="flex flex-wrap justify-center gap-3 pt-2">
-              <button
-                onClick={() => window.print()}
+              <a
+                href={`/zahialga?order=${encodeURIComponent(orderCompleted.orderNumber)}`}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
               >
                 <Printer className="w-4 h-4" />
-                <span>Баримт хэвлэх</span>
-              </button>
+                <span>Захиалга, нэхэмжлэх харах</span>
+              </a>
 
               <button
                 onClick={onClose}
@@ -877,16 +877,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                       </>
                     )}
                   </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={handleNextStep}
-                    className="w-full py-3.5 px-4 rounded-xl btn-liquid-dark font-bold text-xs flex items-center justify-center gap-2 cursor-pointer"
-                  >
-                    <span className="text-white">Дараах алхам руу шилжих</span>
-                    <ArrowRight className="w-4 h-4 text-white" />
-                  </button>
-                )}
+                ) : null}
               </div>
             </div>
           </form>

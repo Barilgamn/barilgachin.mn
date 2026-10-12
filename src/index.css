@@ -82,3 +82,34 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* ─── Хэвлэх ───
+   Нэхэмжлэх хэвлэхэд дэлгэцийн бусад бүх зүйлийг нуух. `.print-sheet`-ийг
+   бүх эцэг элементийн хамт харуулж, хуудсын эхэнд байрлуулна. */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .print-sheet,
+  .print-sheet * {
+    visibility: visible;
+  }
+
+  .print-sheet {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  @page {
+    margin: 14mm;
+  }
+}

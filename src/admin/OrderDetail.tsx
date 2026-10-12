@@ -5,10 +5,13 @@ import {
   FileText,
   Loader2,
   Package,
+  Receipt,
   Truck,
   X,
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { InvoiceModal } from './InvoiceModal';
+import type { InvoiceData } from '../components/InvoiceDocument';
 import type { CustomerRow, OrderItemRow, OrderRow, OrderStatus } from '../types/db';
 import {
   NEXT_STATUS,
@@ -46,6 +49,7 @@ export const OrderDetail: React.FC<OrderDetailProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [dueDays, setDueDays] = useState(14);
   const [method, setMethod] = useState('cash');
+  const [showInvoice, setShowInvoice] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -87,6 +91,36 @@ export const OrderDetail: React.FC<OrderDetailProps> = ({
   const setStatus = (status: OrderStatus) =>
     run(() => supabase.from('orders').update({ status }).eq('id', order.id));
 
+  const invoice: InvoiceData = {
+    invoiceNo: order.invoice_no,
+    orderNo: order.order_no,
+    issuedAt: order.invoice_issued_at ?? order.created_at,
+    dueDate: order.due_date,
+    paidAt: order.paid_at,
+    buyer: {
+      name: customer?.name ?? '—',
+      phone: customer?.phone,
+      email: customer?.email,
+      register: order.company_register ?? customer?.company_register,
+      companyName: order.company_name ?? customer?.company_name,
+    },
+    lines: items.map((it) => ({
+      name: it.name,
+      sku: it.sku,
+      uom: it.uom,
+      qty: Number(it.qty),
+      unitPrice: Number(it.unit_price),
+      lineTotal: Number(it.line_total),
+    })),
+    subtotal: Number(order.subtotal),
+    deliveryFee: Number(order.delivery_fee),
+    total: Number(order.total),
+    deliveryAddress:
+      order.delivery_type === 'delivery'
+        ? [order.district, order.khoroo, order.street_address].filter(Boolean).join(', ')
+        : null,
+  };
+
   const next = NEXT_STATUS[order.status];
   const address = [order.district, order.khoroo, order.street_address]
     .filter(Boolean)
@@ -94,6 +128,9 @@ export const OrderDetail: React.FC<OrderDetailProps> = ({
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white">
+      {showInvoice && (
+        <InvoiceModal data={invoice} onClose={() => setShowInvoice(false)} />
+      )}
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 px-4 py-3">
         <div className="flex items-center gap-3">
           <h2 className="font-mono font-bold text-slate-900">{order.order_no}</h2>
@@ -112,14 +149,26 @@ export const OrderDetail: React.FC<OrderDetailProps> = ({
             </span>
           )}
         </div>
-        <button
-          type="button"
-          onClick={onClose}
-          className="p-1.5 rounded-md text-slate-400 hover:text-slate-900 cursor-pointer"
-          title="Хаах"
-        >
-          <X className="w-4 h-4" />
-        </button>
+        <div className="flex items-center gap-2">
+          {order.status !== 'new' && (
+            <button
+              type="button"
+              onClick={() => setShowInvoice(true)}
+              className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:border-slate-300 flex items-center gap-1.5 cursor-pointer"
+            >
+              <Receipt className="w-3.5 h-3.5" />
+              Нэхэмжлэх харах
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-1.5 rounded-md text-slate-400 hover:text-slate-900 cursor-pointer"
+            title="Хаах"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
       {error && (

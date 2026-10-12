@@ -34,6 +34,23 @@ export const WAREHOUSE = {
   mapsUrl: 'https://maps.google.com/?q=47.8823337,106.7865548',
 } as const;
 
+/**
+ * Нэхэмжлэх дээр гарах нийлүүлэгчийн мэдээлэл.
+ *
+ * ТТД, банкны данс хоосон байна — эдгээрийг зохиомлоор бичиж болохгүй тул
+ * бодит утгыг нь оруулах хүртэл нэхэмжлэх дээр тэр мөрүүд харагдахгүй.
+ */
+export const INVOICE_ISSUER = {
+  legalName: COMPANY.legalName,
+  register: '',
+  address: WAREHOUSE.address,
+  phone: PHONE.display,
+  email: EMAIL.sales,
+  bankName: '',
+  accountNo: '',
+  accountName: '',
+} as const;
+
 /** Борлуулалтын багийн холбоо барих мэдээлэл. */
 export const CONTACTS = [
   {
