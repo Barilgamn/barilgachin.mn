@@ -138,3 +138,75 @@ export interface PromotionRow {
   is_published: boolean;
   created_at: string;
 }
+
+export interface CustomerRow {
+  id: string;
+  name: string;
+  phone: string;
+  email: string | null;
+  customer_type: 'individual' | 'corporate';
+  company_name: string | null;
+  company_register: string | null;
+  note: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export type OrderStatus =
+  | 'new'
+  | 'confirmed'
+  | 'packed'
+  | 'shipped'
+  | 'delivered'
+  | 'cancelled';
+
+export interface OrderRow {
+  id: string;
+  order_no: string;
+  customer_id: string | null;
+  status: OrderStatus;
+
+  delivery_type: 'delivery' | 'pickup';
+  warehouse_id: string | null;
+  district: string | null;
+  khoroo: string | null;
+  street_address: string | null;
+  delivery_notes: string | null;
+
+  vat_type: 'individual' | 'company';
+  company_register: string | null;
+  company_name: string | null;
+  vat_email: string | null;
+
+  payment_method: string;
+  payment_status: 'unpaid' | 'paid' | 'refunded';
+
+  subtotal: number;
+  delivery_fee: number;
+  total: number;
+  total_weight_kg: number;
+
+  settlement: 'direct' | 'invoice' | null;
+  invoice_no: string | null;
+  invoice_issued_at: string | null;
+  due_date: string | null;
+  paid_at: string | null;
+  confirmed_at: string | null;
+
+  admin_note: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OrderItemRow {
+  id: string;
+  order_id: string;
+  product_id: string | null;
+  sku: string;
+  name: string;
+  uom: string;
+  qty: number;
+  unit_price: number;
+  line_total: number;
+  weight_kg: number;
+}

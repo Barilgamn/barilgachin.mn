@@ -6,6 +6,8 @@ import { AdminLayout } from './AdminLayout';
 import { ProductsPage } from './ProductsPage';
 import { CategoriesPage } from './CategoriesPage';
 import { BrandsPage } from './BrandsPage';
+import { OrdersPage } from './OrdersPage';
+import { CustomersPage } from './CustomersPage';
 
 /** Хараахан хийгдээгүй хэсгүүдийн түр орлуулагч. */
 const Placeholder: React.FC<{ title: string; note: string }> = ({ title, note }) => (
@@ -57,14 +59,8 @@ const Guard: React.FC = () => {
           path="promotions"
           element={<Placeholder title="Хямдрал" note="Урамшууллын хэсэг удахгүй нэмэгдэнэ." />}
         />
-        <Route
-          path="customers"
-          element={<Placeholder title="Харилцагч" note="CRM хэсэг удахгүй нэмэгдэнэ." />}
-        />
-        <Route
-          path="orders"
-          element={<Placeholder title="Захиалга" note="Захиалгын хэсэг удахгүй нэмэгдэнэ." />}
-        />
+        <Route path="customers" element={<CustomersPage />} />
+        <Route path="orders" element={<OrdersPage />} />
         <Route
           path="accounting"
           element={

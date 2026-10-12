@@ -21,8 +21,8 @@ const nav = [
   { to: '/admin/brands', label: 'Брэнд', Icon: Award },
   { to: '/admin/posts', label: 'Мэдээ', Icon: Newspaper, soon: true },
   { to: '/admin/promotions', label: 'Хямдрал', Icon: Tag, soon: true },
-  { to: '/admin/customers', label: 'Харилцагч', Icon: Users, soon: true },
-  { to: '/admin/orders', label: 'Захиалга', Icon: Receipt, soon: true },
+  { to: '/admin/customers', label: 'Харилцагч', Icon: Users },
+  { to: '/admin/orders', label: 'Захиалга', Icon: Receipt },
   { to: '/admin/accounting', label: 'Нягтлан бодолт', Icon: BookOpen, soon: true },
 ];
 
