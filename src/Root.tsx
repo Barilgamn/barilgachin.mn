@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import App from './App';
 import { CatalogProvider } from './CatalogProvider';
 import { OrderLookupPage } from './components/OrderLookupPage';
+import { NewsDetailPage, NewsListPage } from './components/NewsPage';
 
 // Админ багцыг дэлгүүрийн багцаас тусгаарлана — худалдан авагч үүнийг татахгүй.
 const AdminApp = lazy(() =>
@@ -27,6 +28,8 @@ export const Root: React.FC = () => (
         }
       />
       <Route path="/zahialga" element={<OrderLookupPage />} />
+      <Route path="/medee" element={<NewsListPage />} />
+      <Route path="/medee/:slug" element={<NewsDetailPage />} />
       <Route
         path="*"
         element={

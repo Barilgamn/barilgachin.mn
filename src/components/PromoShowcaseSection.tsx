@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Product, UnitOfMeasure } from '../types';
 import { formatMNT } from '../utils/formatters';
+import { fetchLivePromotions } from '../lib/content';
+import type { PromotionRow } from '../types/db';
 import { ChevronLeft, ChevronRight, Sparkles, ArrowRight, ShieldCheck } from 'lucide-react';
 
 interface PromoShowcaseSectionProps {
@@ -36,6 +38,12 @@ export const PromoShowcaseSection: React.FC<PromoShowcaseSectionProps> = ({
   onSelectCategory,
 }) => {
   const [currentPage, setCurrentPage] = useState<number>(0);
+  // Идэвхтэй урамшуулал байвал баннерыг түүгээр солино.
+  const [promo, setPromo] = useState<PromotionRow | null>(null);
+  useEffect(() => {
+    void fetchLivePromotions().then((list) => setPromo(list[0] ?? null));
+  }, []);
+
   const itemsPerPage = 8; // 2 rows x 4 columns on large screens
 
   // Showcase items list (Featured, new, and popular items)
@@ -76,19 +84,30 @@ export const PromoShowcaseSection: React.FC<PromoShowcaseSectionProps> = ({
           {/* Top Title Badges matching the screenshot */}
           <div className="space-y-3 relative z-10">
             <div className="inline-block border-2 border-white text-white font-black text-xl sm:text-2xl px-4 py-1.5 rounded-2xl tracking-tight shadow-xs">
-              Үндсэн суурь
+              {promo ? promo.title : 'Үндсэн суурь'}
             </div>
-            <div>
-              <span className="inline-block bg-amber-400 text-slate-950 font-black text-lg sm:text-xl px-3.5 py-1 rounded-xl shadow-xs">
-                материал
-              </span>
-            </div>
+            {(promo?.discount_note || !promo) && (
+              <div>
+                <span className="inline-block bg-amber-400 text-slate-950 font-black text-lg sm:text-xl px-3.5 py-1 rounded-xl shadow-xs">
+                  {promo ? promo.discount_note : 'материал'}
+                </span>
+              </div>
+            )}
             <p className="text-blue-100 text-xs font-medium pt-1">
-              Үйлдвэрийн үнэ, MNS сертификаттай бэлэн нийлүүлэлт
+              {promo?.description ?? 'Үйлдвэрийн үнэ, MNS сертификаттай бэлэн нийлүүлэлт'}
             </p>
           </div>
 
-          {/* Visual Collage in Center */}
+          {/* Баннерын зураг байвал коллажийг орлоно. */}
+          {promo?.banner_url ? (
+            <div className="relative py-6">
+              <img
+                src={promo.banner_url}
+                alt={promo.title}
+                className="w-full rounded-2xl object-cover shadow-lg"
+              />
+            </div>
+          ) : (
           <div className="relative py-6 flex items-center justify-center">
             <div className="relative w-full aspect-square max-w-[210px] flex items-center justify-center">
               {/* Center Main Product */}
@@ -119,6 +138,7 @@ export const PromoShowcaseSection: React.FC<PromoShowcaseSectionProps> = ({
               </div>
             </div>
           </div>
+          )}
 
           {/* Bottom Action Row with Blue Circle Arrow Button */}
           <div className="relative z-10 flex items-center justify-between pt-2">

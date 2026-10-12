@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { PromoShowcaseSection } from './components/PromoShowcaseSection';
+import { NewsSection } from './components/NewsSection';
 import { ProductGrid } from './components/ProductGrid';
 import { B2BSection } from './components/B2BSection';
 import { Footer } from './components/Footer';
@@ -269,6 +270,10 @@ export default function App() {
                 onQuickView={(p) => setSelectedProduct(p)}
                 onSelectCategory={setSelectedCategory}
               />
+            )}
+
+            {selectedCategory === 'all' && !searchQuery && activeMobileTab !== 'saved' && (
+              <NewsSection />
             )}
           </main>
 

@@ -8,6 +8,8 @@ import { CategoriesPage } from './CategoriesPage';
 import { BrandsPage } from './BrandsPage';
 import { OrdersPage } from './OrdersPage';
 import { CustomersPage } from './CustomersPage';
+import { PostsPage } from './PostsPage';
+import { PromotionsPage } from './PromotionsPage';
 
 /** Хараахан хийгдээгүй хэсгүүдийн түр орлуулагч. */
 const Placeholder: React.FC<{ title: string; note: string }> = ({ title, note }) => (
@@ -51,14 +53,8 @@ const Guard: React.FC = () => {
         <Route path="products" element={<ProductsPage />} />
         <Route path="categories" element={<CategoriesPage />} />
         <Route path="brands" element={<BrandsPage />} />
-        <Route
-          path="posts"
-          element={<Placeholder title="Мэдээ" note="Контентын хэсэг удахгүй нэмэгдэнэ." />}
-        />
-        <Route
-          path="promotions"
-          element={<Placeholder title="Хямдрал" note="Урамшууллын хэсэг удахгүй нэмэгдэнэ." />}
-        />
+        <Route path="posts" element={<PostsPage />} />
+        <Route path="promotions" element={<PromotionsPage />} />
         <Route path="customers" element={<CustomersPage />} />
         <Route path="orders" element={<OrdersPage />} />
         <Route
