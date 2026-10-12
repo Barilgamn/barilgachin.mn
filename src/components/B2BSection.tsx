@@ -9,6 +9,7 @@ import {
   ShieldCheck,
   PhoneCall,
 } from 'lucide-react';
+import { EMAIL } from '../lib/contact';
 
 interface B2BSectionProps {
   onOpenRFQ: () => void;
@@ -120,7 +121,12 @@ export const B2BSection: React.FC<B2BSectionProps> = ({
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500 font-medium">И-мэйл:</span>
-                <span className="font-mono font-semibold text-slate-800">b2b@barilgachin.mn</span>
+                <a
+                  href={EMAIL.salesHref}
+                  className="font-mono font-semibold text-slate-800 hover:underline"
+                >
+                  {EMAIL.sales}
+                </a>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500 font-medium">Хариу өгөх хугацаа:</span>

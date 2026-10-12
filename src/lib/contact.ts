@@ -17,6 +17,12 @@ export const PHONE = {
   href: 'tel:+97677662277',
 } as const;
 
+/** Бөөний болон төслийн захиалгын хаяг. */
+export const EMAIL = {
+  sales: 'sales@barilgachin.mn',
+  salesHref: 'mailto:sales@barilgachin.mn',
+} as const;
+
 /** Ганц агуулах. Координат нь Google Maps дээрх байршлаас. */
 export const WAREHOUSE = {
   code: 'wh-main',
