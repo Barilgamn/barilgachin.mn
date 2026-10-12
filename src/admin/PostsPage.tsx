@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Loader2, Plus, Save, Search, Trash2, X } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { slugify, uniqueSlug } from '../lib/slug';
@@ -36,6 +36,7 @@ export const PostsPage: React.FC = () => {
   const [editingId, setEditingId] = useState<string | 'new' | null>(null);
   const [draft, setDraft] = useState<Draft>(emptyDraft);
   const [saving, setSaving] = useState(false);
+  const bodyRef = useRef<HTMLTextAreaElement>(null);
 
   const load = async () => {
     setLoading(true);
@@ -61,6 +62,38 @@ export const PostsPage: React.FC = () => {
     if (!q) return rows;
     return rows.filter((r) => r.title.toLowerCase().includes(q));
   }, [rows, query]);
+
+  /**
+   * Зарын тэмдэглэгээг курсор зогсож байгаа байранд оруулна.
+   *
+   * Хэрэглэгч сонгогч рүү шилжихэд textarea фокусаа алддаг ч selectionStart
+   * хэвээр үлддэг тул сүүлд зогссон байрлалыг олж чадна.
+   */
+  const insertIntoBody = (token: string) => {
+    const el = bodyRef.current;
+    const body = draft.body ?? '';
+    const at = el ? el.selectionStart : body.length;
+
+    const before = body.slice(0, at);
+    const after = body.slice(at);
+
+    // Тэмдэглэгээ өөрийн догол мөр дээрээ зогсох ёстой, гэхдээ байгаа хоосон
+    // мөрүүд дээр нэмж давхарлахгүй.
+    const gapBefore = before.trim() ? '\n\n'.slice(0, 2 - (/\n*$/.exec(before)?.[0].length ?? 0)) : '';
+    const gapAfter = after.trim() ? '\n\n'.slice(0, 2 - (/^\n*/.exec(after)?.[0].length ?? 0)) : '';
+
+    const inserted = gapBefore + token + gapAfter;
+    const next = before + inserted + after;
+    setDraft((d) => ({ ...d, body: next }));
+
+    // React утгыг шинэчилсний дараа курсорыг оруулсан текстийн ард тавина.
+    requestAnimationFrame(() => {
+      if (!el) return;
+      el.focus();
+      const caret = at + inserted.length;
+      el.setSelectionRange(caret, caret);
+    });
+  };
 
   const startEdit = (row: PostRow) => {
     setEditingId(row.id);
@@ -126,7 +159,7 @@ export const PostsPage: React.FC = () => {
   const label = 'text-xs font-medium text-slate-600';
 
   return (
-    <div className="p-6 max-w-4xl">
+    <div className="p-6 max-w-5xl">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-xl font-bold font-display">Мэдээ</h1>
@@ -165,62 +198,83 @@ export const PostsPage: React.FC = () => {
       )}
 
       {editingId && (
-        <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4 space-y-3">
-          <label className="block">
-            <span className={label}>Гарчиг</span>
-            <input
-              value={draft.title}
-              onChange={(e) => setDraft({ ...draft, title: e.target.value })}
-              className={field}
-            />
-          </label>
-
-          <label className="block">
-            <span className={label}>
-              Товч танилцуулга <span className="text-slate-400">(жагсаалтад харагдана)</span>
-            </span>
-            <textarea
-              rows={2}
-              value={draft.excerpt ?? ''}
-              onChange={(e) => setDraft({ ...draft, excerpt: e.target.value })}
-              className={field}
-            />
-          </label>
-
-          <label className="block">
-            <span className={label}>Агуулга</span>
-            <textarea
-              rows={10}
-              value={draft.body ?? ''}
-              onChange={(e) => setDraft({ ...draft, body: e.target.value })}
-              placeholder="Хоосон мөрөөр догол мөр тусгаарлана."
-              className={field}
-            />
-          </label>
-
-          <ProductAdInserter
-            onInsert={(token) =>
-              setDraft((d) => ({ ...d, body: `${d.body ?? ''}${token}`.trimStart() }))
-            }
-          />
-
-          <ImageField
-            value={draft.cover_url}
-            onChange={(url) => setDraft({ ...draft, cover_url: url })}
-            folder="posts"
-            label="Нүүр зураг"
-            hint="Өргөн хэлбэртэй зураг тохиромжтой. 5MB хүртэл."
-          />
-
-          <div className="grid gap-3 sm:grid-cols-3">
+        <div className="mt-4 grid gap-4 lg:grid-cols-[1fr_300px] items-start">
+          {/* ─── Зүүн: бичих талбар ─── */}
+          <div className="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
             <label className="block">
-              <span className={label}>Нийтлэгч</span>
+              <span className={label}>Гарчиг</span>
               <input
-                value={draft.author_name ?? ''}
-                onChange={(e) => setDraft({ ...draft, author_name: e.target.value })}
+                value={draft.title}
+                onChange={(e) => setDraft({ ...draft, title: e.target.value })}
                 className={field}
               />
             </label>
+
+            <label className="block">
+              <span className={label}>
+                Товч танилцуулга{' '}
+                <span className="text-slate-400">(мэдээний картан дээр гарах 1-2 өгүүлбэр)</span>
+              </span>
+              <textarea
+                rows={2}
+                value={draft.excerpt ?? ''}
+                onChange={(e) => setDraft({ ...draft, excerpt: e.target.value })}
+                className={field}
+              />
+            </label>
+
+            <label className="block">
+              <span className={label}>
+                Мэдээний агуулга{' '}
+                <span className="text-slate-400">(хоосон мөр = шинэ догол мөр)</span>
+              </span>
+              <textarea
+                ref={bodyRef}
+                rows={14}
+                value={draft.body ?? ''}
+                onChange={(e) => setDraft({ ...draft, body: e.target.value })}
+                className={field}
+              />
+            </label>
+
+            <ProductAdInserter onInsert={insertIntoBody} />
+          </div>
+
+          {/* ─── Баруун: нийтлэх тохиргоо ─── */}
+          <div className="rounded-xl border border-slate-200 bg-white p-4 space-y-4">
+            <h2 className="text-xs font-bold text-slate-900 border-b border-slate-100 pb-2">
+              Нийтлэх тохиргоо
+            </h2>
+
+            <div>
+              <label className="flex items-start gap-2 text-xs cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={draft.is_published}
+                  onChange={(e) => setDraft({ ...draft, is_published: e.target.checked })}
+                  className="mt-0.5"
+                />
+                <span>
+                  <span className="font-semibold text-slate-900">
+                    {draft.is_published ? 'Нийтэлсэн' : 'Ноорог'}
+                  </span>
+                  <span className="block text-[11px] text-slate-500">
+                    {draft.is_published
+                      ? 'Сайт дээр харагдана.'
+                      : 'Зөвхөн энд харагдана. Уншигчид хүрэхгүй.'}
+                  </span>
+                </span>
+              </label>
+            </div>
+
+            <ImageField
+              value={draft.cover_url}
+              onChange={(url) => setDraft({ ...draft, cover_url: url })}
+              folder="posts"
+              label="Нүүр зураг"
+              hint="Карт болон мэдээний дээр гарна. Өргөн хэлбэртэй, 5MB хүртэл."
+            />
+
             <label className="block">
               <span className={label}>Нийтлэх огноо</span>
               <input
@@ -231,35 +285,44 @@ export const PostsPage: React.FC = () => {
                 }
                 className={field}
               />
-            </label>
-            <label className="block">
-              <span className={label}>
-                Slug <span className="text-slate-400">(хоосон бол гарчгаас)</span>
+              <span className="mt-1 block text-[11px] text-slate-400">
+                Мэдээг эрэмбэлнэ. Хоосон бол нийтлэх үед өнөөдрөөр тавигдана.
               </span>
+            </label>
+
+            <label className="block">
+              <span className={label}>Нийтлэгчийн нэр</span>
+              <input
+                value={draft.author_name ?? ''}
+                onChange={(e) => setDraft({ ...draft, author_name: e.target.value })}
+                className={field}
+              />
+              <span className="mt-1 block text-[11px] text-slate-400">
+                Мэдээн дотор огнооны хажууд гарна.
+              </span>
+            </label>
+
+            <label className="block">
+              <span className={label}>Хаягийн нэр</span>
               <input
                 value={draft.slug}
                 onChange={(e) => setDraft({ ...draft, slug: e.target.value })}
                 placeholder={slugify(draft.title)}
                 className={`${field} font-mono`}
               />
-            </label>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-4 pt-1">
-            <label className="flex items-center gap-2 text-xs text-slate-600 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={draft.is_published}
-                onChange={(e) => setDraft({ ...draft, is_published: e.target.checked })}
-              />
-              Нийтлэх
+              <span className="mt-1 block text-[11px] text-slate-400 break-all">
+                /medee/{draft.slug || slugify(draft.title) || '…'}
+                <br />
+                Хоосон бол гарчгаас үүснэ. Нийтэлсний дараа солиход хуучин холбоос
+                эвдэрнэ.
+              </span>
             </label>
 
-            <div className="ml-auto flex gap-2">
+            <div className="flex gap-2 border-t border-slate-100 pt-3">
               <button
                 type="button"
                 onClick={() => setEditingId(null)}
-                className="btn-liquid-glass px-3 py-2 text-sm font-medium flex items-center gap-1.5 cursor-pointer"
+                className="btn-liquid-glass flex-1 px-3 py-2 text-sm font-medium flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <X className="w-4 h-4" />
                 Болих
@@ -268,7 +331,7 @@ export const PostsPage: React.FC = () => {
                 type="button"
                 onClick={save}
                 disabled={saving || !draft.title.trim()}
-                className="btn-liquid-dark px-3.5 py-2 text-sm font-semibold flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+                className="btn-liquid-dark flex-1 px-3 py-2 text-sm font-semibold flex items-center justify-center gap-1.5 disabled:opacity-50 cursor-pointer"
               >
                 {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                 Хадгалах

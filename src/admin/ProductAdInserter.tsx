@@ -43,7 +43,7 @@ export const ProductAdInserter: React.FC<ProductAdInserterProps> = ({ onInsert }
       mode === 'picked'
         ? `[бараа sku=${skus.join(',')}]`
         : `[бараа ангилал=${categorySlug} тоо=${limit}]`;
-    onInsert(`\n\n${token}\n\n`);
+    onInsert(token);
     setSkus([]);
   };
 
@@ -56,10 +56,10 @@ export const ProductAdInserter: React.FC<ProductAdInserterProps> = ({ onInsert }
       <div>
         <h3 className="text-xs font-semibold text-slate-900 flex items-center gap-1.5">
           <ShoppingBag className="w-3.5 h-3.5 text-amber-600" />
-          Агуулгад бараа оруулах
+          Барааны зар байрлуулах
         </h3>
         <p className="text-[11px] text-slate-500">
-          Текстийн төгсгөлд нэмнэ. Дараа нь хүссэн байрлал руу нь зөөж болно.
+          Байгаа бараанаас сонгоно. Агуулгын дотор курсор зогссон байранд орно.
         </p>
       </div>
 
@@ -133,7 +133,9 @@ export const ProductAdInserter: React.FC<ProductAdInserterProps> = ({ onInsert }
 
       <div className="flex items-center justify-between gap-2">
         <span className="text-[11px] text-slate-400">
-          {mode === 'picked' ? `${skus.length} бараа сонгосон` : 'Ангиллын эхний барааг авна'}
+          {mode === 'picked'
+            ? `${skus.length} бараа сонгосон`
+            : 'Тухайн ангиллын эхний барааг авна'}
         </span>
         <button
           type="button"
@@ -142,7 +144,7 @@ export const ProductAdInserter: React.FC<ProductAdInserterProps> = ({ onInsert }
           className="btn-liquid-dark px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 disabled:opacity-40 cursor-pointer"
         >
           <Plus className="w-3.5 h-3.5" />
-          Оруулах
+          Курсор дээр байрлуулах
         </button>
       </div>
     </div>
