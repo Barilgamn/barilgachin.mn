@@ -3,6 +3,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 import {
   Package,
   Layers,
+  Award,
   Newspaper,
   Tag,
   Users,
@@ -17,6 +18,7 @@ import { useAuth } from './useAuth';
 const nav = [
   { to: '/admin/products', label: 'Бараа', Icon: Package },
   { to: '/admin/categories', label: 'Ангилал', Icon: Layers },
+  { to: '/admin/brands', label: 'Брэнд', Icon: Award },
   { to: '/admin/posts', label: 'Мэдээ', Icon: Newspaper, soon: true },
   { to: '/admin/promotions', label: 'Хямдрал', Icon: Tag, soon: true },
   { to: '/admin/customers', label: 'Харилцагч', Icon: Users, soon: true },

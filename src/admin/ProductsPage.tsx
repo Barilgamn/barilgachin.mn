@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Plus, Trash2, Save, X, Loader2, Search } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { slugify, uniqueSlug } from '../lib/slug';
-import type { CategoryRow, ProductRow } from '../types/db';
+import type { BrandRow, CategoryRow, ProductRow } from '../types/db';
 import { ProductImages } from './ProductImages';
 import { ProductTiers } from './ProductTiers';
 import { ProductStock } from './ProductStock';
@@ -14,7 +14,7 @@ const UOMS = [
 
 type Draft = Pick<
   ProductRow,
-  | 'sku' | 'name' | 'mongolian_name' | 'slug' | 'category_id' | 'subcategory'
+  | 'sku' | 'name' | 'mongolian_name' | 'slug' | 'category_id' | 'brand_id' | 'subcategory'
   | 'price' | 'original_price' | 'uom' | 'weight_kg' | 'description'
   | 'mns_standard' | 'is_mns_certified' | 'is_featured' | 'is_published'
 >;
@@ -25,6 +25,7 @@ const emptyDraft: Draft = {
   mongolian_name: '',
   slug: '',
   category_id: null,
+  brand_id: null,
   subcategory: '',
   price: 0,
   original_price: null,
@@ -40,6 +41,7 @@ const emptyDraft: Draft = {
 export const ProductsPage: React.FC = () => {
   const [rows, setRows] = useState<ProductRow[]>([]);
   const [categories, setCategories] = useState<CategoryRow[]>([]);
+  const [brands, setBrands] = useState<BrandRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState('');
@@ -49,9 +51,10 @@ export const ProductsPage: React.FC = () => {
 
   const load = async () => {
     setLoading(true);
-    const [products, cats] = await Promise.all([
+    const [products, cats, brandRows] = await Promise.all([
       supabase.from('products').select('*').order('sort_order').order('name'),
       supabase.from('categories').select('*').order('name'),
+      supabase.from('brands').select('*').order('name'),
     ]);
     if (products.error) setError(products.error.message);
     else {
@@ -59,6 +62,7 @@ export const ProductsPage: React.FC = () => {
       setError(null);
     }
     setCategories((cats.data as CategoryRow[]) ?? []);
+    setBrands((brandRows.data as BrandRow[]) ?? []);
     setLoading(false);
   };
 
@@ -85,6 +89,7 @@ export const ProductsPage: React.FC = () => {
       mongolian_name: row.mongolian_name ?? '',
       slug: row.slug,
       category_id: row.category_id,
+      brand_id: row.brand_id,
       subcategory: row.subcategory ?? '',
       price: row.price,
       original_price: row.original_price,
@@ -202,15 +207,16 @@ export const ProductsPage: React.FC = () => {
             </label>
           </div>
 
+          <label className="block">
+            <span className={label}>Дэлгэрэнгүй нэр</span>
+            <input
+              value={draft.mongolian_name ?? ''}
+              onChange={(e) => setDraft({ ...draft, mongolian_name: e.target.value })}
+              className={field}
+            />
+          </label>
+
           <div className="grid gap-3 sm:grid-cols-3">
-            <label className="block sm:col-span-2">
-              <span className={label}>Дэлгэрэнгүй нэр</span>
-              <input
-                value={draft.mongolian_name ?? ''}
-                onChange={(e) => setDraft({ ...draft, mongolian_name: e.target.value })}
-                className={field}
-              />
-            </label>
             <label className="block">
               <span className={label}>Ангилал</span>
               <select
@@ -225,6 +231,30 @@ export const ProductsPage: React.FC = () => {
                   </option>
                 ))}
               </select>
+            </label>
+            <label className="block">
+              <span className={label}>Брэнд</span>
+              <select
+                value={draft.brand_id ?? ''}
+                onChange={(e) => setDraft({ ...draft, brand_id: e.target.value || null })}
+                className={field}
+              >
+                <option value="">— сонгоогүй —</option>
+                {brands.map((b) => (
+                  <option key={b.id} value={b.id}>
+                    {b.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="block">
+              <span className={label}>Дэд ангилал</span>
+              <input
+                value={draft.subcategory ?? ''}
+                onChange={(e) => setDraft({ ...draft, subcategory: e.target.value })}
+                placeholder="Портланд цемент"
+                className={field}
+              />
             </label>
           </div>
 

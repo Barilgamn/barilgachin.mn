@@ -5,6 +5,7 @@ import { LoginPage } from './LoginPage';
 import { AdminLayout } from './AdminLayout';
 import { ProductsPage } from './ProductsPage';
 import { CategoriesPage } from './CategoriesPage';
+import { BrandsPage } from './BrandsPage';
 
 /** Хараахан хийгдээгүй хэсгүүдийн түр орлуулагч. */
 const Placeholder: React.FC<{ title: string; note: string }> = ({ title, note }) => (
@@ -47,6 +48,7 @@ const Guard: React.FC = () => {
         <Route index element={<Navigate to="products" replace />} />
         <Route path="products" element={<ProductsPage />} />
         <Route path="categories" element={<CategoriesPage />} />
+        <Route path="brands" element={<BrandsPage />} />
         <Route
           path="posts"
           element={<Placeholder title="Мэдээ" note="Контентын хэсэг удахгүй нэмэгдэнэ." />}
