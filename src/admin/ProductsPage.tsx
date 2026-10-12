@@ -3,6 +3,7 @@ import { Plus, Trash2, Save, X, Loader2, Search } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { slugify, uniqueSlug } from '../lib/slug';
 import type { CategoryRow, ProductRow } from '../types/db';
+import { ProductImages } from './ProductImages';
 
 const UOMS = [
   'ширхэг', 'шуудай 50кг', 'шуудай 25кг', 'тн', 'м²', 'м³', 'у/м',
@@ -308,6 +309,14 @@ export const ProductsPage: React.FC = () => {
             </label>
           </div>
 
+          {editingId === 'new' ? (
+            <p className="text-[11px] text-slate-400">
+              Зураг нэмэхийн тулд эхлээд барааг хадгална уу.
+            </p>
+          ) : (
+            <ProductImages productId={editingId} productName={draft.name} />
+          )}
+
           <div className="flex flex-wrap items-center gap-4 pt-1">
             {([
               ['is_mns_certified', 'MNS баталгаатай'],
@@ -346,7 +355,7 @@ export const ProductsPage: React.FC = () => {
           </div>
 
           <p className="text-[11px] text-slate-400">
-            Зураг, бөөний үнэ, агуулахын үлдэгдлийг дараагийн алхамд нэмнэ.
+            Бөөний үнэ, агуулахын үлдэгдлийг дараагийн алхамд нэмнэ.
           </p>
         </div>
       )}
