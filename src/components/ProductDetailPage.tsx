@@ -163,10 +163,11 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             >
               <span>Нүүр</span>
             </button>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
 
+            {/* Ангилалгүй бараан дээр сум дангаараа үлдэхгүй. */}
             {currentCategory && (
               <>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                 <button
                   onClick={() => {
                     if (onSelectCategory) {
@@ -178,13 +179,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 >
                   {currentCategory.name}
                 </button>
-                <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
               </>
             )}
-
-            <span className="font-bold text-slate-900 truncate max-w-[160px] sm:max-w-[300px]">
-              {product.name}
-            </span>
           </div>
 
           {/* Back Button & Actions */}
