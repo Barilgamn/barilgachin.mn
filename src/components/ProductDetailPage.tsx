@@ -231,7 +231,10 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
             {/* Гар утсан дээр нэр зургийн дээр байх нь ойлгомжтой. Дэлгэц дээр
                 баруун баганад, үнийн хажууд хэвээр. */}
-            <h1 className="lg:hidden text-xl sm:text-2xl font-bold text-slate-900 font-display leading-[1.2]">
+            <h1
+              className="lg:hidden truncate text-base sm:text-xl font-bold text-slate-900 font-display"
+              title={product.name}
+            >
               {product.name}
             </h1>
 
