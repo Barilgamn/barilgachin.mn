@@ -322,13 +322,10 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             
             {/* Header & Product Information */}
             <div className="bg-white rounded-3xl p-5 sm:p-7 border border-slate-200 shadow-sm space-y-4">
-              <div className="space-y-1.5 border-b border-slate-100 pb-4">
+              <div className="border-b border-slate-100 pb-4">
                 <h1 className="text-2xl sm:text-[30px] font-bold text-slate-900 font-display leading-[1.15]">
                   {product.name}
                 </h1>
-                <div className="text-sm sm:text-base text-slate-500">
-                  {product.mongolianName}
-                </div>
               </div>
 
               {product.description && (
