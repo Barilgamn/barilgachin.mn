@@ -565,6 +565,16 @@ export const Header: React.FC<HeaderProps> = ({
               <span>B2B Үнийн санал</span>
             </button>
 
+            {/* Захиалга, нэхэмжлэх хайх */}
+            <button
+              onClick={onOpenOrderTracker}
+              className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl btn-liquid-glass text-slate-800 text-xs sm:text-sm font-semibold cursor-pointer"
+              title="Захиалгын явц, нэхэмжлэхээ харах"
+            >
+              <Truck className="w-4 h-4 text-slate-700" />
+              <span>Захиалга хянах</span>
+            </button>
+
             {/* Cart Drawer Trigger */}
             <button
               onClick={onOpenCart}

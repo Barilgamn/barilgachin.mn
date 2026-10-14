@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   Building2,
 } from 'lucide-react';
+import { EMAIL, PHONE } from '../lib/contact';
 
 interface LiveChatModalProps {
   isOpen: boolean;
@@ -42,7 +43,10 @@ export const LiveChatModal: React.FC<LiveChatModalProps> = ({
     {
       id: '1',
       sender: 'agent',
-      text: 'Сайн байна уу! "Барилгачин.мн" шуурхай зөвлөх үйлчилгээнд тавтай морилно уу. Барилгын материалын сонголт, техникийн үзүүлэлт, бөөний хөнгөлөлт болон тээврийн талаар юугаар туслах вэ?',
+      text:
+        'Сайн байна уу. Энэ бол автомат туслах — хүргэлт, үнэ, стандартын ' +
+        'талаарх түгээмэл асуултад хариулна. Нарийн зүйл асуух бол ' +
+        `${PHONE.display} дугаар руу залгаарай.`,
       time: 'Яг одоо',
     },
   ]);
@@ -76,10 +80,10 @@ export const LiveChatModal: React.FC<LiveChatModalProps> = ({
   if (!isOpen) return null;
 
   const quickQuestions = [
-    'Тээврийн үнэ болон крантай хүргэлт',
-    'МАК цемент, блокийн бөөний үнэ',
-    'Арматурын MNS стандарт гэрчилгээ',
-    'Төслийн нэгдсэн үнийн санал (RFQ)',
+    'Хүргэлтийн хөлс хэд вэ?',
+    'Бөөний үнэ хэрхэн тогтдог вэ?',
+    'MNS стандарт, гэрчилгээ',
+    'Төслийн үнийн санал авах',
   ];
 
   const handleSendMessage = (textToSend?: string) => {
@@ -103,17 +107,33 @@ export const LiveChatModal: React.FC<LiveChatModalProps> = ({
 
       const lower = text.toLowerCase();
       if (lower.includes('тээвэр') || lower.includes('кран') || lower.includes('хүргэлт')) {
-        reply = 'Улаанбаатар хот дотор захиалга 2-4 цагийн дотор хүргэгдэнэ. 1.5 тонноос 25 тонн хүртэлх болон крантай автомашины сонголттой бөгөөд 10 сая ₮-өөс дээш захиалга хот дотор үнэгүй хүргэгдэнэ.';
+        // Эдгээр дүн нь create_order-ийн delivery_fee_for-той яг таарна.
+        reply =
+          'Хүргэлтийн хөлс ачааны жингээр тогтоогдоно: 50кг хүртэл 10,000₮, ' +
+          '1.2 тонн хүртэл 35,000₮, 3.5 тонн хүртэл 65,000₮, 6 тонн хүртэл ' +
+          '120,000₮, түүнээс дээш 220,000₮. Сагсандаа бараагаа хийхэд яг ' +
+          'хэдэн төгрөг болохыг харуулна. Агуулахаас өөрөө ачих бол хөлсгүй.';
       } else if (lower.includes('цемент') || lower.includes('блок') || lower.includes('мак')) {
-        reply = 'МАК Евроцемент (M-400, M-500) болон Евроблок (AAC) нь үйлдвэрийн албан ёсны үнээр, 50+ болон 100+ ширхэгээс эхлэн шаталсан бөөний хөнгөлөлттэй худалдаалагдаж байна.';
+        reply =
+          'Бөөний үнэ бараа тус бүрдээ өөр шатлалтай. Барааны дэлгэрэнгүй ' +
+          'хуудсан дээр хэдэн ширхэгээс ямар үнэ болохыг жагсаалтаар харуулсан ' +
+          'байгаа. Их хэмжээний татан авалт бол үнийн санал авах нь зүйтэй.';
       } else if (lower.includes('арматур') || lower.includes('стандарт') || lower.includes('mns')) {
-        reply = 'Бүх арматур, катанка төмөр нь MNS 6296 / ГОСТ 5781 стандартыг 100% хангасан, үйлдвэрийн чанарын гэрчилгээтэй бөгөөд захиалга бүрт баталгаат хуудас хавсаргана.';
+        reply =
+          'Стандарт бүхий бараан дээр MNS тэмдэглэгээ, дугаарыг нь барааны ' +
+          'хуудсан дээр бичсэн байгаа. Тодорхой барааны чанарын гэрчилгээ ' +
+          'шаардлагатай бол урьдчилж хэлнэ үү, бэлтгэж өгнө.';
       } else if (lower.includes('үнийн санал') || lower.includes('rfq') || lower.includes('төсөл')) {
-        reply = 'Та манай B2B системээр дамжуулан албан байгууллагын НӨАТ-тай үнийн санал (RFQ)-ыг 5 минутад автоматаар үүсгэн авах боломжтой.';
-        action = { label: 'B2B Үнийн санал нээх', type: 'rfq' };
+        reply =
+          'Төслийн хэмжээний татан авалтад бөөний үнийн санал гаргаж өгнө. ' +
+          `Материалын жагсаалтаа ${EMAIL.sales} хаяг руу илгээх эсвэл ` +
+          `${PHONE.display} дугаар руу залгаарай.`;
+        action = { label: `${PHONE.display} руу залгах`, type: 'call' };
       } else {
-        reply = `Таны асуултыг хүлээн авлаа. Манай төслийн инженер тантай шууд холбогдож дэлгэрэнгүй мэдээлэл өгөх боломжтой. Яаралтай бол 7766-2277 утсаар залгаарай.`;
-        action = { label: '7766-2277 руу залгах', type: 'call' };
+        reply =
+          'Энэ асуултад би хариулж чадахгүй байна. Манай борлуулалтын ' +
+          `багтай ${PHONE.display} дугаараар холбогдоход шуурхай хариу өгнө.`;
+        action = { label: `${PHONE.display} руу залгах`, type: 'call' };
       }
 
       setMessages((prev) => [
@@ -174,7 +194,7 @@ export const LiveChatModal: React.FC<LiveChatModalProps> = ({
           </div>
           <div className="flex items-center gap-1">
             <a
-              href="tel:+97677662277"
+              href={PHONE.href}
               className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-400 transition-colors"
               title="Шууд залгах"
             >
@@ -200,7 +220,7 @@ export const LiveChatModal: React.FC<LiveChatModalProps> = ({
             className="font-black text-amber-700 hover:underline flex items-center gap-1"
           >
             <Phone className="w-3 h-3" />
-            <span>7766-2277</span>
+            <span>{PHONE.display}</span>
           </a>
         </div>
 

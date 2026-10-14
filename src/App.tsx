@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Header } from './components/Header';
 import { PromoShowcaseSection } from './components/PromoShowcaseSection';
 import { NewsSection } from './components/NewsSection';
@@ -11,7 +11,6 @@ import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
 import { MaterialCalculatorModal } from './components/MaterialCalculatorModal';
 import { RFQModal } from './components/RFQModal';
-import { OrderTrackerModal } from './components/OrderTrackerModal';
 import { LiveChatModal } from './components/LiveChatModal';
 import { MobileBottomNav, MobileTab } from './components/MobileBottomNav';
 import { useCatalogState } from './CatalogProvider';
@@ -45,7 +44,6 @@ export default function App() {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState<boolean>(false);
   const [isCalculatorOpen, setIsCalculatorOpen] = useState<boolean>(false);
   const [isRfqOpen, setIsRfqOpen] = useState<boolean>(false);
-  const [isOrderTrackerOpen, setIsOrderTrackerOpen] = useState<boolean>(false);
   const [isLiveChatOpen, setIsLiveChatOpen] = useState<boolean>(false);
 
   // Selected product for technical datasheet modal / single RFQ
@@ -53,6 +51,7 @@ export default function App() {
   const [rfqTargetProduct, setRfqTargetProduct] = useState<Product | null>(null);
 
   // Мэдээн доторх зар бараа, ангилал руу шууд хөтөлдөг.
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   useEffect(() => {
     const sku = searchParams.get('product');
@@ -226,7 +225,7 @@ export default function App() {
           setRfqTargetProduct(null);
           setIsRfqOpen(true);
         }}
-        onOpenOrderTracker={() => setIsOrderTrackerOpen(true)}
+        onOpenOrderTracker={() => navigate('/zahialga')}
         onOpenLiveChat={() => setIsLiveChatOpen(true)}
         onSelectCategory={(catId) => {
           setSelectedCategory(catId);
@@ -425,10 +424,6 @@ export default function App() {
       />
 
 
-      <OrderTrackerModal
-        isOpen={isOrderTrackerOpen}
-        onClose={() => setIsOrderTrackerOpen(false)}
-      />
     </div>
   );
 }

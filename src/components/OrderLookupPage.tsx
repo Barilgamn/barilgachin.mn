@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Loader2, Printer, Search } from 'lucide-react';
+import { ArrowLeft, Check, Loader2, Printer, Search } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { InvoiceDocument, type InvoiceData } from './InvoiceDocument';
+import { PHONE } from '../lib/contact';
 
 interface LookupRow {
   order_no: string;
@@ -65,6 +66,69 @@ const toInvoice = (r: LookupRow): InvoiceData => ({
       : null,
 });
 
+
+/** Захиалгын явцын шат. Цуцалсан захиалгад энэ шат утгагүй. */
+const STEPS: Array<{ key: string; label: string }> = [
+  { key: 'new', label: 'Хүлээн авсан' },
+  { key: 'confirmed', label: 'Баталгаажсан' },
+  { key: 'packed', label: 'Агуулахад бэлтгэсэн' },
+  { key: 'shipped', label: 'Замд гарсан' },
+  { key: 'delivered', label: 'Хүргэсэн' },
+];
+
+const OrderProgress: React.FC<{ row: LookupRow }> = ({ row }) => {
+  if (row.status === 'cancelled') {
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white p-4">
+        <p className="text-sm font-semibold text-slate-900">Захиалга цуцлагдсан</p>
+        <p className="mt-1 text-xs text-slate-500">
+          Дэлгэрэнгүйг манай борлуулалтын багаас лавлана уу: {PHONE.display}
+        </p>
+      </div>
+    );
+  }
+
+  const at = STEPS.findIndex((s) => s.key === row.status);
+
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-4">
+      <div className="flex items-center justify-between gap-2">
+        <h2 className="text-sm font-semibold text-slate-900">Захиалгын явц</h2>
+        <span
+          className={`rounded-md px-2 py-0.5 text-[11px] font-medium ${
+            row.payment_status === 'paid'
+              ? 'bg-emerald-50 text-emerald-700'
+              : 'bg-amber-50 text-amber-700'
+          }`}
+        >
+          {row.payment_status === 'paid' ? 'Төлөгдсөн' : 'Төлөгдөөгүй'}
+        </span>
+      </div>
+
+      <ol className="mt-3 space-y-2">
+        {STEPS.map((step, i) => {
+          const done = i <= at;
+          const current = i === at;
+          return (
+            <li key={step.key} className="flex items-center gap-2.5 text-sm">
+              <span
+                className={`grid h-5 w-5 shrink-0 place-items-center rounded-full text-[10px] font-bold ${
+                  done ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-400'
+                }`}
+              >
+                {done ? <Check className="h-3 w-3" /> : i + 1}
+              </span>
+              <span className={current ? 'font-semibold text-slate-900' : done ? 'text-slate-700' : 'text-slate-400'}>
+                {step.label}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+  );
+};
+
 export const OrderLookupPage: React.FC = () => {
   const [params] = useSearchParams();
   const [orderNo, setOrderNo] = useState(params.get('order') ?? '');
@@ -72,12 +136,14 @@ export const OrderLookupPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [found, setFound] = useState<InvoiceData | null>(null);
+  const [row, setRow] = useState<LookupRow | null>(null);
 
   const search = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     setFound(null);
+    setRow(null);
 
     const { data, error: err } = await supabase.rpc('lookup_order', {
       p_order_no: orderNo,
@@ -85,7 +151,10 @@ export const OrderLookupPage: React.FC = () => {
     });
 
     if (err) setError(err.message);
-    else setFound(toInvoice(data as LookupRow));
+    else {
+      setRow(data as LookupRow);
+      setFound(toInvoice(data as LookupRow));
+    }
     setLoading(false);
   };
 
@@ -146,6 +215,12 @@ export const OrderLookupPage: React.FC = () => {
             </p>
           )}
         </div>
+
+        {row && (
+          <div className="no-print mt-4">
+            <OrderProgress row={row} />
+          </div>
+        )}
 
         {found && (
           <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-white">
