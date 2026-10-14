@@ -116,15 +116,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         />
 
         {/* Top-Left: Brand Badge */}
-        <div className="absolute top-2 left-2 z-10 flex flex-col gap-1 items-start">
+        <div className="absolute top-2 left-2 z-10">
           <span className="px-1.5 sm:px-2 py-0.5 rounded-md text-[9px] sm:text-[10px] font-black tracking-wider bg-slate-900 text-white shadow-xs uppercase">
             {brandBadge}
           </span>
-          {product.isMNSCertified && (
-            <span className="px-1 py-0.2 rounded text-[8px] sm:text-[9px] font-extrabold bg-emerald-600 text-white shadow-2xs">
-              MNS
-            </span>
-          )}
         </div>
 
         {/* Top-Right: Favorite Button & Discount Badge */}
@@ -186,10 +181,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             {product.name}
           </h3>
 
-          {/* Metadata: код · дэд ангилал */}
-          <div className="mt-1 flex items-center justify-between gap-2 text-[10px] text-slate-400">
-            <span className="font-mono truncate">{product.sku}</span>
-            <span className="truncate">{product.subcategory || product.brand}</span>
+          {/* Дэд ангилал */}
+          <div className="mt-1 truncate text-[10px] text-slate-400">
+            {product.subcategory || product.brand}
           </div>
 
           {/* Stock indicator badge */}
