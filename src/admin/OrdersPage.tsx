@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Search } from 'lucide-react';
+import { Plus, Search } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import type { CustomerRow, OrderRow, OrderStatus } from '../types/db';
 import { OrderDetail } from './OrderDetail';
+import { ManualOrderForm } from './ManualOrderForm';
 import { STATUS_CLASS, STATUS_LABEL, formatDate, formatMNT } from './orderLabels';
 
 const FILTERS: Array<{ value: OrderStatus | 'all' | 'unpaid'; label: string }> = [
@@ -23,6 +24,8 @@ export const OrdersPage: React.FC = () => {
   const [filter, setFilter] = useState<OrderStatus | 'all' | 'unpaid'>('all');
   const [query, setQuery] = useState('');
   const [openId, setOpenId] = useState<string | null>(null);
+  const [adding, setAdding] = useState(false);
+  const [created, setCreated] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -86,14 +89,27 @@ export const OrdersPage: React.FC = () => {
             {receivable > 0 && <> · авлага {formatMNT(receivable)}</>}
           </p>
         </div>
-        <div className="relative">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Дугаар, нэр, утас"
-            className="w-56 rounded-lg border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm outline-hidden focus:border-slate-900"
-          />
+        <div className="flex items-center gap-2">
+          <div className="relative">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Дугаар, нэр, утас"
+              className="w-56 rounded-lg border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm outline-hidden focus:border-slate-900"
+            />
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setAdding(true);
+              setOpenId(null);
+            }}
+            className="btn-liquid-dark px-3.5 py-2 text-sm font-semibold flex items-center gap-1.5 cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            Шинэ захиалга
+          </button>
         </div>
       </div>
 
@@ -118,6 +134,23 @@ export const OrdersPage: React.FC = () => {
         <p role="alert" className="mt-4 rounded-lg border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700">
           {error}
         </p>
+      )}
+
+      {created && (
+        <p className="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-800">
+          {created} захиалга үүслээ. Доорх жагсаалтаас нээж баталгаажуулна уу.
+        </p>
+      )}
+
+      {adding && (
+        <ManualOrderForm
+          onCreated={(orderNo) => {
+            setAdding(false);
+            setCreated(orderNo);
+            void load();
+          }}
+          onCancel={() => setAdding(false)}
+        />
       )}
 
       {open && (

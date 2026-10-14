@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Building2, Search, User } from 'lucide-react';
+import { Building2, Pencil, Plus, Search, Trash2, User } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import type { CustomerRow, OrderRow } from '../types/db';
 import { STATUS_CLASS, STATUS_LABEL, formatDate, formatMNT } from './orderLabels';
+import { CustomerForm } from './CustomerForm';
 
 export const CustomersPage: React.FC = () => {
   const [rows, setRows] = useState<CustomerRow[]>([]);
@@ -11,6 +12,7 @@ export const CustomersPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState('');
   const [openId, setOpenId] = useState<string | null>(null);
+  const [editing, setEditing] = useState<CustomerRow | null | undefined>(undefined);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -57,6 +59,22 @@ export const CustomersPage: React.FC = () => {
     );
   }, [rows, query]);
 
+  const remove = async (row: CustomerRow) => {
+    const theirs = orders.filter((o) => o.customer_id === row.id).length;
+    // orders.customer_id нь "on delete set null" тул захиалга устахгүй, зөвхөн сална.
+    const warning = theirs
+      ? `"${row.name}" харилцагчийг устгах уу?\n\n${theirs} захиалга байна. Захиалга устахгүй, гэхдээ эзэнгүй болно.`
+      : `"${row.name}" харилцагчийг устгах уу?`;
+    if (!confirm(warning)) return;
+
+    const { error: err } = await supabase.from('customers').delete().eq('id', row.id);
+    if (err) setError(err.message);
+    else {
+      setOpenId(null);
+      await load();
+    }
+  };
+
   const openOrders = openId ? orders.filter((o) => o.customer_id === openId) : [];
 
   return (
@@ -66,14 +84,24 @@ export const CustomersPage: React.FC = () => {
           <h1 className="text-xl font-bold font-display">Харилцагч</h1>
           <p className="text-sm text-slate-500">{rows.length} харилцагч</p>
         </div>
-        <div className="relative">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Нэр, утас, байгууллага"
-            className="w-56 rounded-lg border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm outline-hidden focus:border-slate-900"
-          />
+        <div className="flex items-center gap-2">
+          <div className="relative">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Нэр, утас, байгууллага"
+              className="w-56 rounded-lg border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm outline-hidden focus:border-slate-900"
+            />
+          </div>
+          <button
+            type="button"
+            onClick={() => setEditing(null)}
+            className="btn-liquid-dark px-3.5 py-2 text-sm font-semibold flex items-center gap-1.5 cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            Шинэ харилцагч
+          </button>
         </div>
       </div>
 
@@ -81,6 +109,18 @@ export const CustomersPage: React.FC = () => {
         <p role="alert" className="mt-4 rounded-lg border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700">
           {error}
         </p>
+      )}
+
+      {editing !== undefined && (
+        <CustomerForm
+          key={editing?.id ?? 'new'}
+          editing={editing}
+          onSaved={() => {
+            setEditing(undefined);
+            void load();
+          }}
+          onCancel={() => setEditing(undefined)}
+        />
       )}
 
       <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
@@ -102,6 +142,7 @@ export const CustomersPage: React.FC = () => {
                 <th className="text-right font-medium px-4 py-2.5">Нийт</th>
                 <th className="text-right font-medium px-4 py-2.5">Авлага</th>
                 <th className="text-left font-medium px-4 py-2.5">Сүүлд</th>
+                <th className="px-4 py-2.5" />
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -146,11 +187,32 @@ export const CustomersPage: React.FC = () => {
                       <td className="px-4 py-2.5 text-slate-500 whitespace-nowrap">
                         {s?.last ? formatDate(s.last) : '—'}
                       </td>
+                      <td
+                        className="px-4 py-2.5 text-right whitespace-nowrap"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setEditing(row)}
+                          title="Засах"
+                          className="p-1.5 rounded-md text-slate-400 hover:text-slate-900 hover:bg-slate-100 cursor-pointer"
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => remove(row)}
+                          title="Устгах"
+                          className="p-1.5 rounded-md text-slate-400 hover:text-rose-600 hover:bg-rose-50 cursor-pointer"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </td>
                     </tr>
 
                     {isOpen && (
                       <tr>
-                        <td colSpan={6} className="bg-slate-50/60 px-4 py-3">
+                        <td colSpan={7} className="bg-slate-50/60 px-4 py-3">
                           {openOrders.length === 0 ? (
                             <p className="text-xs text-slate-500">Захиалга алга.</p>
                           ) : (
