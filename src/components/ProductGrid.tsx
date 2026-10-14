@@ -22,6 +22,8 @@ import {
   Droplets,
   Wrench,
   Layers,
+  Calculator,
+  FileText,
 } from 'lucide-react';
 
 const getCategoryIcon = (iconName: string, className = "w-4 h-4") => {
@@ -78,6 +80,8 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
   onAddToRFQ,
   favoriteIds = [],
   onToggleFavorite,
+  onOpenCalculator,
+  onOpenRFQModal,
 }) => {
   const CATEGORIES = useCategories();
   const WAREHOUSES = useWarehouses();
@@ -1136,16 +1140,50 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
           {/* ================= 4-COLUMN PRODUCT CARDS GRID (Matching Screenshot Layout) ================= */}
           {filteredProducts.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3.5 sm:gap-4.5">
-              {filteredProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onAddToCart={onAddToCart}
-                  onQuickView={onQuickView}
-                  onAddToRFQ={onAddToRFQ}
-                  isFavorite={favoriteIds.includes(product.id)}
-                  onToggleFavorite={onToggleFavorite}
-                />
+              {filteredProducts.map((product, i) => (
+                <React.Fragment key={product.id}>
+                  <ProductCard
+                    product={product}
+                    onAddToCart={onAddToCart}
+                    onQuickView={onQuickView}
+                    onAddToRFQ={onAddToRFQ}
+                    isFavorite={favoriteIds.includes(product.id)}
+                    onToggleFavorite={onToggleFavorite}
+                  />
+
+                  {/* Хэрэглэгч жагсаалтыг гүйлгэж байх үед хэрэгтэй болох хэрэгслүүд.
+                      Толгойд байснаа хайлтад зай гаргахаар эндээс гаргав. */}
+                  {i === Math.min(3, filteredProducts.length - 1) &&
+                    (onOpenCalculator || onOpenRFQModal) && (
+                    <div className="col-span-2 md:col-span-3 xl:col-span-4 rounded-2xl border border-slate-200/90 bg-slate-50/70 p-3.5 flex flex-wrap items-center gap-3">
+                      <span className="text-xs font-semibold text-slate-700">
+                        Төсөлдөө тооцоо хийх үү?
+                      </span>
+                      <div className="ml-auto flex flex-wrap gap-2">
+                        {onOpenCalculator && (
+                          <button
+                            type="button"
+                            onClick={onOpenCalculator}
+                            className="flex items-center gap-2 rounded-xl bg-white border border-slate-200 hover:border-slate-300 px-3.5 py-2 text-xs font-semibold text-slate-800 cursor-pointer"
+                          >
+                            <Calculator className="w-4 h-4 text-slate-600" />
+                            Материалын тооцоолуур
+                          </button>
+                        )}
+                        {onOpenRFQModal && (
+                          <button
+                            type="button"
+                            onClick={onOpenRFQModal}
+                            className="flex items-center gap-2 rounded-xl btn-liquid-dark px-3.5 py-2 text-xs font-semibold cursor-pointer"
+                          >
+                            <FileText className="w-4 h-4 text-white" />
+                            <span className="text-white">Бөөний үнийн санал авах</span>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </React.Fragment>
               ))}
             </div>
           ) : (

@@ -2,8 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   Search,
   ShoppingCart,
-  Calculator,
-  FileText,
   Truck,
   Phone,
   MessageSquare,
@@ -61,8 +59,6 @@ interface HeaderProps {
   totalCartWeight: number;
   totalCartAmount: number;
   onOpenCart: () => void;
-  onOpenCalculator: () => void;
-  onOpenRFQ: () => void;
   onSelectCategory: (categoryId: string) => void;
   selectedCategory: string;
   searchQuery: string;
@@ -77,8 +73,6 @@ export const Header: React.FC<HeaderProps> = ({
   totalCartWeight,
   totalCartAmount,
   onOpenCart,
-  onOpenCalculator,
-  onOpenRFQ,
   onSelectCategory,
   selectedCategory,
   searchQuery,
@@ -454,12 +448,12 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           {/* Desktop Search Bar */}
-          <div className="flex-1 max-w-xl relative" ref={searchContainerRef}>
+          <div className="flex-1 min-w-0 relative" ref={searchContainerRef}>
             <div className="relative flex items-center">
               <Search className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none" />
               <input
                 type="text"
-                placeholder="Бараа, марк, SKU код, MNS стандарт хайх... (жишээ: МАК цемент, 16мм арматур)"
+                placeholder="Бараа, брэнд, SKU код хайх"
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
                 onFocus={() => setIsSearchFocused(true)}
@@ -545,26 +539,6 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Desktop Right Action Tools */}
           <div className="flex items-center gap-3 shrink-0">
-            {/* Calculator Button */}
-            <button
-              onClick={onOpenCalculator}
-              className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl btn-liquid-glass text-slate-800 text-xs sm:text-sm font-semibold cursor-pointer"
-              title="Барилгын материалын орц тооцоолуур"
-            >
-              <Calculator className="w-4 h-4 text-slate-700" />
-              <span>Тооцоолуур</span>
-            </button>
-
-            {/* B2B RFQ Quote Button */}
-            <button
-              onClick={onOpenRFQ}
-              className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl btn-liquid-glass text-slate-800 text-xs sm:text-sm font-semibold cursor-pointer"
-              title="B2B Төслийн үнийн санал авах"
-            >
-              <FileText className="w-4 h-4 text-slate-700" />
-              <span>B2B Үнийн санал</span>
-            </button>
-
             {/* Захиалга, нэхэмжлэх хайх */}
             <button
               onClick={onOpenOrderTracker}

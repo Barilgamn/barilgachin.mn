@@ -220,11 +220,6 @@ export default function App() {
         totalCartWeight={totalCartWeight}
         totalCartAmount={totalCartAmount}
         onOpenCart={() => setIsCartOpen(true)}
-        onOpenCalculator={() => setIsCalculatorOpen(true)}
-        onOpenRFQ={() => {
-          setRfqTargetProduct(null);
-          setIsRfqOpen(true);
-        }}
         onOpenOrderTracker={() => navigate('/zahialga')}
         onOpenLiveChat={() => setIsLiveChatOpen(true)}
         onSelectCategory={(catId) => {
