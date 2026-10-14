@@ -31,6 +31,7 @@ export const RfqPage: React.FC = () => {
   const [filter, setFilter] = useState<RfqStatus | 'all'>('all');
   const [query, setQuery] = useState('');
   const [openId, setOpenId] = useState<string | null>(null);
+  const [noteSaved, setNoteSaved] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -85,7 +86,11 @@ export const RfqPage: React.FC = () => {
       .update({ admin_note: note || null })
       .eq('id', id);
     if (err) setError(err.message);
-    else await load();
+    else {
+      await load();
+      setNoteSaved(true);
+      setTimeout(() => setNoteSaved(false), 2000);
+    }
     setBusy(false);
   };
 
@@ -126,7 +131,8 @@ export const RfqPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="mt-3 flex flex-wrap gap-1.5">
+      <div className="mt-3 flex flex-wrap items-center gap-1.5">
+        <span className="mr-1 text-xs font-medium text-slate-500">Шүүх:</span>
         {(['all', ...ORDER] as const).map((f) => (
           <button
             key={f}
@@ -220,7 +226,10 @@ export const RfqPage: React.FC = () => {
                 тогтооно.
               </p>
 
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="mr-1 text-xs font-medium text-slate-500">
+                  Төлөв өөрчлөх:
+                </span>
                 {ORDER.map((st) => (
                   <button
                     key={st}
@@ -240,7 +249,12 @@ export const RfqPage: React.FC = () => {
               </div>
 
               <label className="block">
-                <span className="text-xs font-medium text-slate-600">Дотоод тэмдэглэл</span>
+                <span className="text-xs font-medium text-slate-600">
+                  Дотоод тэмдэглэл
+                  {noteSaved && (
+                    <span className="ml-2 font-normal text-emerald-700">Хадгаллаа</span>
+                  )}
+                </span>
                 <textarea
                   key={open.id}
                   rows={2}
@@ -250,7 +264,7 @@ export const RfqPage: React.FC = () => {
                       void saveNote(open.id, e.target.value);
                     }
                   }}
-                  placeholder="Фокусаас гармагц хадгална."
+                  placeholder="Бичээд өөр газар дарахад хадгална."
                   className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-hidden focus:border-slate-900"
                 />
               </label>
