@@ -210,3 +210,37 @@ export interface OrderItemRow {
   line_total: number;
   weight_kg: number;
 }
+
+export type RfqStatus = 'new' | 'in_review' | 'quoted' | 'won' | 'lost';
+
+export interface RfqRequestRow {
+  id: string;
+  rfq_no: string;
+  company_name: string;
+  company_register: string | null;
+  contact_person: string | null;
+  phone: string;
+  email: string | null;
+  project_location: string | null;
+  required_date: string | null;
+  delivery_needed: boolean;
+  notes: string | null;
+  status: RfqStatus;
+  estimated_total: number;
+  admin_note: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface RfqItemRow {
+  id: string;
+  rfq_id: string;
+  product_id: string | null;
+  sku: string;
+  name: string;
+  uom: string;
+  qty: number;
+  unit_price: number;
+  line_total: number;
+  note: string | null;
+}

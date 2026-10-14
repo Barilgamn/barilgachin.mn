@@ -8,6 +8,7 @@ import {
   Tag,
   Users,
   Receipt,
+  FileText,
   BookOpen,
   LogOut,
   Store,
@@ -23,6 +24,7 @@ const nav = [
   { to: '/admin/promotions', label: 'Хямдрал', Icon: Tag },
   { to: '/admin/customers', label: 'Харилцагч', Icon: Users },
   { to: '/admin/orders', label: 'Захиалга', Icon: Receipt },
+  { to: '/admin/rfq', label: 'Үнийн санал', Icon: FileText },
   { to: '/admin/accounting', label: 'Нягтлан бодолт', Icon: BookOpen, soon: true },
 ];
 

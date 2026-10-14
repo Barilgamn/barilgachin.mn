@@ -10,6 +10,7 @@ import { OrdersPage } from './OrdersPage';
 import { CustomersPage } from './CustomersPage';
 import { PostsPage } from './PostsPage';
 import { PromotionsPage } from './PromotionsPage';
+import { RfqPage } from './RfqPage';
 
 /** Хараахан хийгдээгүй хэсгүүдийн түр орлуулагч. */
 const Placeholder: React.FC<{ title: string; note: string }> = ({ title, note }) => (
@@ -57,6 +58,7 @@ const Guard: React.FC = () => {
         <Route path="promotions" element={<PromotionsPage />} />
         <Route path="customers" element={<CustomersPage />} />
         <Route path="orders" element={<OrdersPage />} />
+        <Route path="rfq" element={<RfqPage />} />
         <Route
           path="accounting"
           element={

@@ -20,6 +20,7 @@ import { useProducts } from '../CatalogProvider';
 import { Product, UnitOfMeasure } from '../types';
 
 import { formatMNT } from '../utils/formatters';
+import { submitRfq } from '../lib/rfq';
 
 interface RFQModalProps {
   isOpen: boolean;
@@ -49,27 +50,20 @@ export const RFQModal: React.FC<RFQModalProps> = ({
   const [contactPerson, setContactPerson] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
-  const [projectLocation, setProjectLocation] = useState('Хан-Уул дүүрэг, Яармагийн шинэ суурьшлын бүс');
-  const [requiredDate, setRequiredDate] = useState('2026-09-10');
+  const [projectLocation, setProjectLocation] = useState('');
+  const [requiredDate, setRequiredDate] = useState('');
   const [deliveryNeeded, setDeliveryNeeded] = useState(true);
   const [notes, setNotes] = useState('');
 
   // Items in the RFQ
   const [rfqItems, setRfqItems] = useState<
     { product: Product; quantity: number; notes: string }[]
-  >(() => {
-    if (initialProduct) {
-      return [{ product: initialProduct, quantity: 100, notes: 'Төслийн 1-р ээлжийн татан авалт' }];
-    }
-    return [
-      { product: PRODUCTS[0], quantity: 200, notes: 'Суурийн цутгалт' },
-      { product: PRODUCTS[1], quantity: 500, notes: 'Гадна өрлөг' },
-    ];
-  });
+  >(() => (initialProduct ? [{ product: initialProduct, quantity: 100, notes: '' }] : []));
 
-  const [selectedAddProductId, setSelectedAddProductId] = useState<string>(PRODUCTS[2].id);
+  const [selectedAddProductId, setSelectedAddProductId] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedLeadId, setSubmittedLeadId] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
@@ -105,19 +99,49 @@ export const RFQModal: React.FC<RFQModalProps> = ({
     return sum + unitPrice * item.quantity;
   }, 0);
 
-  const handleSubmitToOdoo = (e: React.FormEvent) => {
+  const handleSubmitRfq = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!companyName || !phone) {
-      alert('Байгууллагын нэр болон холбоо барих утсыг заавал бөглөнө үү.');
+    setSubmitError(null);
+
+    if (!companyName.trim() || !phone.trim()) {
+      setSubmitError('Байгууллагын нэр болон холбоо барих утсыг бөглөнө үү.');
+      return;
+    }
+    if (rfqItems.length === 0) {
+      setSubmitError('Үнийн санал авах материалаа нэмнэ үү.');
       return;
     }
 
     setIsSubmitting(true);
-    setTimeout(() => {
+    try {
+      const sent = await submitRfq(
+        {
+          companyName,
+          companyRegister: registerNumber,
+          contactPerson,
+          phone,
+          email,
+        },
+        {
+          location: projectLocation,
+          requiredDate: requiredDate,
+          deliveryNeeded,
+          notes,
+        },
+        rfqItems.map((item) => ({
+          productId: item.product.id,
+          qty: item.quantity,
+          note: item.notes,
+        })),
+      );
+      setSubmittedLeadId(sent.rfqNo);
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error ? err.message : 'Хүсэлт илгээхэд алдаа гарлаа.',
+      );
+    } finally {
       setIsSubmitting(false);
-      const generatedLead = `RFQ-2026-${Math.floor(1000 + Math.random() * 9000)}`;
-      setSubmittedLeadId(generatedLead);
-    }, 1500);
+    }
   };
 
   return (
@@ -188,7 +212,7 @@ export const RFQModal: React.FC<RFQModalProps> = ({
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmitToOdoo} className="p-6 overflow-y-auto flex-1 space-y-6">
+          <form onSubmit={handleSubmitRfq} className="p-6 overflow-y-auto flex-1 space-y-6">
             {/* Step 1: Company & Project Information */}
             <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
               <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2">
@@ -294,6 +318,7 @@ export const RFQModal: React.FC<RFQModalProps> = ({
                   aria-label="Нэмэх бараа"
                   className="min-w-0 flex-1 text-xs bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-medium outline-hidden focus:border-slate-900"
                 >
+                  <option value="">— бараа сонгох —</option>
                   {PRODUCTS.map((p) => (
                     <option key={p.id} value={p.id}>
                       {p.name}
@@ -379,6 +404,15 @@ export const RFQModal: React.FC<RFQModalProps> = ({
               </div>
             </div>
 
+            {submitError && (
+              <p
+                role="alert"
+                className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700"
+              >
+                {submitError}
+              </p>
+            )}
+
             {/* Bottom Actions */}
             <div className="pt-4 border-t border-slate-200 flex items-center justify-between">
               <button
@@ -391,8 +425,8 @@ export const RFQModal: React.FC<RFQModalProps> = ({
 
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="px-6 py-3 rounded-xl btn-liquid-dark font-bold text-xs flex items-center gap-2 cursor-pointer"
+                disabled={isSubmitting || rfqItems.length === 0}
+                className="px-6 py-3 rounded-xl btn-liquid-dark font-bold text-xs flex items-center gap-2 disabled:opacity-50 cursor-pointer"
               >
                 {isSubmitting ? (
                   <>
