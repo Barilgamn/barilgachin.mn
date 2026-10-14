@@ -1,7 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Loader2, Plus, Save, Trash2, X } from 'lucide-react';
 import { supabase } from '../lib/supabase';
-import type { CustomerRow, ProductRow, WarehouseRow } from '../types/db';
+import type {
+  BulkPriceTierRow,
+  CustomerRow,
+  ProductRow,
+  WarehouseRow,
+} from '../types/db';
 import { formatMNT } from './orderLabels';
 
 const PAYMENT_METHODS = [
@@ -31,6 +36,7 @@ export const ManualOrderForm: React.FC<ManualOrderFormProps> = ({
   const [customers, setCustomers] = useState<CustomerRow[]>([]);
   const [products, setProducts] = useState<ProductRow[]>([]);
   const [warehouses, setWarehouses] = useState<WarehouseRow[]>([]);
+  const [tiers, setTiers] = useState<BulkPriceTierRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -49,14 +55,16 @@ export const ManualOrderForm: React.FC<ManualOrderFormProps> = ({
 
   useEffect(() => {
     void (async () => {
-      const [cs, ps, ws] = await Promise.all([
+      const [cs, ps, ws, ts] = await Promise.all([
         supabase.from('customers').select('*').order('name'),
         supabase.from('products').select('*').order('name'),
         supabase.from('warehouses').select('*').eq('is_active', true).order('sort_order'),
+        supabase.from('bulk_price_tiers').select('*'),
       ]);
       setCustomers((cs.data as CustomerRow[]) ?? []);
       setProducts((ps.data as ProductRow[]) ?? []);
       setWarehouses((ws.data as WarehouseRow[]) ?? []);
+      setTiers((ts.data as BulkPriceTierRow[]) ?? []);
       setLoading(false);
     })();
   }, []);
@@ -78,11 +86,21 @@ export const ManualOrderForm: React.FC<ManualOrderFormProps> = ({
   const patch = (key: string, next: Partial<Line>) =>
     setLines((prev) => prev.map((l) => (l.key === key ? { ...l, ...next } : l)));
 
-  /** Зөвхөн чиглүүлэх дүн — эцсийн тооцоог бааз хийнэ. */
+  /**
+   * Тухайн тоо хэмжээнд мөрдөх нэгж үнэ — create_manual_order-той ижил дүрэм:
+   * тоонд тохирох хамгийн өндөр шатлал, байхгүй бол үндсэн үнэ.
+   */
+  const priceFor = (productId: string, qty: number): number => {
+    const p = productById.get(productId);
+    if (!p) return 0;
+    const best = tiers
+      .filter((t) => t.product_id === productId && t.min_qty <= qty)
+      .sort((a, b) => b.min_qty - a.min_qty)[0];
+    return Number(best ? best.price : p.price);
+  };
+
   const preview = lines.reduce((sum, l) => {
-    const p = productById.get(l.productId);
-    if (!p) return sum;
-    const price = l.unitPrice !== '' ? Number(l.unitPrice) : Number(p.price);
+    const price = l.unitPrice !== '' ? Number(l.unitPrice) : priceFor(l.productId, l.qty);
     return sum + price * l.qty;
   }, 0);
 
@@ -258,7 +276,7 @@ export const ManualOrderForm: React.FC<ManualOrderFormProps> = ({
                         min={0}
                         value={l.unitPrice}
                         onChange={(e) => patch(l.key, { unitPrice: e.target.value })}
-                        placeholder={p ? Number(p.price).toLocaleString('mn-MN') : ''}
+                        placeholder={priceFor(l.productId, l.qty).toLocaleString('mn-MN')}
                         className="w-full rounded-lg border border-slate-200 px-2 py-1.5 text-sm text-right tabular-nums outline-hidden focus:border-slate-900"
                       />
                     </td>
@@ -280,8 +298,8 @@ export const ManualOrderForm: React.FC<ManualOrderFormProps> = ({
         )}
 
         <p className="text-[11px] text-slate-400">
-          Нэгж үнийг хоосон орхивол баазын үнэ, тоо хэмжээнд тохирох бөөний шатлалаар
-          бодно. Эцсийн дүнг бааз тооцно.
+          Нэгж үнийг хоосон орхивол саарал өнгөөр харагдаж буй шатлалын үнээр бодно.
+          Дээр нь хүргэлтийн хөлс нэмэгдэнэ.
         </p>
       </div>
 
@@ -351,7 +369,7 @@ export const ManualOrderForm: React.FC<ManualOrderFormProps> = ({
 
       <div className="flex flex-wrap items-center gap-3 border-t border-slate-100 pt-3">
         <span className="text-xs text-slate-500">
-          Барааны ойролцоо дүн:{' '}
+          Барааны дүн:{' '}
           <span className="font-semibold text-slate-900 tabular-nums">
             {formatMNT(preview)}
           </span>
