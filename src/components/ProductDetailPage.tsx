@@ -179,8 +179,13 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 >
                   {currentCategory.name}
                 </button>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
               </>
             )}
+
+            <span className="font-bold text-slate-900 truncate max-w-[160px] sm:max-w-[300px]">
+              {product.name}
+            </span>
           </div>
 
           {/* Back Button & Actions */}
@@ -223,7 +228,13 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               LEFT COLUMN: Product Images & Technical Specifications Directly Below
              ========================================================================= */}
           <div className="lg:col-span-6 space-y-6">
-            
+
+            {/* Гар утсан дээр нэр зургийн дээр байх нь ойлгомжтой. Дэлгэц дээр
+                баруун баганад, үнийн хажууд хэвээр. */}
+            <h1 className="lg:hidden text-xl sm:text-2xl font-bold text-slate-900 font-display leading-[1.2]">
+              {product.name}
+            </h1>
+
             {/* Image Gallery Stage */}
             <div className="bg-white rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-sm space-y-4">
               {/* Main Active Image Display */}
@@ -318,8 +329,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             
             {/* Header & Product Information */}
             <div className="bg-white rounded-3xl p-5 sm:p-7 border border-slate-200 shadow-sm space-y-4">
-              <div className="border-b border-slate-100 pb-4">
-                <h1 className="text-2xl sm:text-[30px] font-bold text-slate-900 font-display leading-[1.15]">
+              <div className="hidden lg:block border-b border-slate-100 pb-4">
+                <h1 className="text-[30px] font-bold text-slate-900 font-display leading-[1.15]">
                   {product.name}
                 </h1>
               </div>
