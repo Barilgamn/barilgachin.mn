@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useCategories, useWarehouses } from '../CatalogProvider';
 import { Product, UnitOfMeasure } from '../types';
 import { ProductCard } from './ProductCard';
@@ -65,6 +65,9 @@ interface ProductGridProps {
   onAddToRFQ: (product: Product) => void;
   onOpenCalculator?: () => void;
   onOpenRFQModal?: () => void;
+  /** Доод цэснээс ангиллын жагсаалтыг нээх дохио. Утга нь
+   *  өөрчлөгдөх бүрт нээгдэнэ. */
+  openCategoryMenu?: number;
   favoriteIds?: string[];
   onToggleFavorite?: (productId: string) => void;
 }
@@ -82,6 +85,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
   onToggleFavorite,
   onOpenCalculator,
   onOpenRFQModal,
+  openCategoryMenu,
 }) => {
   const CATEGORIES = useCategories();
   const WAREHOUSES = useWarehouses();
@@ -125,6 +129,11 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
   // Mobile drawers
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState<boolean>(false);
   const [isMobileCategoryOpen, setIsMobileCategoryOpen] = useState<boolean>(false);
+
+  // Эхний ачаалалт дээр биш, зөвхөн дохио өөрчлөгдөхөд нээнэ.
+  useEffect(() => {
+    if (openCategoryMenu) setIsMobileCategoryOpen(true);
+  }, [openCategoryMenu]);
 
   // Brand dropdown strip expansion
   const [showAllBrands, setShowAllBrands] = useState<boolean>(false);

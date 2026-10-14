@@ -1,15 +1,7 @@
 import React from 'react';
-import {
-  Home,
-  Layers,
-  Star,
-  Tag,
-  Heart,
-  User,
-  ShoppingCart,
-} from 'lucide-react';
+import { Home, Layers, Heart, User, ShoppingCart } from 'lucide-react';
 
-export type MobileTab = 'home' | 'categories' | 'featured' | 'brands' | 'saved' | 'profile';
+export type MobileTab = 'home' | 'categories' | 'saved' | 'profile';
 
 interface MobileBottomNavProps {
   activeTab: MobileTab;
@@ -18,9 +10,17 @@ interface MobileBottomNavProps {
   cartCount: number;
   onOpenCart: () => void;
   onOpenCategories: () => void;
-  onOpenBrands: () => void;
-  onOpenFeatured: () => void;
 }
+
+/** Идэвхтэй таб дээр гарах шар цэг. */
+const Dot: React.FC = () => (
+  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 absolute -top-1" />
+);
+
+const itemClass = (active: boolean) =>
+  `flex flex-col items-center justify-center py-1 px-2 relative transition-all cursor-pointer ${
+    active ? 'text-slate-950 font-bold' : 'text-slate-500 hover:text-slate-800'
+  }`;
 
 export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   activeTab,
@@ -29,96 +29,61 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   cartCount,
   onOpenCart,
   onOpenCategories,
-  onOpenBrands,
-  onOpenFeatured,
 }) => {
   return (
     <nav
       id="mobile-bottom-dock"
       className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-slate-200/90 shadow-2xl py-1 px-1 flex items-center justify-around safe-area-pb"
     >
-      {/* 1. Нүүр (Home) */}
+      {/* Нүүр */}
       <button
         onClick={() => {
           onTabChange('home');
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
-        className={`flex flex-col items-center justify-center py-1 px-2 relative transition-all cursor-pointer ${
-          activeTab === 'home' ? 'text-slate-950 font-bold' : 'text-slate-500 hover:text-slate-800'
-        }`}
+        className={itemClass(activeTab === 'home')}
       >
-        {activeTab === 'home' && (
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 absolute -top-1"></span>
-        )}
+        {activeTab === 'home' && <Dot />}
         <Home className="w-5 h-5 mb-0.5" />
         <span className="text-[10px] tracking-tight">Нүүр</span>
       </button>
 
-      {/* 2. Ангилал (Categories) */}
+      {/* Ангилал — ангиллын жагсаалтыг нээнэ */}
       <button
         onClick={() => {
           onTabChange('categories');
           onOpenCategories();
         }}
-        className={`flex flex-col items-center justify-center py-1 px-2 relative transition-all cursor-pointer ${
-          activeTab === 'categories' ? 'text-slate-950 font-bold' : 'text-slate-500 hover:text-slate-800'
-        }`}
+        className={itemClass(activeTab === 'categories')}
       >
-        {activeTab === 'categories' && (
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 absolute -top-1"></span>
-        )}
+        {activeTab === 'categories' && <Dot />}
         <Layers className="w-5 h-5 mb-0.5" />
         <span className="text-[10px] tracking-tight">Ангилал</span>
       </button>
 
-      {/* 3. Онцлох (Featured) */}
-      <button
-        onClick={() => {
-          onTabChange('featured');
-          onOpenFeatured();
-        }}
-        className={`flex flex-col items-center justify-center py-1 px-2 relative transition-all cursor-pointer ${
-          activeTab === 'featured' ? 'text-slate-950 font-bold' : 'text-slate-500 hover:text-slate-800'
-        }`}
-      >
-        {activeTab === 'featured' && (
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 absolute -top-1"></span>
-        )}
-        <Star className="w-5 h-5 mb-0.5" />
-        <span className="text-[10px] tracking-tight">Онцлох</span>
-      </button>
-
-      {/* 4. Брэндүүд (Brands) */}
-      <button
-        onClick={() => {
-          onTabChange('brands');
-          onOpenBrands();
-        }}
-        className={`flex flex-col items-center justify-center py-1 px-2 relative transition-all cursor-pointer ${
-          activeTab === 'brands' ? 'text-slate-950 font-bold' : 'text-slate-500 hover:text-slate-800'
-        }`}
-      >
-        {activeTab === 'brands' && (
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 absolute -top-1"></span>
-        )}
-        <Tag className="w-5 h-5 mb-0.5" />
-        <span className="text-[10px] tracking-tight">Брэндүүд</span>
-      </button>
-
-      {/* 5. Хадгалсан (Saved) */}
-      <button
-        onClick={() => {
-          onTabChange('saved');
-        }}
-        className={`flex flex-col items-center justify-center py-1 px-2 relative transition-all cursor-pointer ${
-          activeTab === 'saved' ? 'text-slate-950 font-bold' : 'text-slate-500 hover:text-slate-800'
-        }`}
-      >
-        {activeTab === 'saved' && (
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 absolute -top-1"></span>
-        )}
+      {/* Сагс — таб биш, сагсны хаалтыг нээнэ тул идэвхтэй төлөвгүй */}
+      <button onClick={onOpenCart} className={itemClass(false)}>
         <div className="relative">
-          <Heart className={`w-5 h-5 mb-0.5 ${savedCount > 0 ? 'fill-rose-500 text-rose-500' : ''}`} />
+          <ShoppingCart className="w-5 h-5 mb-0.5" />
+          {cartCount > 0 && (
+            <span className="absolute -top-1 -right-2 min-w-3.5 h-3.5 px-1 rounded-full bg-amber-500 text-slate-950 text-[9px] font-bold flex items-center justify-center">
+              {cartCount}
+            </span>
+          )}
+        </div>
+        <span className="text-[10px] tracking-tight">Сагс</span>
+      </button>
+
+      {/* Хадгалсан */}
+      <button
+        onClick={() => onTabChange('saved')}
+        className={itemClass(activeTab === 'saved')}
+      >
+        {activeTab === 'saved' && <Dot />}
+        <div className="relative">
+          <Heart
+            className={`w-5 h-5 mb-0.5 ${savedCount > 0 ? 'fill-rose-500 text-rose-500' : ''}`}
+          />
           {savedCount > 0 && (
             <span className="absolute -top-1 -right-2 w-3.5 h-3.5 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center">
               {savedCount}
@@ -128,17 +93,13 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
         <span className="text-[10px] tracking-tight">Хадгалсан</span>
       </button>
 
-      {/* 6. Профайл */}
+      {/* Профайл */}
       <button
         onClick={() => onTabChange('profile')}
-        className={`flex flex-col items-center justify-center py-1 px-2 relative transition-all cursor-pointer ${
-          activeTab === 'profile' ? 'text-slate-950 font-bold' : 'text-slate-500 hover:text-slate-800'
-        }`}
+        className={itemClass(activeTab === 'profile')}
       >
-        {activeTab === 'profile' && (
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 absolute -top-1"></span>
-        )}
-        <div className="w-5 h-5 rounded-full bg-slate-900 text-white text-[10px] font-bold flex items-center justify-center mb-0.5 border border-slate-300">
+        {activeTab === 'profile' && <Dot />}
+        <div className="w-5 h-5 rounded-full bg-slate-900 text-white flex items-center justify-center mb-0.5 border border-slate-300">
           <User className="w-3.5 h-3.5" />
         </div>
         <span className="text-[10px] tracking-tight">Профайл</span>

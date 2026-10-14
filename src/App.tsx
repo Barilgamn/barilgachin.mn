@@ -24,7 +24,12 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeMobileTab, setActiveMobileTab] = useState<MobileTab>('home');
-  const [favoriteIds, setFavoriteIds] = useState<string[]>(['prod-1']);
+  // Доод цэсийн «Ангилал» дарахад ProductGrid доторх ангиллын жагсаалт
+  // нээгдэнэ. Тоолуур өөрчлөгдөхөд л нээгддэг тул дахин дарж болно.
+  const [openCategoryMenu, setOpenCategoryMenu] = useState(0);
+  // mockData-гийн үеийн 'prod-1' үлдэж, UUID-тай болсон хойно юутай ч
+  // таарахгүй атлаа тоологдож байв — хоосноос эхэлнэ.
+  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
 
   const toggleFavorite = (productId: string) => {
     setFavoriteIds((prev) => {
@@ -273,6 +278,7 @@ export default function App() {
               }}
               favoriteIds={favoriteIds}
               onToggleFavorite={toggleFavorite}
+              openCategoryMenu={openCategoryMenu}
             />
 
             {/* Promo / Foundation Materials Curated Showcase when on All category (matching user design) */}
@@ -342,9 +348,6 @@ export default function App() {
             setSelectedCategory('all');
             setSearchQuery('');
             window.scrollTo({ top: 0, behavior: 'smooth' });
-          } else if (tab === 'categories' || tab === 'brands' || tab === 'featured') {
-            const el = document.getElementById('catalog-section');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
           }
         }}
         savedCount={favoriteIds.length}
@@ -352,19 +355,7 @@ export default function App() {
         onOpenCart={() => setIsCartOpen(true)}
         onOpenCategories={() => {
           setSelectedProduct(null);
-          const el = document.getElementById('catalog-section');
-          if (el) el.scrollIntoView({ behavior: 'smooth' });
-        }}
-        onOpenBrands={() => {
-          setSelectedProduct(null);
-          const el = document.getElementById('catalog-section');
-          if (el) el.scrollIntoView({ behavior: 'smooth' });
-        }}
-        onOpenFeatured={() => {
-          setSelectedProduct(null);
-          setSelectedCategory('all');
-          const el = document.getElementById('catalog-section');
-          if (el) el.scrollIntoView({ behavior: 'smooth' });
+          setOpenCategoryMenu((n) => n + 1);
         }}
       />
 
