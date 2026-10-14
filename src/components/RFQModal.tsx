@@ -21,6 +21,7 @@ import { Product, UnitOfMeasure } from '../types';
 
 import { formatMNT } from '../utils/formatters';
 import { submitRfq } from '../lib/rfq';
+import { PHONE } from '../lib/contact';
 
 interface RFQModalProps {
   isOpen: boolean;
@@ -179,7 +180,12 @@ export const RFQModal: React.FC<RFQModalProps> = ({
                 Үнийн саналын хүсэлт амжилттай үүслээ!
               </h4>
               <p className="text-sm text-slate-600 max-w-lg mx-auto">
-                Таны хүсэлт бүртгэгдсэн бөгөөд манай B2B төслийн менежер <strong>15-30 минутын дотор</strong> албан ёсны үнийн саналыг илгээнэ.
+                Таны хүсэлт бүртгэгдлээ. Борлуулалтын менежер жагсаалтыг тань
+                шалгаад холбогдож, үнийн санал гаргана. Яаралтай бол{' '}
+                <a href={PHONE.href} className="font-semibold text-amber-700 hover:underline">
+                  {PHONE.display}
+                </a>{' '}
+                дугаар руу залгаарай.
               </p>
             </div>
 
