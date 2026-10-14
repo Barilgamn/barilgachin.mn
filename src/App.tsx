@@ -13,6 +13,7 @@ import { MaterialCalculatorModal } from './components/MaterialCalculatorModal';
 import { RFQModal } from './components/RFQModal';
 import { LiveChatModal } from './components/LiveChatModal';
 import { MobileBottomNav, MobileTab } from './components/MobileBottomNav';
+import { loadFavorites, saveFavorites } from './lib/favorites';
 import { useCatalogState } from './CatalogProvider';
 import { Product, CartItem, UnitOfMeasure } from './types';
 import { MessageSquare, Phone } from 'lucide-react';
@@ -27,9 +28,12 @@ export default function App() {
   // Доод цэсийн «Ангилал» дарахад ProductGrid доторх ангиллын жагсаалт
   // нээгдэнэ. Тоолуур өөрчлөгдөхөд л нээгддэг тул дахин дарж болно.
   const [openCategoryMenu, setOpenCategoryMenu] = useState(0);
-  // mockData-гийн үеийн 'prod-1' үлдэж, UUID-тай болсон хойно юутай ч
-  // таарахгүй атлаа тоологдож байв — хоосноос эхэлнэ.
-  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+  // Хөтчөөс уншиж эхэлнэ — хуудас дахин ачаалахад хадгалсан нь үлдэнэ.
+  const [favoriteIds, setFavoriteIds] = useState<string[]>(loadFavorites);
+
+  useEffect(() => {
+    saveFavorites(favoriteIds);
+  }, [favoriteIds]);
 
   const toggleFavorite = (productId: string) => {
     setFavoriteIds((prev) => {
@@ -39,6 +43,10 @@ export default function App() {
       return next;
     });
   };
+
+  // Тэмдэг дээр каталогт байгаа барааг л тоолно. Хадгалсан бараа хожим
+  // нийтлэгдэхээ больсон бол жагсаалтад гарахгүй — тоонд нь ч орохгүй.
+  const savedCount = PRODUCTS.filter((p) => favoriteIds.includes(p.id)).length;
 
   // Сагс хоосноос эхэлнэ. Өмнө нь жишээ 2 бараагаар дүүргэсэн байсан нь
   // статик каталогт тулгуурладаг байсан бөгөөд жинхэнэ дэлгүүрт буруу.
@@ -350,7 +358,7 @@ export default function App() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }
         }}
-        savedCount={favoriteIds.length}
+        savedCount={savedCount}
         cartCount={cartCount}
         onOpenCart={() => setIsCartOpen(true)}
         onOpenCategories={() => {
