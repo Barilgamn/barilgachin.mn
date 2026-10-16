@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Header } from './components/Header';
 import { PromoShowcaseSection } from './components/PromoShowcaseSection';
 import { NewsSection } from './components/NewsSection';
+import { TopPromoBanner } from './components/TopPromoBanner';
 import { ProductGrid } from './components/ProductGrid';
 import { B2BSection } from './components/B2BSection';
 import { Footer } from './components/Footer';
@@ -253,6 +254,10 @@ export default function App() {
         }}
         onSelectProduct={(product) => setSelectedProduct(product)}
       />
+
+      {/* Сурталчилгааны баннер — зөвхөн каталог дээр, барааны дэлгэрэнгүй
+          хуудсан дээр гарахгүй. */}
+      {!selectedProduct && <TopPromoBanner />}
 
       {/* Main Content Area: Dedicated Product Detail Page OR Main Product Catalog */}
       {selectedProduct ? (

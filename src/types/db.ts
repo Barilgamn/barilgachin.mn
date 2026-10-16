@@ -132,6 +132,7 @@ export interface PromotionRow {
   title: string;
   description: string | null;
   banner_url: string | null;
+  link_url: string | null;
   discount_note: string | null;
   starts_at: string | null;
   ends_at: string | null;
