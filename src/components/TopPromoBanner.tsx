@@ -2,8 +2,10 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { fetchLivePromotions } from '../lib/content';
 import type { PromotionRow } from '../types/db';
 
-/** Хураангуй үеийн дээд өндөр. */
-const COLLAPSED_MAX = 240;
+/** Хураангуй үед зургийн хэдэн хувийг харуулах. */
+const COLLAPSED_SHARE = 0.4;
+/** Хураангуй хэдий чинээ өндөр байлаа ч үүнээс хэтрэхгүй. */
+const COLLAPSED_MAX = 200;
 /** Дэлгэгдсэн ч хуудсыг бүхэлд нь эзлэхээс сэргийлнэ. */
 const EXPANDED_MAX = 520;
 /** Зураг ачаалахаас өмнөх түр өндөр. */
@@ -47,7 +49,7 @@ export const TopPromoBanner: React.FC = () => {
 
   if (!promo?.banner_url) return null;
 
-  const collapsed = Math.min(COLLAPSED_MAX, fullHeight);
+  const collapsed = Math.min(Math.round(fullHeight * COLLAPSED_SHARE), COLLAPSED_MAX, fullHeight);
   const isCropped = fullHeight > collapsed;
 
   const inner = (
