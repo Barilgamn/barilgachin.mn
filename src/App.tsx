@@ -4,6 +4,7 @@ import { Header } from './components/Header';
 import { PromoShowcaseSection } from './components/PromoShowcaseSection';
 import { NewsSection } from './components/NewsSection';
 import { TopBanner } from './components/TopBanner';
+import { MobileMoreSheet } from './components/MobileMoreSheet';
 import { ProductGrid } from './components/ProductGrid';
 import { B2BSection } from './components/B2BSection';
 import { Footer } from './components/Footer';
@@ -31,6 +32,7 @@ export default function App() {
   const [openCategoryMenu, setOpenCategoryMenu] = useState(0);
   const [openFilterMenu, setOpenFilterMenu] = useState(0);
   const [filtersActive, setFiltersActive] = useState(false);
+  const [isMoreOpen, setIsMoreOpen] = useState(false);
   // Хөтчөөс уншиж эхэлнэ — хуудас дахин ачаалахад хадгалсан нь үлдэнэ.
   const [favoriteIds, setFavoriteIds] = useState<string[]>(loadFavorites);
 
@@ -239,7 +241,6 @@ export default function App() {
         onOpenOrderTracker={() => navigate('/zahialga')}
         onOpenFilter={() => setOpenFilterMenu((n) => n + 1)}
         hasActiveFilters={filtersActive}
-        onOpenLiveChat={() => setIsLiveChatOpen(true)}
         onSelectCategory={(catId) => {
           setSelectedCategory(catId);
           setSelectedProduct(null);
@@ -376,6 +377,17 @@ export default function App() {
           setSelectedProduct(null);
           setOpenCategoryMenu((n) => n + 1);
         }}
+        onOpenMore={() => setIsMoreOpen(true)}
+      />
+
+      <MobileMoreSheet
+        isOpen={isMoreOpen}
+        onClose={() => setIsMoreOpen(false)}
+        onOpenLiveChat={() => {
+          setIsMoreOpen(false);
+          setIsLiveChatOpen(true);
+        }}
+        onOpenOrderTracker={() => navigate('/zahialga')}
       />
 
       {/* Modals & Slide-overs */}

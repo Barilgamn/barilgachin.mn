@@ -1,7 +1,7 @@
 import React from 'react';
-import { Home, Layers, Heart, User, ShoppingCart } from 'lucide-react';
+import { Home, Layers, Heart, Phone, ShoppingCart } from 'lucide-react';
 
-export type MobileTab = 'home' | 'categories' | 'saved' | 'profile';
+export type MobileTab = 'home' | 'categories' | 'saved';
 
 interface MobileBottomNavProps {
   activeTab: MobileTab;
@@ -10,6 +10,7 @@ interface MobileBottomNavProps {
   cartCount: number;
   onOpenCart: () => void;
   onOpenCategories: () => void;
+  onOpenMore: () => void;
 }
 
 /** Идэвхтэй таб дээр гарах шар цэг. */
@@ -29,6 +30,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   cartCount,
   onOpenCart,
   onOpenCategories,
+  onOpenMore,
 }) => {
   return (
     <nav
@@ -93,16 +95,12 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
         <span className="text-[10px] tracking-tight">Хадгалсан</span>
       </button>
 
-      {/* Профайл */}
-      <button
-        onClick={() => onTabChange('profile')}
-        className={itemClass(activeTab === 'profile')}
-      >
-        {activeTab === 'profile' && <Dot />}
-        <div className="w-5 h-5 rounded-full bg-slate-900 text-white flex items-center justify-center mb-0.5 border border-slate-300">
-          <User className="w-3.5 h-3.5" />
-        </div>
-        <span className="text-[10px] tracking-tight">Профайл</span>
+      {/* Холбоо барих — хуудас биш, доороос нээгддэг хуудас тул идэвхтэй
+          төлөвгүй. Өмнө нь энд «Профайл» байсан ч бүртгэл байхгүй учраас
+          дарахад юу ч болдоггүй байв. */}
+      <button onClick={onOpenMore} className={itemClass(false)}>
+        <Phone className="w-5 h-5 mb-0.5" />
+        <span className="text-[10px] tracking-tight">Холбоо</span>
       </button>
     </nav>
   );

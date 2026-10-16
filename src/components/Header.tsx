@@ -7,7 +7,6 @@ import {
   MapPin,
   Mail,
   Phone,
-  MessageSquare,
   Building2,
   ChevronDown,
   ChevronLeft,
@@ -71,7 +70,6 @@ interface HeaderProps {
   /** Гар утсан дээр шүүлтийн самбарыг нээнэ. */
   onOpenFilter?: () => void;
   hasActiveFilters?: boolean;
-  onOpenLiveChat?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -87,7 +85,6 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenOrderTracker,
   onOpenFilter,
   hasActiveFilters,
-  onOpenLiveChat,
 }) => {
   const CATEGORIES = useCategories();
   const PRODUCTS = useProducts();
@@ -216,37 +213,6 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Quick Actions (Warehouse badge & Cart) */}
           <div className="flex items-center gap-2 shrink-0">
-            {/* Агуулахын тэмдэг */}
-            <a
-              href={WAREHOUSE.mapsUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="px-2 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold flex items-center gap-1 transition-colors"
-              title={`${WAREHOUSE.name} — ${WAREHOUSE.address}`}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-              <span>{WAREHOUSE.shortAddress}</span>
-            </a>
-
-            {/* Залгах — гар утсан дээр хөвөгч товч контент халхалдаг тул энд. */}
-            <a
-              href={PHONE.href}
-              className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors"
-              title={`Лавлах: ${PHONE.display}`}
-              aria-label={`Лавлах утас ${PHONE.display}`}
-            >
-              <Phone className="w-4 h-4 text-slate-700" />
-            </a>
-
-            {/* Quick Live Chat */}
-            <button
-              onClick={onOpenLiveChat}
-              className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center cursor-pointer transition-colors"
-              title="Шуурхай чатлах"
-            >
-              <MessageSquare className="w-4 h-4 text-slate-700" />
-            </button>
-
             {/* Cart Button */}
             <button
               onClick={onOpenCart}
