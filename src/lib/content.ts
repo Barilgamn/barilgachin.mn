@@ -1,5 +1,5 @@
 import { supabase, isSupabaseConfigured } from './supabase';
-import type { PostRow, PromotionRow } from '../types/db';
+import type { BannerRow, PostRow, PromotionRow } from '../types/db';
 
 /**
  * Нийтэлсэн мэдээ. RLS нь ноорогийг аль хэдийн нуудаг тул энд
@@ -36,7 +36,7 @@ export const fetchPostBySlug = async (slug: string): Promise<PostRow | null> => 
 };
 
 /** Огнооны хувьд яг одоо үйлчилж байгаа эсэх. */
-const isLive = (p: PromotionRow): boolean => {
+const isLive = (p: { starts_at: string | null; ends_at: string | null }): boolean => {
   const now = Date.now();
   if (p.starts_at && new Date(p.starts_at).getTime() > now) return false;
   if (p.ends_at && new Date(p.ends_at).getTime() < now) return false;
@@ -58,4 +58,22 @@ export const fetchLivePromotions = async (): Promise<PromotionRow[]> => {
     return [];
   }
   return ((data as PromotionRow[]) ?? []).filter(isLive);
+};
+
+/**
+ * Нийтэлсэн бөгөөд хугацаандаа багтаж буй сурталчилгааны баннерууд.
+ * RLS нь нийтлээгүйг нуудаг тул энд зөвхөн огноог шалгана.
+ */
+export const fetchLiveBanners = async (): Promise<BannerRow[]> => {
+  if (!isSupabaseConfigured) return [];
+  const { data, error } = await supabase
+    .from('banners')
+    .select('*')
+    .order('sort_order')
+    .order('created_at', { ascending: false });
+  if (error) {
+    console.error('Баннер уншиж чадсангүй:', error.message);
+    return [];
+  }
+  return ((data as BannerRow[]) ?? []).filter(isLive);
 };

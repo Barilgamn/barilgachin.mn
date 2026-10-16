@@ -132,7 +132,6 @@ export interface PromotionRow {
   title: string;
   description: string | null;
   banner_url: string | null;
-  link_url: string | null;
   discount_note: string | null;
   starts_at: string | null;
   ends_at: string | null;
@@ -244,4 +243,17 @@ export interface RfqItemRow {
   unit_price: number;
   line_total: number;
   note: string | null;
+}
+
+export interface BannerRow {
+  id: string;
+  title: string;
+  image_url: string;
+  link_url: string | null;
+  starts_at: string | null;
+  ends_at: string | null;
+  sort_order: number;
+  is_published: boolean;
+  created_at: string;
+  updated_at: string;
 }

@@ -8,7 +8,7 @@ import { formatDate } from './orderLabels';
 
 type Draft = Pick<
   PromotionRow,
-  'title' | 'slug' | 'description' | 'banner_url' | 'link_url' | 'discount_note'
+  'title' | 'slug' | 'description' | 'banner_url' | 'discount_note'
   | 'starts_at' | 'ends_at' | 'is_published'
 >;
 
@@ -17,7 +17,6 @@ const emptyDraft: Draft = {
   slug: '',
   description: '',
   banner_url: null,
-  link_url: '',
   discount_note: '',
   starts_at: null,
   ends_at: null,
@@ -70,7 +69,6 @@ export const PromotionsPage: React.FC = () => {
       slug: row.slug,
       description: row.description ?? '',
       banner_url: row.banner_url,
-      link_url: row.link_url ?? '',
       discount_note: row.discount_note ?? '',
       starts_at: row.starts_at,
       ends_at: row.ends_at,
@@ -99,7 +97,6 @@ export const PromotionsPage: React.FC = () => {
       ...draft,
       slug,
       description: draft.description || null,
-      link_url: draft.link_url || null,
       discount_note: draft.discount_note || null,
     };
 
@@ -195,21 +192,8 @@ export const PromotionsPage: React.FC = () => {
             onChange={(url) => setDraft({ ...draft, banner_url: url })}
             folder="promotions"
             label="Баннер"
-            hint="Толгойн доор гарна. Өргөн хэлбэртэй зураг тохиромжтой, 5MB хүртэл."
+            hint="Нүүр хуудасны урамшууллын хэсэгт гарна. 5MB хүртэл."
           />
-
-          <label className="block">
-            <span className={label}>
-              Баннер дарахад очих хаяг{' '}
-              <span className="text-slate-400">(хоосон бол дарагдахгүй)</span>
-            </span>
-            <input
-              value={draft.link_url ?? ''}
-              onChange={(e) => setDraft({ ...draft, link_url: e.target.value })}
-              placeholder="/medee/tsementiin-hyamdral эсвэл https://…"
-              className={`${field} font-mono`}
-            />
-          </label>
 
           <div className="grid gap-3 sm:grid-cols-3">
             <label className="block">

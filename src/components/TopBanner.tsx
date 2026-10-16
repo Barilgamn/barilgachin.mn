@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { fetchLivePromotions } from '../lib/content';
-import type { PromotionRow } from '../types/db';
+import { fetchLiveBanners } from '../lib/content';
+import type { BannerRow } from '../types/db';
 
 /** Хураангуй үед зургийн хэдэн хувийг харуулах. */
 const COLLAPSED_SHARE = 0.4;
@@ -20,16 +20,14 @@ const FALLBACK = 200;
  *
  * Хулганагүй төхөөрөмж дээр дэлгэх үйлдэл утгагүй тул гар утсанд гарахгүй.
  */
-export const TopPromoBanner: React.FC = () => {
-  const [promo, setPromo] = useState<PromotionRow | null>(null);
+export const TopBanner: React.FC = () => {
+  const [banner, setBanner] = useState<BannerRow | null>(null);
   const [open, setOpen] = useState(false);
   const [fullHeight, setFullHeight] = useState(FALLBACK);
   const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
-    void fetchLivePromotions().then((list) => {
-      setPromo(list.find((p) => p.banner_url) ?? null);
-    });
+    void fetchLiveBanners().then((list) => setBanner(list[0] ?? null));
   }, []);
 
   const measure = useCallback(() => {
@@ -47,7 +45,7 @@ export const TopPromoBanner: React.FC = () => {
     return () => window.removeEventListener('resize', measure);
   }, [measure]);
 
-  if (!promo?.banner_url) return null;
+  if (!banner) return null;
 
   const collapsed = Math.min(Math.round(fullHeight * COLLAPSED_SHARE), COLLAPSED_MAX, fullHeight);
   const isCropped = fullHeight > collapsed;
@@ -59,8 +57,8 @@ export const TopPromoBanner: React.FC = () => {
     >
       <img
         ref={imgRef}
-        src={promo.banner_url}
-        alt={promo.title}
+        src={banner.image_url}
+        alt={banner.title}
         onLoad={measure}
         className="h-full w-full object-cover object-top"
       />
@@ -87,12 +85,12 @@ export const TopPromoBanner: React.FC = () => {
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
-      {promo.link_url ? (
+      {banner.link_url ? (
         <a
-          href={promo.link_url}
-          target={promo.link_url.startsWith('http') ? '_blank' : undefined}
-          rel={promo.link_url.startsWith('http') ? 'noreferrer' : undefined}
-          title={promo.title}
+          href={banner.link_url}
+          target={banner.link_url.startsWith('http') ? '_blank' : undefined}
+          rel={banner.link_url.startsWith('http') ? 'noreferrer' : undefined}
+          title={banner.title}
           className="block"
         >
           {inner}
