@@ -48,7 +48,7 @@ export const TopPromoBanner: React.FC = () => {
 
   return (
     <div
-      className="hidden md:block max-w-6xl mx-auto px-4 pt-3"
+      className="hidden md:block w-full max-w-6xl mx-auto px-4 pt-3"
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
