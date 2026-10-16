@@ -54,7 +54,7 @@ export const TopPromoBanner: React.FC = () => {
 
   const inner = (
     <div
-      className="relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 transition-[height] duration-300 ease-out"
+      className="relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-sm transition-[height] duration-300 ease-out"
       style={{ height: open ? fullHeight : collapsed }}
     >
       <img
@@ -77,9 +77,13 @@ export const TopPromoBanner: React.FC = () => {
     </div>
   );
 
-  return (
+  // Гадна сав нь хураангуй өндрөө үргэлж эзэлнэ. Дэлгэгдэх хэсэг нь
+  // үүний дотор absolute байрлалтай тул тэлэхдээ доорх барааг доошлуулахгүй,
+  // дээгүүр нь гарна. Хулганы заалтыг тэлэгч хэсэг дээр нь тавина — үгүй бол
+  // хулгана сав руугаа багтахаа болиод тэр дор нь хураагдана.
+  const expanding = (
     <div
-      className="hidden md:block w-full max-w-6xl mx-auto px-4 pt-3"
+      className="absolute inset-x-0 top-0 z-30"
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
@@ -96,6 +100,14 @@ export const TopPromoBanner: React.FC = () => {
       ) : (
         inner
       )}
+    </div>
+  );
+
+  return (
+    <div className="hidden md:block w-full max-w-6xl mx-auto px-4 pt-3">
+      <div className="relative" style={{ height: collapsed }}>
+        {expanding}
+      </div>
     </div>
   );
 };
