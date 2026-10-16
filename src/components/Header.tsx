@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
   Search,
+  SlidersHorizontal,
   ShoppingCart,
   Truck,
   Phone,
@@ -24,7 +25,7 @@ import { POPULAR_SEARCH_TERMS } from '../data/mockData';
 import { formatMNT, formatWeight } from '../utils/formatters';
 import { useCategories, useProducts } from '../CatalogProvider';
 import { Product } from '../types';
-import { WAREHOUSE } from '../lib/contact';
+import { PHONE, WAREHOUSE } from '../lib/contact';
 
 const getCategoryIcon = (iconName: string, className = "w-4 h-4") => {
   switch (iconName) {
@@ -65,6 +66,9 @@ interface HeaderProps {
   onSearchChange: (query: string) => void;
   onSelectProduct: (product: Product) => void;
   onOpenOrderTracker: () => void;
+  /** Гар утсан дээр шүүлтийн самбарыг нээнэ. */
+  onOpenFilter?: () => void;
+  hasActiveFilters?: boolean;
   onOpenLiveChat?: () => void;
 }
 
@@ -79,6 +83,8 @@ export const Header: React.FC<HeaderProps> = ({
   onSearchChange,
   onSelectProduct,
   onOpenOrderTracker,
+  onOpenFilter,
+  hasActiveFilters,
   onOpenLiveChat,
 }) => {
   const CATEGORIES = useCategories();
@@ -171,6 +177,16 @@ export const Header: React.FC<HeaderProps> = ({
               <span>{WAREHOUSE.shortAddress}</span>
             </a>
 
+            {/* Залгах — гар утсан дээр хөвөгч товч контент халхалдаг тул энд. */}
+            <a
+              href={PHONE.href}
+              className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors"
+              title={`Лавлах: ${PHONE.display}`}
+              aria-label={`Лавлах утас ${PHONE.display}`}
+            >
+              <Phone className="w-4 h-4 text-slate-700" />
+            </a>
+
             {/* Quick Live Chat */}
             <button
               onClick={onOpenLiveChat}
@@ -198,7 +214,8 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Row 2: Always-Visible Mobile Search Bar */}
         <div className="px-3.5 pb-2" ref={searchContainerRef}>
-          <div className="relative flex items-center">
+          <div className="flex items-center gap-2">
+          <div className="relative flex flex-1 min-w-0 items-center">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none" />
             <input
               type="text"
@@ -216,6 +233,24 @@ export const Header: React.FC<HeaderProps> = ({
                 <X className="w-3.5 h-3.5" />
               </button>
             )}
+          </div>
+
+          {/* Шүүлт — хайлтын ард. Өмнө нь барааны жагсаалтын дээр
+              тусдаа мөр эзэлдэг байв. */}
+          {onOpenFilter && (
+            <button
+              type="button"
+              onClick={onOpenFilter}
+              title="Шүүлт"
+              aria-label="Шүүлт"
+              className="relative w-9 h-9 shrink-0 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors cursor-pointer"
+            >
+              <SlidersHorizontal className="w-4 h-4" />
+              {hasActiveFilters && (
+                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-amber-500 border border-white" />
+              )}
+            </button>
+          )}
           </div>
 
           {/* Mobile Search Dropdown Results / Suggestions */}

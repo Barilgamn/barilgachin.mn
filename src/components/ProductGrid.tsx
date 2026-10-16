@@ -68,6 +68,11 @@ interface ProductGridProps {
   /** Доод цэснээс ангиллын жагсаалтыг нээх дохио. Утга нь
    *  өөрчлөгдөх бүрт нээгдэнэ. */
   openCategoryMenu?: number;
+  /** Хайлтын хажуугийн товчноос шүүлтийг нээх дохио. */
+  openFilterMenu?: number;
+  /** Шүүлт идэвхтэй эсэхийг гадагш мэдэгдэнэ — толгой дээрх
+   *  товчны тэмдэг үүнээс хамаарна. */
+  onFiltersActiveChange?: (active: boolean) => void;
   favoriteIds?: string[];
   onToggleFavorite?: (productId: string) => void;
 }
@@ -86,6 +91,8 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
   onOpenCalculator,
   onOpenRFQModal,
   openCategoryMenu,
+  openFilterMenu,
+  onFiltersActiveChange,
 }) => {
   const CATEGORIES = useCategories();
   const WAREHOUSES = useWarehouses();
@@ -134,6 +141,10 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
   useEffect(() => {
     if (openCategoryMenu) setIsMobileCategoryOpen(true);
   }, [openCategoryMenu]);
+
+  useEffect(() => {
+    if (openFilterMenu) setIsMobileFilterOpen(true);
+  }, [openFilterMenu]);
 
   // Brand dropdown strip expansion
   const [showAllBrands, setShowAllBrands] = useState<boolean>(false);
@@ -318,6 +329,10 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
     minPrice !== '' ||
     maxPrice !== '' ||
     searchQuery !== '';
+
+  useEffect(() => {
+    onFiltersActiveChange?.(hasActiveFilters);
+  }, [hasActiveFilters, onFiltersActiveChange]);
 
   // Filtered list of brands for sidebar search
   const filteredSidebarBrands = useMemo(() => {
@@ -871,25 +886,6 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
             RIGHT COLUMN: HEADER BAR, BRAND BADGES & PRODUCT GRID (9 / 12)
            ========================================================================= */}
         <main className="lg:col-span-9 space-y-3 sm:space-y-5">
-          {/* ================= MOBILE QUICK ACTIONS ROW (Exact Match to Screenshot) ================= */}
-          <div className="grid grid-cols-2 gap-2 lg:hidden">
-            <button
-              onClick={() => setIsMobileCategoryOpen(true)}
-              className="flex items-center justify-between px-3.5 py-2.5 bg-white rounded-xl border border-slate-200 text-slate-800 text-xs font-bold shadow-2xs active:scale-98 transition-all cursor-pointer"
-            >
-              <span className="truncate">Цэс {selectedCategory !== 'all' ? `(${displayCategoryTitle.slice(0, 8)}...)` : ''}</span>
-              <ChevronDown className="w-4 h-4 text-slate-500 shrink-0" />
-            </button>
-
-            <button
-              onClick={() => setIsMobileFilterOpen(true)}
-              className="flex items-center justify-between px-3.5 py-2.5 bg-white rounded-xl border border-slate-200 text-slate-800 text-xs font-bold shadow-2xs active:scale-98 transition-all cursor-pointer"
-            >
-              <span>Шүүлт {hasActiveFilters ? '•' : ''}</span>
-              <SlidersHorizontal className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-            </button>
-          </div>
-
           {/* Top Header: Category Title | Count & Sort Dropdown */}
           <div className="flex items-center justify-between gap-2 pb-1.5 sm:pb-2 border-b border-slate-100">
             {/* Title | Count */}

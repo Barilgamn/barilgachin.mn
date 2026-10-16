@@ -28,6 +28,8 @@ export default function App() {
   // Доод цэсийн «Ангилал» дарахад ProductGrid доторх ангиллын жагсаалт
   // нээгдэнэ. Тоолуур өөрчлөгдөхөд л нээгддэг тул дахин дарж болно.
   const [openCategoryMenu, setOpenCategoryMenu] = useState(0);
+  const [openFilterMenu, setOpenFilterMenu] = useState(0);
+  const [filtersActive, setFiltersActive] = useState(false);
   // Хөтчөөс уншиж эхэлнэ — хуудас дахин ачаалахад хадгалсан нь үлдэнэ.
   const [favoriteIds, setFavoriteIds] = useState<string[]>(loadFavorites);
 
@@ -234,6 +236,8 @@ export default function App() {
         totalCartAmount={totalCartAmount}
         onOpenCart={() => setIsCartOpen(true)}
         onOpenOrderTracker={() => navigate('/zahialga')}
+        onOpenFilter={() => setOpenFilterMenu((n) => n + 1)}
+        hasActiveFilters={filtersActive}
         onOpenLiveChat={() => setIsLiveChatOpen(true)}
         onSelectCategory={(catId) => {
           setSelectedCategory(catId);
@@ -287,6 +291,8 @@ export default function App() {
               favoriteIds={favoriteIds}
               onToggleFavorite={toggleFavorite}
               openCategoryMenu={openCategoryMenu}
+              openFilterMenu={openFilterMenu}
+              onFiltersActiveChange={setFiltersActive}
             />
 
             {/* Promo / Foundation Materials Curated Showcase when on All category (matching user design) */}
@@ -316,7 +322,7 @@ export default function App() {
 
       {/* Subtle Floating Call & Live Chat Side Dock (Shifted up on mobile to avoid bottom bar collision) */}
       {/* Холбоо барих — контент халхлахгүйн тулд зөвхөн дүрс */}
-      <div className="fixed right-3 sm:right-5 bottom-20 sm:bottom-6 z-40 flex flex-col items-end gap-2">
+      <div className="hidden sm:flex fixed right-5 bottom-6 z-40 flex-col items-end gap-2">
         <a
           href="tel:+97677662277"
           title="Лавлах: 7766-2277"
