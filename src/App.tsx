@@ -16,6 +16,7 @@ import { RFQModal } from './components/RFQModal';
 import { LiveChatModal } from './components/LiveChatModal';
 import { MobileBottomNav, MobileTab } from './components/MobileBottomNav';
 import { loadFavorites, saveFavorites } from './lib/favorites';
+import { isSupabaseConfigured } from './lib/supabase';
 import { useCatalogState } from './CatalogProvider';
 import { Product, CartItem, UnitOfMeasure } from './types';
 import { MessageSquare, Phone } from 'lucide-react';
@@ -209,7 +210,18 @@ export default function App() {
       <div className="min-h-screen grid place-items-center bg-white px-6 text-center">
         <div className="max-w-sm">
           <p className="font-semibold text-slate-900">Каталог ачаалж чадсангүй</p>
-          <p className="mt-1 text-sm text-slate-500">{error}</p>
+          {isSupabaseConfigured ? (
+            <p className="mt-1 text-sm text-slate-500">{error}</p>
+          ) : (
+            /* Тохируулаагүй үед client нь localhost руу ханддаг тул хөтөч
+               зүгээр «Failed to fetch» гэдэг — шалтгааныг нь шууд хэлнэ. */
+            <p className="mt-1 text-sm text-slate-500">
+              Өгөгдлийн сангийн холболт тохируулаагүй байна. Байршуулсан орчинд{' '}
+              <span className="font-mono text-slate-700">VITE_SUPABASE_URL</span> ба{' '}
+              <span className="font-mono text-slate-700">VITE_SUPABASE_ANON_KEY</span>{' '}
+              хувьсагчийг нэмээд дахин deploy хийнэ үү.
+            </p>
+          )}
           <button
             type="button"
             onClick={() => window.location.reload()}
