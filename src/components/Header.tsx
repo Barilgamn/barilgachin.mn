@@ -4,6 +4,8 @@ import {
   SlidersHorizontal,
   ShoppingCart,
   Truck,
+  MapPin,
+  Mail,
   Phone,
   MessageSquare,
   Building2,
@@ -25,7 +27,7 @@ import { POPULAR_SEARCH_TERMS } from '../data/mockData';
 import { formatMNT, formatWeight } from '../utils/formatters';
 import { useCategories, useProducts } from '../CatalogProvider';
 import { Product } from '../types';
-import { PHONE, WAREHOUSE } from '../lib/contact';
+import { EMAIL, PHONE, WAREHOUSE } from '../lib/contact';
 
 const getCategoryIcon = (iconName: string, className = "w-4 h-4") => {
   switch (iconName) {
@@ -128,6 +130,55 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-xs">
+      {/* =========================================================================
+          DESKTOP TOP BAR — холбоо барих, байршил, захиалга хянах.
+          Гар утсан дээр гарахгүй: тэнд энэ мэдээлэл толгойн дүрс товчнууд
+          болон хөл хэсэгт аль хэдийн байдаг.
+         ========================================================================= */}
+      <div className="hidden md:block bg-slate-900 text-slate-300">
+        <div className="max-w-6xl mx-auto px-4 h-9 flex items-center justify-between gap-4 text-xs">
+          <div className="flex items-center gap-5 min-w-0">
+            <a
+              href={WAREHOUSE.mapsUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-1.5 hover:text-white transition-colors truncate"
+              title={WAREHOUSE.address}
+            >
+              <MapPin className="w-3.5 h-3.5 shrink-0 text-amber-400" />
+              <span className="truncate">
+                {WAREHOUSE.name} · {WAREHOUSE.shortAddress}
+              </span>
+            </a>
+
+            <a
+              href={PHONE.href}
+              className="hidden lg:flex items-center gap-1.5 hover:text-white transition-colors"
+            >
+              <Phone className="w-3.5 h-3.5 shrink-0 text-amber-400" />
+              <span className="font-semibold text-white">{PHONE.display}</span>
+            </a>
+
+            <a
+              href={EMAIL.salesHref}
+              className="hidden xl:flex items-center gap-1.5 hover:text-white transition-colors"
+            >
+              <Mail className="w-3.5 h-3.5 shrink-0 text-amber-400" />
+              <span>{EMAIL.sales}</span>
+            </a>
+          </div>
+
+          <button
+            type="button"
+            onClick={onOpenOrderTracker}
+            className="flex items-center gap-1.5 shrink-0 hover:text-white transition-colors cursor-pointer"
+          >
+            <Truck className="w-3.5 h-3.5 text-amber-400" />
+            <span>Захиалга, нэхэмжлэх хянах</span>
+          </button>
+        </div>
+      </div>
+
       {/* =========================================================================
           MOBILE TOP APP BAR & MODERN SEARCH (High-Performance Mobile UX)
          ========================================================================= */}
@@ -574,16 +625,6 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Desktop Right Action Tools */}
           <div className="flex items-center gap-3 shrink-0">
-            {/* Захиалга, нэхэмжлэх хайх */}
-            <button
-              onClick={onOpenOrderTracker}
-              className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl btn-liquid-glass text-slate-800 text-xs sm:text-sm font-semibold cursor-pointer"
-              title="Захиалгын явц, нэхэмжлэхээ харах"
-            >
-              <Truck className="w-4 h-4 text-slate-700" />
-              <span>Захиалга хянах</span>
-            </button>
-
             {/* Cart Drawer Trigger */}
             <button
               onClick={onOpenCart}
