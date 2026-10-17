@@ -9,11 +9,30 @@ import { createClient } from '@supabase/supabase-js';
  * хөтчийн багцад шигддэг.
  */
 
-const url = import.meta.env.VITE_SUPABASE_URL as string | undefined;
-const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
+const rawUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+const rawKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
 
-/** Тохиргоо бүрэн эсэх — бэлэн болтол сайт mock өгөгдлөөр ажиллана. */
-export const isSupabaseConfigured = Boolean(url && anonKey);
+const url = rawUrl?.trim();
+const anonKey = rawKey?.trim();
+
+/**
+ * Түлхүүр нь HTTP толгойд орох тул зөвхөн latin-1 тэмдэгт агуулж болно.
+ * Тохиргоо хуулах үед тайлбар, кирилл үсэг санамсаргүй орвол хөтөч
+ * «String contains non ISO-8859-1 code point» гэж шалтгааныг нь хэлэлгүй
+ * унадаг — иймд эндээс нь барина.
+ */
+const isHeaderSafe = (v: string | undefined): boolean =>
+  Boolean(v) && /^[\x20-\x7E]+$/.test(v as string);
+
+/** Тохиргоо бүрэн, ашиглахад тохиромжтой эсэх. */
+export const isSupabaseConfigured = isHeaderSafe(url) && isHeaderSafe(anonKey);
+
+if (url && anonKey && !isSupabaseConfigured) {
+  console.error(
+    'Supabase тохиргоонд латин бус тэмдэгт орсон байна. VITE_SUPABASE_URL, ' +
+      'VITE_SUPABASE_ANON_KEY-г тайлбаргүй, цэвэр утгаар нь дахин оруулна уу.',
+  );
+}
 
 if (!isSupabaseConfigured && import.meta.env.DEV) {
   console.warn(
@@ -21,9 +40,11 @@ if (!isSupabaseConfigured && import.meta.env.DEV) {
   );
 }
 
+// Тохиргоо бүрэн биш бол орлуулагч утгаар үүсгэнэ. Бохир утгыг дамжуулбал
+// хөтөч толгой угсрах үедээ унаж, алдаа нь шалтгаанаа хэлэхгүй.
 export const supabase = createClient(
-  url ?? 'http://localhost:54321',
-  anonKey ?? 'public-anon-key',
+  isSupabaseConfigured ? (url as string) : 'http://localhost:54321',
+  isSupabaseConfigured ? (anonKey as string) : 'public-anon-key',
   {
     auth: {
       persistSession: true,

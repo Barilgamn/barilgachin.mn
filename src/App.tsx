@@ -219,7 +219,8 @@ export default function App() {
               Өгөгдлийн сангийн холболт тохируулаагүй байна. Байршуулсан орчинд{' '}
               <span className="font-mono text-slate-700">VITE_SUPABASE_URL</span> ба{' '}
               <span className="font-mono text-slate-700">VITE_SUPABASE_ANON_KEY</span>{' '}
-              хувьсагчийг нэмээд дахин deploy хийнэ үү.
+              хувьсагчийг тайлбар, нэмэлт тэмдэггүйгээр оруулаад дахин deploy
+              хийнэ үү.
             </p>
           )}
           <button
