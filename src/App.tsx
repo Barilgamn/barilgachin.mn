@@ -251,7 +251,6 @@ export default function App() {
         totalCartWeight={totalCartWeight}
         totalCartAmount={totalCartAmount}
         onOpenCart={() => setIsCartOpen(true)}
-        onOpenOrderTracker={() => navigate('/zahialga')}
         onOpenFilter={() => setOpenFilterMenu((n) => n + 1)}
         hasActiveFilters={filtersActive}
         onSelectCategory={(catId) => {

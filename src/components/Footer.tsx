@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useWarehouses } from '../CatalogProvider';
 import { WAREHOUSE } from '../lib/contact';
 import {
@@ -136,10 +137,13 @@ export const Footer: React.FC<FooterProps> = ({
                 </button>
               </li>
               <li>
-                <span className="text-slate-500 flex items-center gap-1.5 font-medium">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>MNS Стандартын сан</span>
-                </span>
+                <Link
+                  to="/zahialga"
+                  className="hover:text-amber-700 transition-colors flex items-center gap-1.5 text-slate-600 font-medium"
+                >
+                  <Truck className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Захиалга, нэхэмжлэх хянах</span>
+                </Link>
               </li>
             </ul>
           </div>
