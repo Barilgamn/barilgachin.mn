@@ -17,6 +17,15 @@ export const PHONE = {
   href: 'tel:+97677662277',
 } as const;
 
+/** Хоёр дахь шугам — борлуулалтын менежерүүд энэ дугаарыг ашигладаг. */
+export const PHONE_ALT = {
+  display: '7711-1177',
+  href: 'tel:+97677111177',
+} as const;
+
+/** Хоёр дугаарыг хамтад нь бичих хэлбэр. */
+export const PHONES_DISPLAY = `${PHONE.display}, ${PHONE_ALT.display}`;
+
 /** Бөөний болон төслийн захиалгын хаяг. */
 export const EMAIL = {
   sales: 'sales@barilgachin.mn',

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useWarehouses } from '../CatalogProvider';
-import { WAREHOUSE } from '../lib/contact';
+import { EMAIL, PHONE, PHONES_DISPLAY, WAREHOUSE } from '../lib/contact';
 import {
   Building2,
   Phone,
@@ -171,14 +171,17 @@ export const Footer: React.FC<FooterProps> = ({
             <div className="space-y-2 text-slate-600">
               <div className="flex items-center gap-2">
                 <Phone className="w-3.5 h-3.5 text-amber-600" />
-                <a href="tel:+97677662277" className="font-bold text-slate-900 hover:text-amber-700 hover:underline">
-                  7766-2277, 7711-1177
+                <a
+                  href={PHONE.href}
+                  className="font-bold text-slate-900 hover:text-amber-700 hover:underline"
+                >
+                  {PHONES_DISPLAY}
                 </a>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-3.5 h-3.5 text-amber-600" />
-                <a href="mailto:haus@barilgachin.mn" className="font-semibold text-slate-800 hover:underline">
-                  haus@barilgachin.mn
+                <a href={EMAIL.salesHref} className="font-semibold text-slate-800 hover:underline">
+                  {EMAIL.sales}
                 </a>
               </div>
               <div className="flex items-start gap-2">

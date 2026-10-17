@@ -17,6 +17,7 @@ import { LiveChatModal } from './components/LiveChatModal';
 import { MobileBottomNav, MobileTab } from './components/MobileBottomNav';
 import { loadFavorites, saveFavorites } from './lib/favorites';
 import { isSupabaseConfigured } from './lib/supabase';
+import { PHONE } from './lib/contact';
 import { useCatalogState } from './CatalogProvider';
 import { Product, CartItem, UnitOfMeasure } from './types';
 import { MessageSquare, Phone } from 'lucide-react';
@@ -342,9 +343,9 @@ export default function App() {
       {/* Холбоо барих — контент халхлахгүйн тулд зөвхөн дүрс */}
       <div className="hidden sm:flex fixed right-5 bottom-6 z-40 flex-col items-end gap-2">
         <a
-          href="tel:+97677662277"
-          title="Лавлах: 7766-2277"
-          aria-label="Лавлах утас 7766-2277"
+          href={PHONE.href}
+          title={`Лавлах: ${PHONE.display}`}
+          aria-label={`Лавлах утас ${PHONE.display}`}
           className="w-11 h-11 rounded-full bg-white border border-slate-200 text-slate-700 shadow-md hover:shadow-lg hover:text-slate-950 flex items-center justify-center transition-all active:scale-95"
         >
           <Phone className="w-4 h-4" />

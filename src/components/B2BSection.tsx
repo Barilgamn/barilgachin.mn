@@ -9,7 +9,7 @@ import {
   ShieldCheck,
   PhoneCall,
 } from 'lucide-react';
-import { EMAIL } from '../lib/contact';
+import { EMAIL, PHONE, PHONES_DISPLAY } from '../lib/contact';
 
 interface B2BSectionProps {
   onOpenRFQ: () => void;
@@ -115,8 +115,8 @@ export const B2BSection: React.FC<B2BSectionProps> = ({
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
               <div className="flex justify-between">
                 <span className="text-slate-500 font-medium">B2B Утас:</span>
-                <a href="tel:+97677662277" className="font-bold text-amber-700 underline">
-                  7766-2277, 7711-1177
+                <a href={PHONE.href} className="font-bold text-amber-700 underline">
+                  {PHONES_DISPLAY}
                 </a>
               </div>
               <div className="flex justify-between">

@@ -216,7 +216,7 @@ export const LiveChatModal: React.FC<LiveChatModalProps> = ({
             <span>Шуурхай лавлах утас:</span>
           </div>
           <a
-            href="tel:+97677662277"
+            href={PHONE.href}
             className="font-black text-amber-700 hover:underline flex items-center gap-1"
           >
             <Phone className="w-3 h-3" />
@@ -262,7 +262,7 @@ export const LiveChatModal: React.FC<LiveChatModalProps> = ({
                       )}
                       {msg.action.type === 'call' && (
                         <a
-                          href="tel:+97677662277"
+                          href={PHONE.href}
                           className="w-full py-1.5 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-colors flex items-center justify-center gap-1.5"
                         >
                           <Phone className="w-3.5 h-3.5" />
