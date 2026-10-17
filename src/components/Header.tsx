@@ -371,7 +371,7 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="relative" ref={categoryMenuRef}>
               <button
                 onClick={() => setIsCategoryMenuOpen(!isCategoryMenuOpen)}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm cursor-pointer transition-all ${
+                className={`flex h-[42px] items-center gap-2 px-4 font-bold text-xs sm:text-sm cursor-pointer transition-all ${
                   isCategoryMenuOpen || selectedCategory !== 'all'
                     ? 'btn-liquid-dark ring-2 ring-white/20'
                     : 'btn-liquid-dark'
@@ -455,7 +455,7 @@ export const Header: React.FC<HeaderProps> = ({
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
                 onFocus={() => setIsSearchFocused(true)}
-                className="w-full pl-10 pr-9 py-2.5 text-xs sm:text-sm bg-slate-100 hover:bg-slate-100/90 focus:bg-white text-slate-900 rounded-xl border border-transparent focus:border-slate-400 focus:ring-2 focus:ring-slate-900/10 transition-all outline-hidden placeholder:text-slate-500 shadow-inner"
+                className="h-[42px] w-full rounded-[10px] border border-slate-200 bg-slate-50 pl-10 pr-9 text-xs sm:text-sm text-slate-900 transition-colors outline-hidden placeholder:text-slate-400 hover:border-slate-300 focus:border-slate-900 focus:bg-white"
               />
               {searchQuery && (
                 <button
@@ -540,22 +540,24 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Cart Drawer Trigger */}
             <button
               onClick={onOpenCart}
-              className="relative flex items-center gap-2.5 px-4 py-2.5 rounded-xl btn-liquid-dark font-bold text-sm cursor-pointer"
+              title={
+                cartCount > 0
+                  ? `${cartCount} бараа · ${formatWeight(totalCartWeight)} · ${formatMNT(totalCartAmount)}`
+                  : 'Сагс хоосон'
+              }
+              className="relative flex h-[42px] items-center gap-2.5 px-4 btn-liquid-dark font-bold text-sm cursor-pointer"
             >
-              <ShoppingCart className="w-4 h-4 text-white" />
-              <div className="flex flex-col text-left leading-tight hidden lg:flex">
-                <span className="text-[11px] font-medium text-slate-300">
-                  {cartCount > 0 ? `${formatWeight(totalCartWeight)}` : 'Сагс'}
-                </span>
-                <span className="text-xs font-black text-white">
-                  {cartCount > 0 ? formatMNT(totalCartAmount) : '0 ₮'}
-                </span>
-              </div>
-              {cartCount > 0 && (
-                <span className="w-5 h-5 rounded-full bg-white text-slate-950 text-xs font-black flex items-center justify-center shadow-xs">
-                  {cartCount}
-                </span>
-              )}
+              <span className="relative flex">
+                <ShoppingCart className="w-4 h-4 text-white" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-amber-400 px-1 text-[10px] font-black text-slate-950">
+                    {cartCount}
+                  </span>
+                )}
+              </span>
+              <span className="hidden lg:inline text-white tabular-nums">
+                {cartCount > 0 ? formatMNT(totalCartAmount) : 'Сагс'}
+              </span>
             </button>
           </div>
         </div>
